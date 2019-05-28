@@ -1,3 +1,11 @@
+# inquests.ca
+
+<a href="inquests.ca">inquests.ca</a> is a website which provides public access to inquest-related rulings, findings, and other authorities.
+
+This repo is for the website front end. It is written in JavaScript with React.
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
