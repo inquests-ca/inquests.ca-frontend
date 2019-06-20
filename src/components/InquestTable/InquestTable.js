@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-class InquestTable extends React.Component {
+export default class InquestTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = { inquests: [] };
@@ -51,5 +51,3 @@ class InquestTable extends React.Component {
     this.setState({ inquests: inquests });
   }
 }
-
-export default InquestTable;
