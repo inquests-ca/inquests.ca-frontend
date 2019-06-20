@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
+  },
+  subtitle: {
+    marginTop: theme.spacing(2)
   }
 }));
 
@@ -19,10 +22,13 @@ export default function App() {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="sm">
       <CssBaseline />
       <div className={classes.layout}>
         <Typography variant="h1">Inquests.ca</Typography>
+        <Typography variant="h6" className={classes.subtitle}>
+          The guide to Canadian inquest authorities
+        </Typography>
         <InquestTable />
       </div>
     </Container>
