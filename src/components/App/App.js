@@ -15,6 +15,9 @@ const useStyles = makeStyles(theme => ({
   },
   subtitle: {
     marginTop: theme.spacing(2)
+  },
+  table: {
+    marginTop: theme.spacing(4)
   }
 }));
 
@@ -29,7 +32,9 @@ export default function App() {
         <Typography variant="h6" className={classes.subtitle}>
           The guide to Canadian inquest authorities
         </Typography>
-        <InquestTable />
+        <div className={classes.table}>
+          <InquestTable />
+        </div>
       </div>
     </Container>
   );

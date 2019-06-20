@@ -1,17 +1,10 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-
-const styles = theme => ({
-  layout: {
-    marginTop: theme.spacing(4)
-  }
-});
 
 class InquestTable extends React.Component {
   constructor(props) {
@@ -24,10 +17,8 @@ class InquestTable extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-
     return (
-      <Paper className={classes.layout}>
+      <Paper>
         <Table>
           <TableHead>
             <TableRow>
@@ -61,4 +52,4 @@ class InquestTable extends React.Component {
   }
 }
 
-export default withStyles(styles)(InquestTable);
+export default InquestTable;
