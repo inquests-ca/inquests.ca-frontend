@@ -7,6 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
+  navMenu: {
+    backgroundColor: theme.palette.grey[900]
+  },
   navHeader: {
     flexGrow: 1,
     textDecoration: 'none',
@@ -31,7 +34,7 @@ export default function NavMenu() {
   const classes = useStyles();
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" className={classes.navMenu}>
       <ToolBar>
         <Link to="/" className={classes.navHeader}>
           <Typography variant="h6">Inquests.ca</Typography>
