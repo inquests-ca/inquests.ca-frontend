@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import NavMenu from '../NavMenu';
 import SignIn from '../../scenes/SignIn';
+import SignUp from '../../scenes/SignUp';
 import ViewInquests from '../../scenes/ViewInquests';
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
       <NavMenu />
       <Route exact={true} path="/" component={ViewInquests} />
       <Route path="/signin" component={SignIn} />
+      <Route path="/signup" component={SignUp} />
     </Router>
   );
 }
