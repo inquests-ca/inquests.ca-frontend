@@ -10,23 +10,25 @@ const useStyles = makeStyles(theme => ({
   navMenu: {
     backgroundColor: theme.palette.grey[900]
   },
-  navHeader: {
-    flexGrow: 1,
+  navLink: {
     textDecoration: 'none',
     color: 'inherit'
   },
+  navHeader: {
+    flexGrow: 1
+  },
   navItem: {
-    marginLeft: theme.spacing(4),
-    textDecoration: 'none',
-    color: 'inherit'
+    marginLeft: theme.spacing(4)
   }
 }));
 
 function NavItem(classes, link, label) {
   return (
-    <Link to={link} className={classes.navItem}>
-      <Button color="inherit">{label}</Button>
-    </Link>
+    <Button color="inherit" className={classes.navItem}>
+      <Link to={link} className={classes.navLink}>
+        {label}
+      </Link>
+    </Button>
   );
 }
 
@@ -36,9 +38,11 @@ export default function NavMenu() {
   return (
     <AppBar position="fixed" className={classes.navMenu}>
       <ToolBar>
-        <Link to="/" className={classes.navHeader}>
-          <Typography variant="h6">Inquests.ca</Typography>
-        </Link>
+        <Typography variant="h6" className={classes.navHeader}>
+          <Link to="/" className={classes.navLink}>
+            Inquests.ca
+          </Link>
+        </Typography>
         {NavItem(classes, '/signup', 'Sign Up')}
         {NavItem(classes, '/signin', 'Sign In')}
       </ToolBar>
