@@ -7,14 +7,25 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
-  title: {
-    flexGrow: 1
+  navHeader: {
+    flexGrow: 1,
+    textDecoration: 'none',
+    color: 'inherit'
   },
-  navLink: {
+  navItem: {
+    marginLeft: theme.spacing(4),
     textDecoration: 'none',
     color: 'inherit'
   }
 }));
+
+function NavItem(classes, link, label) {
+  return (
+    <Link to={link} className={classes.navItem}>
+      <Button color="inherit">{label}</Button>
+    </Link>
+  );
+}
 
 export default function NavMenu() {
   const classes = useStyles();
@@ -22,12 +33,11 @@ export default function NavMenu() {
   return (
     <AppBar position="fixed">
       <ToolBar>
-        <Typography variant="h6" className={classes.title}>
-          Inquests.ca
-        </Typography>
-        <Link to="/signin" className={classes.navLink}>
-          <Button color="inherit">Sign In</Button>
+        <Link to="/" className={classes.navHeader}>
+          <Typography variant="h6">Inquests.ca</Typography>
         </Link>
+        {NavItem(classes, '/signup', 'Sign Up')}
+        {NavItem(classes, '/signin', 'Sign In')}
       </ToolBar>
     </AppBar>
   );
