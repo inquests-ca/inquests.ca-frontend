@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import NavMenu from '../NavMenu';
+import SignIn from '../../scenes/SignIn';
 import ViewInquests from '../../scenes/ViewInquests';
 
 export default function App() {
@@ -10,7 +11,8 @@ export default function App() {
     <Router>
       <CssBaseline />
       <NavMenu />
-      <Route path="/" component={ViewInquests} />
+      <Route exact={true} path="/" component={ViewInquests} />
+      <Route path="/signin" component={SignIn} />
     </Router>
   );
 }
