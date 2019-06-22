@@ -1,1 +1,1 @@
-export { default } from './components/ViewInquests';
+export { default } from './ViewInquests';

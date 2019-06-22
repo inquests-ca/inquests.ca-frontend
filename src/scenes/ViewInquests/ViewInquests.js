@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
-import InquestTable from '../InquestTable';
+import InquestTable from './components/InquestTable';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -24,15 +24,13 @@ export default function ViewInquests() {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="sm">
-      <div className={classes.layout}>
-        <Typography variant="h1">Inquests.ca</Typography>
-        <Typography variant="h6" className={classes.subtitle}>
-          The guide to Canadian inquest authorities
-        </Typography>
-        <div className={classes.table}>
-          <InquestTable />
-        </div>
+    <Container maxWidth="xs" className={classes.layout}>
+      <Typography variant="h2">Inquests.ca</Typography>
+      <Typography variant="h6" className={classes.subtitle}>
+        The guide to Canadian inquest authorities
+      </Typography>
+      <div className={classes.table}>
+        <InquestTable />
       </div>
     </Container>
   );
