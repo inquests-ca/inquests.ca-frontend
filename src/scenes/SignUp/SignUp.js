@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
+
+import { signUp } from './services/signUp.js';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -27,6 +29,19 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignIn() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const setSignUpError = useState('');
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    const handleSignUpError = error => setSignUpError(error.message);
+    await signUp(email, password, handleSignUpError);
+  };
+
+  const handleEmailChange = event => setEmail(event.target.value);
+  const handlePasswordChange = event => setPassword(event.target.value);
+
   const classes = useStyles();
 
   return (
@@ -34,8 +49,9 @@ export default function SignIn() {
       <Typography component="h1" variant="h5">
         Sign Up
       </Typography>
-      <form className={classes.form}>
+      <form onSubmit={handleSubmit} className={classes.form}>
         <TextField
+          onChange={handleEmailChange}
           label="Email"
           name="email"
           autoComplete="email"
@@ -46,6 +62,7 @@ export default function SignIn() {
           margin="normal"
         />
         <TextField
+          onChange={handlePasswordChange}
           label="Password"
           name="password"
           type="password"
