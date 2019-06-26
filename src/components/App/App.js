@@ -9,10 +9,13 @@ import SignUp from '../../scenes/SignUp';
 import ViewInquests from '../../scenes/ViewInquests';
 
 export default function App() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(null);
 
   // Callback will be invoked upon sign-in, sign-out, and token expiration.
   firebase.auth().onIdTokenChanged(user => setIsSignedIn(user !== null));
+
+  // TODO: loading icon.
+  if (isSignedIn === null) return <p>Loading</p>;
 
   return (
     <Router>
