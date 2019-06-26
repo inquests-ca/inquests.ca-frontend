@@ -29,9 +29,7 @@ export default function ViewInquests() {
       <Typography variant="h6" className={classes.subtitle}>
         The guide to Canadian inquest authorities
       </Typography>
-      <div className={classes.table}>
-        <InquestTable />
-      </div>
+      <InquestTable className={classes.table} />
     </Container>
   );
 }

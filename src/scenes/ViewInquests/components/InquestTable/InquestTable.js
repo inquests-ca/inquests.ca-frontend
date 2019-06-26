@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
@@ -20,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InquestTable() {
+export default function InquestTable(props) {
   const [inquests, setInquests] = useState(null);
 
   const fetchInquests = async () => {
@@ -42,7 +43,7 @@ export default function InquestTable() {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.layout}>
+    <Paper className={clsx(props.className, classes.layout)}>
       <Table>
         <TableHead>
           <TableRow>
