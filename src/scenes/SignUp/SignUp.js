@@ -38,7 +38,7 @@ const errorMessages = {
   'auth/weak-password': 'Password should be at least 6 characters'
 };
 
-export default function SignIn() {
+export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signUpError, setSignUpError] = useState('');
