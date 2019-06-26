@@ -24,18 +24,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function NavItem(classes, label, link) {
+function NavItem(props) {
   return (
-    <Link to={link} className={clsx(classes.navLink, classes.navItem)}>
-      <Button color="inherit">{label}</Button>
+    <Link
+      to={props.link}
+      className={clsx(props.classes.navLink, props.classes.navItem)}
+    >
+      <Button color="inherit">{props.label}</Button>
     </Link>
   );
 }
 
-function NavAction(classes, label, action) {
+function NavAction(props) {
   return (
-    <Button onClick={action} color="inherit">
-      {label}
+    <Button onClick={props.action} color="inherit">
+      {props.label}
     </Button>
   );
 }
@@ -53,9 +56,15 @@ export default function NavMenu(props) {
             Inquests.ca
           </Link>
         </Typography>
-        {!props.isSignedIn && NavItem(classes, 'Sign Up', '/signup')}
-        {!props.isSignedIn && NavItem(classes, 'Sign In', '/signin')}
-        {props.isSignedIn && NavAction(classes, 'Sign Out', handleSignOut)}
+        {!props.isSignedIn && (
+          <NavItem classes={classes} label="Sign Up" link="/signup" />
+        )}
+        {!props.isSignedIn && (
+          <NavItem classes={classes} label="Sign In" link="/signin" />
+        )}
+        {props.isSignedIn && (
+          <NavAction label="Sign Out" action={handleSignOut} />
+        )}
       </ToolBar>
     </AppBar>
   );
