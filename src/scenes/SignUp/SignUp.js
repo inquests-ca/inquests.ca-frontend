@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
+import Toast from '../../components/Toast';
 import { signUp } from './services/signUp.js';
 
 const useStyles = makeStyles(theme => ({
@@ -25,13 +26,16 @@ const useStyles = makeStyles(theme => ({
   signInLink: {
     marginTop: theme.spacing(2),
     textDecoration: 'none'
+  },
+  errorAlert: {
+    marginTop: theme.spacing(2)
   }
 }));
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const setSignUpError = useState('');
+  const [signUpError, setSignUpError] = useState('');
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -42,6 +46,8 @@ export default function SignIn() {
   const handleEmailChange = event => setEmail(event.target.value);
   const handlePasswordChange = event => setPassword(event.target.value);
 
+  const handleSignUpErrorClosed = () => setSignUpError('');
+
   const classes = useStyles();
 
   return (
@@ -49,6 +55,14 @@ export default function SignIn() {
       <Typography component="h1" variant="h5">
         Sign Up
       </Typography>
+      {signUpError && (
+        <Toast
+          className={classes.errorAlert}
+          onClose={handleSignUpErrorClosed}
+          message={signUpError}
+          variant="error"
+        />
+      )}
       <form onSubmit={handleSubmit} className={classes.form}>
         <TextField
           onChange={handleEmailChange}
