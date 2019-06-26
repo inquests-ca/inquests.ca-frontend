@@ -6,6 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
+// TODO: convert to functional component with React hooks.
 export default class InquestTable extends React.Component {
   constructor(props) {
     super(props);
