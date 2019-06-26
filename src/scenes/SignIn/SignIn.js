@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -6,6 +6,11 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
+import Toast from '../../components/Toast';
+import { signIn } from './services/signIn.js';
+
+// There is lots of overlap between this component and SignUp.
+// TODO: reduce code duplication btwn components.
 const useStyles = makeStyles(theme => ({
   layout: {
     marginTop: theme.spacing(16),
@@ -23,10 +28,36 @@ const useStyles = makeStyles(theme => ({
   signUpLink: {
     marginTop: theme.spacing(2),
     textDecoration: 'none'
+  },
+  errorAlert: {
+    marginTop: theme.spacing(2)
   }
 }));
 
+const errorMessages = {
+  'auth/invalid-email': 'Invalid email',
+  'auth/user-disabled': 'This account has been disabled',
+  'auth/user-not-found': 'Incorrect email or password',
+  'auth/wrong-password': 'Incorrect email or password'
+};
+
 export default function SignIn() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [signInError, setSignInError] = useState('');
+
+  const handleSignInError = errorCode =>
+    setSignInError(errorMessages[errorCode] || 'An unknown error occurred');
+  const handleSubmit = event => {
+    event.preventDefault();
+    signIn(email, password, handleSignInError);
+  };
+
+  const handleEmailChange = event => setEmail(event.target.value);
+  const handlePasswordChange = event => setPassword(event.target.value);
+
+  const handleSignInErrorClosed = () => setSignInError('');
+
   const classes = useStyles();
 
   return (
@@ -34,8 +65,17 @@ export default function SignIn() {
       <Typography component="h1" variant="h5">
         Sign In
       </Typography>
-      <form className={classes.form}>
+      {signInError && (
+        <Toast
+          className={classes.errorAlert}
+          onClose={handleSignInErrorClosed}
+          message={signInError}
+          variant="error"
+        />
+      )}
+      <form onSubmit={handleSubmit} className={classes.form}>
         <TextField
+          onChange={handleEmailChange}
           label="Email"
           name="email"
           autoComplete="email"
@@ -46,6 +86,7 @@ export default function SignIn() {
           margin="normal"
         />
         <TextField
+          onChange={handlePasswordChange}
           label="Password"
           name="password"
           type="password"
