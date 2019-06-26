@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import * as firebase from 'firebase/app';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function NavItem(classes, link, label) {
+function NavItem(classes, label, link) {
   return (
     <Link to={link} className={clsx(classes.navLink, classes.navItem)}>
       <Button color="inherit">{label}</Button>
@@ -31,8 +32,18 @@ function NavItem(classes, link, label) {
   );
 }
 
-export default function NavMenu() {
+function NavAction(classes, label, action) {
+  return (
+    <Button onClick={action} color="inherit">
+      {label}
+    </Button>
+  );
+}
+
+export default function NavMenu(props) {
   const classes = useStyles();
+
+  const handleSignOut = () => firebase.auth().signOut();
 
   return (
     <AppBar position="fixed" className={classes.navMenu}>
@@ -42,8 +53,9 @@ export default function NavMenu() {
             Inquests.ca
           </Link>
         </Typography>
-        {NavItem(classes, '/signup', 'Sign Up')}
-        {NavItem(classes, '/signin', 'Sign In')}
+        {!props.isSignedIn && NavItem(classes, 'Sign Up', '/signup')}
+        {!props.isSignedIn && NavItem(classes, 'Sign In', '/signin')}
+        {props.isSignedIn && NavAction(classes, 'Sign Out', handleSignOut)}
       </ToolBar>
     </AppBar>
   );
