@@ -1,10 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+
+const useStyles = makeStyles(theme => ({
+  layout: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  progress: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2)
+  }
+}));
 
 export default function InquestTable() {
   const [inquests, setInquests] = useState(null);
@@ -25,8 +39,10 @@ export default function InquestTable() {
     if (inquests === null) fetchInquests();
   });
 
+  const classes = useStyles();
+
   return (
-    <Paper>
+    <Paper className={classes.layout}>
       <Table>
         <TableHead>
           <TableRow>
@@ -45,6 +61,7 @@ export default function InquestTable() {
           </TableBody>
         )}
       </Table>
+      {!inquests && <CircularProgress className={classes.progress} />}
     </Paper>
   );
 }
