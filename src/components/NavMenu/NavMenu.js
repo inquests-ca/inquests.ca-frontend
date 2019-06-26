@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -24,11 +25,9 @@ const useStyles = makeStyles(theme => ({
 
 function NavItem(classes, link, label) {
   return (
-    <Button color="inherit" className={classes.navItem}>
-      <Link to={link} className={classes.navLink}>
-        {label}
-      </Link>
-    </Button>
+    <Link to={link} className={clsx(classes.navLink, classes.navItem)}>
+      <Button color="inherit">{label}</Button>
+    </Link>
   );
 }
 
