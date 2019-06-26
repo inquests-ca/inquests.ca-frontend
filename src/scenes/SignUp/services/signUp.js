@@ -6,6 +6,6 @@ export function signUp(email, password, onError) {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .catch(function(error) {
-      onError(error);
+      onError(error.code);
     });
 }

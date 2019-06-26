@@ -32,15 +32,22 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const errorMessages = {
+  'auth/email-already-in-use': 'Email already in use',
+  'auth/invalid-email': 'Invalid email',
+  'auth/weak-password': 'Password should be at least 6 characters'
+};
+
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signUpError, setSignUpError] = useState('');
 
-  const handleSubmit = async event => {
+  const handleSignUpError = errorCode =>
+    setSignUpError(errorMessages[errorCode] || 'An unknown error occurred');
+  const handleSubmit = event => {
     event.preventDefault();
-    const handleSignUpError = error => setSignUpError(error.message);
-    await signUp(email, password, handleSignUpError);
+    signUp(email, password, handleSignUpError);
   };
 
   const handleEmailChange = event => setEmail(event.target.value);
