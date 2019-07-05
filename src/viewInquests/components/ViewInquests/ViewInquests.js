@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
-import InquestTable from './components/InquestTable';
+import InquestTable from '../InquestTable';
 
 const useStyles = makeStyles(theme => ({
   layout: {

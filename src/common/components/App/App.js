@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import NavMenu from '../NavMenu';
-import SignIn from '../../scenes/SignIn';
-import SignUp from '../../scenes/SignUp';
-import ViewInquests from '../../scenes/ViewInquests';
+import SignIn from '../../../signIn';
+import SignUp from '../../../signUp';
+import ViewInquests from '../../../viewInquests';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(null);

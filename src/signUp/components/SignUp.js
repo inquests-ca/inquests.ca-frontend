@@ -6,8 +6,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
-import Toast from '../../components/Toast';
-import { signUp } from './services/signUp.js';
+import Toast from '../../common/components/Toast';
+import { signUp } from '../services/signUp.js';
 
 const useStyles = makeStyles(theme => ({
   layout: {
