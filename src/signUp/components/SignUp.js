@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
 import Toast from '../../common/components/Toast';
-import { signUp } from '../services/signUp.js';
+import { signUp } from '../../common/services/firebase';
 
 const useStyles = makeStyles(theme => ({
   layout: {

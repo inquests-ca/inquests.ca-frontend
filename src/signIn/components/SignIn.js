@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
 import Toast from '../../common/components/Toast';
-import { signIn } from '../services/signIn.js';
+import { signIn } from '../../common/services/firebase';
 
 // There is lots of overlap between this component and SignUp.
 // TODO: reduce code duplication btwn components.
