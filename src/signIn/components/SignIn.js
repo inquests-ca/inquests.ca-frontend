@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -31,6 +32,9 @@ const useStyles = makeStyles(theme => ({
   },
   errorAlert: {
     marginTop: theme.spacing(2)
+  },
+  progress: {
+    marginTop: theme.spacing(2)
   }
 }));
 
@@ -44,19 +48,27 @@ const errorMessages = {
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [signInError, setSignInError] = useState('');
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [signInError, setSignInError] = useState(null);
 
-  const handleSignInError = errorCode =>
-    setSignInError(errorMessages[errorCode] || 'An unknown error occurred');
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    signIn(email, password, handleSignInError);
+    setSignInError(null);
+    setIsSigningIn(true);
+    const result = await signIn(email, password);
+    // If the sign in is successful, this component will be unmounted.
+    // Therefore, only perform state updates if an error occured.
+    if (result.errorCode) {
+      setIsSigningIn(false);
+      setSignInError(
+        errorMessages[result.errorCode] || 'An unknown error occurred'
+      );
+    }
   };
 
   const handleEmailChange = event => setEmail(event.target.value);
   const handlePasswordChange = event => setPassword(event.target.value);
-
-  const handleSignInErrorClosed = () => setSignInError('');
+  const handleSignInErrorClosed = () => setSignInError(null);
 
   const classes = useStyles();
 
@@ -76,6 +88,7 @@ export default function SignIn() {
       <form onSubmit={handleSubmit} className={classes.form}>
         <TextField
           onChange={handleEmailChange}
+          disabled={isSigningIn}
           label="Email"
           name="email"
           autoComplete="email"
@@ -87,6 +100,7 @@ export default function SignIn() {
         />
         <TextField
           onChange={handlePasswordChange}
+          disabled={isSigningIn}
           label="Password"
           name="password"
           type="password"
@@ -98,6 +112,7 @@ export default function SignIn() {
         />
         <Button
           className={classes.submit}
+          disabled={isSigningIn}
           type="submit"
           variant="contained"
           color="primary"
@@ -109,6 +124,7 @@ export default function SignIn() {
       <Link to="/signup" className={classes.signUpLink}>
         Don't have an account? Sign up.
       </Link>
+      {isSigningIn && <CircularProgress className={classes.progress} />}
     </Container>
   );
 }

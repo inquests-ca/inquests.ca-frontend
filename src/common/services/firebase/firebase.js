@@ -2,7 +2,7 @@ import * as firebase from 'firebase/app';
 
 import 'firebase/auth';
 
-export function init() {
+export const init = () => {
   var firebaseConfig = {
     apiKey: 'AIzaSyDPe1F4lsCVALqEsfDXLRH3FolSU46p5Lw',
     authDomain: 'inquestsca.firebaseapp.com',
@@ -15,34 +15,34 @@ export function init() {
 
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
-}
+};
 
-export function signIn(email, password, onError) {
+const authenticationResult = (user, errorCode) => ({ user, errorCode });
+
+export const signIn = async (email, password) => {
   // TODO: use async await syntax.
-  firebase
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  return await firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .catch(function(error) {
-      onError(error.code);
-    });
-}
+    .then(user => authenticationResult(user, null))
+    .catch(error => authenticationResult(null, error.code));
+};
 
-export function signUp(email, password, onError) {
+export const signUp = async (email, password) => {
   // TODO: use async await syntax.
   // TODO: consider using Firebase Admin SDK to handle account creation.
-  firebase
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  return await firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .catch(function(error) {
-      onError(error.code);
-    });
-}
+    .then(user => authenticationResult(user, null))
+    .catch(error => authenticationResult(null, error.code));
+};
 
-export function isUserSignedIn() {
-  return firebase.auth().currentUser !== null;
-}
+export const isUserSignedIn = () => firebase.auth().currentUser !== null;
 
-export async function fetchWithAuthentication(url, options) {
+export const fetchWithAuthentication = async (url, options) => {
   if (!isUserSignedIn())
     throw new Error('No user is signed in, cannot authenticate request.');
 
@@ -57,4 +57,4 @@ export async function fetchWithAuthentication(url, options) {
     credentials: 'same-origin'
   });
   return response;
-}
+};
