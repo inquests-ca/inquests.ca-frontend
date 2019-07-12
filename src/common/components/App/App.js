@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import LoadingPage from '../LoadingPage';
 import NavMenu from '../NavMenu';
 import SignIn from '../../../signIn';
 import SignUp from '../../../signUp';
@@ -15,7 +16,7 @@ export default function App() {
   firebase.auth().onIdTokenChanged(user => setIsSignedIn(user !== null));
 
   // TODO: loading icon.
-  if (isSignedIn === null) return <p>Loading</p>;
+  if (isSignedIn === null) return <LoadingPage />;
 
   return (
     <Router>
