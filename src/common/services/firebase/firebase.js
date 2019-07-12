@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
 export const init = () => {
+  // Note this object contains unique, but non-secret identifiers.
   var firebaseConfig = {
     apiKey: 'AIzaSyDPe1F4lsCVALqEsfDXLRH3FolSU46p5Lw',
     authDomain: 'inquestsca.firebaseapp.com',
