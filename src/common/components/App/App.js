@@ -15,7 +15,6 @@ export default function App() {
   // Callback will be invoked upon sign-in, sign-out, and token expiration.
   firebase.auth().onIdTokenChanged(user => setIsSignedIn(user !== null));
 
-  // TODO: loading icon.
   if (isSignedIn === null) return <LoadingPage />;
 
   return (
@@ -23,20 +22,9 @@ export default function App() {
       <CssBaseline />
       <NavMenu isSignedIn={isSignedIn} />
       <Route exact={true} path="/" component={ViewInquests} />
-      <Route
-        path="/signup"
-        render={() => {
-          if (isSignedIn) return <Redirect to="/" />;
-          else return <SignUp />;
-        }}
-      />
-      <Route
-        path="/signin"
-        component={() => {
-          if (isSignedIn) return <Redirect to="/" />;
-          else return <SignIn />;
-        }}
-      />
+      {!isSignedIn && <Route path="/signup" component={SignUp} />}
+      {!isSignedIn && <Route path="/signin" component={SignIn} />}
+      {isSignedIn && <Route path="/" render={() => <Redirect to="/" />} />}
     </Router>
   );
 }
