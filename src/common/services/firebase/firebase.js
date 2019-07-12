@@ -46,14 +46,13 @@ export const fetchWithAuthentication = async (url, options) => {
     throw new Error('No user is signed in, cannot authenticate request.');
 
   const token = await firebase.auth().currentUser.getIdToken();
-  // TODO: determine what options to set here.
   const response = await fetch(url, {
     ...options,
     headers: {
       ...options.headers,
       Authorization: `Bearer ${token}`
     },
-    credentials: 'same-origin'
+    credentials: 'omit'
   });
   return response;
 };
