@@ -19,21 +19,19 @@ export const init = () => {
 
 const authenticationResult = (user, errorCode) => ({ user, errorCode });
 
-export const signIn = async (email, password) => {
+export const signIn = (email, password) => {
   // TODO: use async await syntax.
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  return await firebase
+  return firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(user => authenticationResult(user, null))
     .catch(error => authenticationResult(null, error.code));
 };
 
-export const signUp = async (email, password) => {
+export const signUp = (email, password) => {
   // TODO: use async await syntax.
   // TODO: consider using Firebase Admin SDK to handle account creation.
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  return await firebase
+  return firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(user => authenticationResult(user, null))
