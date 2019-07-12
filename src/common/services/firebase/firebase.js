@@ -40,19 +40,4 @@ export const signUp = (email, password) => {
 };
 
 export const isUserSignedIn = () => firebase.auth().currentUser !== null;
-
-export const fetchWithAuthentication = async (url, options) => {
-  if (!isUserSignedIn())
-    throw new Error('No user is signed in, cannot authenticate request.');
-
-  const token = await firebase.auth().currentUser.getIdToken();
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      ...options.headers,
-      Authorization: `Bearer ${token}`
-    },
-    credentials: 'omit'
-  });
-  return response;
-};
+export const getBearerToken = () => firebase.auth().currentUser.getIdToken();

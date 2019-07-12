@@ -9,6 +9,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
+import { fetchNoAuth } from '../../../common/services/fetchHelper';
+
 const useStyles = makeStyles(theme => ({
   layout: {
     display: 'flex',
@@ -25,7 +27,7 @@ export default function InquestTable(props) {
   const [inquests, setInquests] = useState(null);
 
   const fetchInquests = async () => {
-    const response = await fetch('/api/inquests');
+    const response = await fetchNoAuth('/api/inquests');
     let json;
     try {
       json = await response.json();
