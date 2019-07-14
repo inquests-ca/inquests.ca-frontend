@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
@@ -18,53 +17,58 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center'
   },
   progress: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2)
+    marginTop: theme.spacing(4)
   }
 }));
 
 export default function InquestTable(props) {
   const [inquests, setInquests] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
 
   const fetchInquests = async () => {
+    setIsFetching(true);
     const response = await fetchNoAuth('/api/inquests');
-    let json;
-    try {
-      json = await response.json();
-    } catch (e) {
-      // TODO: log, and display error in client.
-      json = [];
+    if (!response.ok) {
+      let json;
+      try {
+        json = await response.json();
+      } catch (e) {
+        return;
+      }
+      setIsFetching(false);
+      setInquests(json);
     }
-    setInquests(json);
   };
 
   useEffect(() => {
-    if (inquests === null) fetchInquests();
+    if (!inquests && !isFetching) fetchInquests();
   });
 
   const classes = useStyles();
 
   return (
-    <Paper className={clsx(props.className, classes.layout)}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Title</TableCell>
-            <TableCell>Description</TableCell>
-          </TableRow>
-        </TableHead>
-        {inquests && (
-          <TableBody>
-            {inquests.map((inquest, i) => (
-              <TableRow key={i}>
-                <TableCell>{inquest.title}</TableCell>
-                <TableCell>{inquest.description}</TableCell>
+    <div className={classes.layout}>
+      {inquests && (
+        <Paper className={props.className}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Title</TableCell>
+                <TableCell>Description</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        )}
-      </Table>
-      {!inquests && <CircularProgress className={classes.progress} />}
-    </Paper>
+            </TableHead>
+            <TableBody>
+              {inquests.map((inquest, i) => (
+                <TableRow key={i}>
+                  <TableCell>{inquest.title}</TableCell>
+                  <TableCell>{inquest.description}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      )}
+      {isFetching && <CircularProgress className={classes.progress} />}
+    </div>
   );
 }
