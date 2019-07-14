@@ -10,7 +10,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(14),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    textAlign: 'center'
   },
   subtitle: {
     marginTop: theme.spacing(2)
