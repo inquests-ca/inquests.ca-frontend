@@ -28,7 +28,7 @@ export default function InquestTable(props) {
   const fetchInquests = async () => {
     setIsFetching(true);
     const response = await fetchNoAuth('/api/inquests');
-    if (!response.ok) {
+    if (response.ok) {
       let json;
       try {
         json = await response.json();
