@@ -57,8 +57,7 @@ function NavItem(props) {
   );
 }
 
-// TODO: rename to NavHeader.
-export default function NavMenu(props) {
+export default function NavHeader(props) {
   const classes = useStyles();
 
   return (

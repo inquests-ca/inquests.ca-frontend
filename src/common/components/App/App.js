@@ -11,7 +11,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
 import LoadingPage from '../LoadingPage';
-import NavMenu from '../NavMenu';
+import NavHeader from '../NavHeader';
 import AuthorityViewer from '../../../authorityViewer';
 import SignIn from '../../../signIn';
 import SignUp from '../../../signUp';
@@ -39,7 +39,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <NavMenu isSignedIn={isSignedIn} />
+        <NavHeader isSignedIn={isSignedIn} />
         <Switch>
           <Route exact={true} path="/" component={AuthorityViewer} />
           {!isSignedIn && <Route path="/signup" component={SignUp} />}
