@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import * as firebase from 'firebase/app';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch
+} from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import LoadingPage from '../LoadingPage';
@@ -21,10 +26,12 @@ export default function App() {
     <Router>
       <CssBaseline />
       <NavMenu isSignedIn={isSignedIn} />
-      <Route exact={true} path="/" component={AuthorityViewer} />
-      {!isSignedIn && <Route path="/signup" component={SignUp} />}
-      {!isSignedIn && <Route path="/signin" component={SignIn} />}
-      {isSignedIn && <Route path="/" render={() => <Redirect to="/" />} />}
+      <Switch>
+        <Route exact={true} path="/" component={AuthorityViewer} />
+        {!isSignedIn && <Route path="/signup" component={SignUp} />}
+        {!isSignedIn && <Route path="/signin" component={SignIn} />}
+        <Redirect to="/" />
+      </Switch>
     </Router>
   );
 }
