@@ -7,12 +7,22 @@ import {
   Switch
 } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 
 import LoadingPage from '../LoadingPage';
 import NavMenu from '../NavMenu';
 import AuthorityViewer from '../../../authorityViewer';
 import SignIn from '../../../signIn';
 import SignUp from '../../../signUp';
+
+const theme = createMuiTheme({
+  palette: {
+    background: {
+      default: '#f9f9f9'
+    }
+  }
+});
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(null);
@@ -23,15 +33,17 @@ export default function App() {
   if (isSignedIn === null) return <LoadingPage />;
 
   return (
-    <Router>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <NavMenu isSignedIn={isSignedIn} />
-      <Switch>
-        <Route exact={true} path="/" component={AuthorityViewer} />
-        {!isSignedIn && <Route path="/signup" component={SignUp} />}
-        {!isSignedIn && <Route path="/signin" component={SignIn} />}
-        <Redirect to="/" />
-      </Switch>
-    </Router>
+      <Router>
+        <NavMenu isSignedIn={isSignedIn} />
+        <Switch>
+          <Route exact={true} path="/" component={AuthorityViewer} />
+          {!isSignedIn && <Route path="/signup" component={SignUp} />}
+          {!isSignedIn && <Route path="/signin" component={SignIn} />}
+          <Redirect to="/" />
+        </Switch>
+      </Router>
+    </ThemeProvider>
   );
 }
