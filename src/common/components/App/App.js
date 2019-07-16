@@ -5,9 +5,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import LoadingPage from '../LoadingPage';
 import NavMenu from '../NavMenu';
+import AuthorityViewer from '../../../authorityViewer';
 import SignIn from '../../../signIn';
 import SignUp from '../../../signUp';
-import ViewInquests from '../../../viewInquests';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(null);
@@ -21,7 +21,7 @@ export default function App() {
     <Router>
       <CssBaseline />
       <NavMenu isSignedIn={isSignedIn} />
-      <Route exact={true} path="/" component={ViewInquests} />
+      <Route exact={true} path="/" component={AuthorityViewer} />
       {!isSignedIn && <Route path="/signup" component={SignUp} />}
       {!isSignedIn && <Route path="/signin" component={SignIn} />}
       {isSignedIn && <Route path="/" render={() => <Redirect to="/" />} />}
