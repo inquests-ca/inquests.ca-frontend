@@ -39,5 +39,7 @@ export const signUp = (email, password) => {
     .catch(error => authenticationResult(null, error.code));
 };
 
+export const signOut = () => firebase.auth().signOut();
+
 export const isUserSignedIn = () => firebase.auth().currentUser !== null;
 export const getBearerToken = () => firebase.auth().currentUser.getIdToken();
