@@ -1,70 +1,87 @@
 import React from 'react';
 import clsx from 'clsx';
-import * as firebase from 'firebase/app';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
 import ToolBar from '@material-ui/core/ToolBar';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
+import AccountMenu from '../AccountMenu';
+
 const useStyles = makeStyles(theme => ({
   navMenu: {
-    backgroundColor: theme.palette.grey[900]
+    borderTop: `5px solid ${theme.palette.common.black}`,
+    padding: theme.spacing(0.5),
+    backgroundColor: theme.palette.common.white
   },
-  navLink: {
+  navTextDefault: {
     textDecoration: 'none',
-    color: 'inherit'
+    color: theme.palette.text.primary
+  },
+  navTextLink: {
+    textDecoration: 'none',
+    color: theme.palette.text.link
   },
   navHeader: {
     flexGrow: 1
   },
   navItem: {
     marginLeft: theme.spacing(4)
+  },
+  accountMenu: {
+    marginLeft: theme.spacing(4),
+    marginRight: theme.spacing(4)
   }
 }));
 
-function NavItem(props) {
+function NavLink(props) {
+  const classes = useStyles();
+
   return (
-    <Link
-      to={props.link}
-      className={clsx(props.classes.navLink, props.classes.navItem)}
-    >
-      <Button color="inherit">{props.label}</Button>
+    <Link to={props.to} className={classes.navTextLink}>
+      {props.label}
     </Link>
   );
 }
 
-function NavAction(props) {
+function NavItem(props) {
+  const classes = useStyles();
+
   return (
-    <Button onClick={props.action} color="inherit">
-      {props.label}
-    </Button>
+    <Typography
+      variant="body1"
+      className={clsx(classes.navItem, classes.navTextDefault)}
+    >
+      {props.children}
+    </Typography>
   );
 }
 
+// TODO: rename to NavHeader.
 export default function NavMenu(props) {
   const classes = useStyles();
-
-  const handleSignOut = () => firebase.auth().signOut();
 
   return (
     <AppBar position="fixed" className={classes.navMenu}>
       <ToolBar>
-        <Typography variant="h6" className={classes.navHeader}>
-          <Link to="/" className={classes.navLink}>
+        <Typography variant="h4" className={classes.navHeader}>
+          <Link to="/" className={classes.navTextDefault}>
             Inquests.ca
           </Link>
         </Typography>
         {!props.isSignedIn && (
-          <NavItem classes={classes} label="Sign Up" link="/signup" />
-        )}
-        {!props.isSignedIn && (
-          <NavItem classes={classes} label="Sign In" link="/signin" />
+          <NavItem>
+            <NavLink to="/signup" label="Sign Up" />
+            &nbsp;or&nbsp;
+            <NavLink to="/signin" label="Sign In" />
+          </NavItem>
         )}
         {props.isSignedIn && (
-          <NavAction label="Sign Out" action={handleSignOut} />
+          <NavItem>
+            <NavLink to="/create" label="Create Authority" />
+          </NavItem>
         )}
+        {props.isSignedIn && <AccountMenu className={classes.accountMenu} />}
       </ToolBar>
     </AppBar>
   );
