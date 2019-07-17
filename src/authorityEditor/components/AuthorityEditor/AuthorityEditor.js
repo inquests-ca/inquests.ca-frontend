@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
 import MuiTextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+
+import Toast from '../../../common/components/Toast';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -23,13 +26,17 @@ const useStyles = makeStyles(theme => ({
   },
   progress: {
     marginTop: theme.spacing(2)
+  },
+  errorAlert: {
+    position: 'absolute',
+    bottom: theme.spacing(2)
   }
 }));
 
 function TextField(props) {
   return (
     <MuiTextField
-      onChange={event => props.onChange(props.key, event.target.value)}
+      onChange={event => props.onChange(props.dataKey, event.target.value)}
       label={props.label}
       name={props.name}
       required={props.required}
@@ -46,24 +53,31 @@ function TextField(props) {
 // authorities.
 export default function AuthorityEditor(props) {
   const [data, setData] = useState({});
-
-  // TODO: show errors.
-  // TODO: show success.
-  // const [validationError, setValidationError] = useState(null);
-  // const [submitError, setSubmitError] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(null);
+  const [created, setCreated] = useState(false);
+  // TODO: display Toast when authority successfully created.
 
   const handleSubmit = async event => {
-    // TODO: use onSubmit passed by props.
     event.preventDefault();
+    setSubmitError(null);
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    const result = await props.onSubmit(data);
     setIsSubmitting(false);
+    if (result.error) {
+      setSubmitError(result.error);
+    } else {
+      setCreated(true);
+    }
   };
 
-  const handleDataChange = (key, value) => setData({ ...data, key: value });
+  const handleDataChange = (key, value) => setData({ ...data, [key]: value });
+  const handleSubmitErrorClosed = () => setSubmitError(null);
 
   const classes = useStyles();
+
+  // TODO: redirect to authority page.
+  if (created) return <Redirect to="/" />;
 
   return (
     <Container maxWidth="xs" className={classes.layout}>
@@ -73,7 +87,7 @@ export default function AuthorityEditor(props) {
       <form onSubmit={handleSubmit} className={classes.form}>
         <TextField
           label="Title"
-          key="title"
+          dataKey="title"
           name="title"
           autoFocus
           required
@@ -82,7 +96,7 @@ export default function AuthorityEditor(props) {
         />
         <TextField
           label="Description"
-          key="description"
+          dataKey="description"
           name="description"
           onChange={handleDataChange}
           disabled={isSubmitting}
@@ -99,6 +113,14 @@ export default function AuthorityEditor(props) {
         </Button>
       </form>
       {isSubmitting && <CircularProgress className={classes.progress} />}
+      {submitError && (
+        <Toast
+          className={classes.errorAlert}
+          onClose={handleSubmitErrorClosed}
+          message={submitError}
+          variant="error"
+        />
+      )}
     </Container>
   );
 }
