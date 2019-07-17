@@ -13,6 +13,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import LoadingPage from '../LoadingPage';
 import NavHeader from '../NavHeader';
 import AuthorityViewer from '../../../authorityViewer';
+import AuthorityCreator from '../../../authorityEditor';
 import SignIn from '../../../signIn';
 import SignUp from '../../../signUp';
 
@@ -44,6 +45,7 @@ export default function App() {
           <Route exact={true} path="/" component={AuthorityViewer} />
           {!isSignedIn && <Route path="/signup" component={SignUp} />}
           {!isSignedIn && <Route path="/signin" component={SignIn} />}
+          {isSignedIn && <Route path="/create" component={AuthorityCreator} />}
           <Redirect to="/" />
         </Switch>
       </Router>
