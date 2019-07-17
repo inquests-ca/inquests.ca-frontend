@@ -18,15 +18,15 @@ export const init = () => {
   firebase.initializeApp(firebaseConfig);
 };
 
-const authenticationResult = (user, errorCode) => ({ user, errorCode });
+const authenticationResponse = (user, errorCode) => ({ user, errorCode });
 
 export const signIn = (email, password) => {
   // TODO: use async await syntax.
   return firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then(user => authenticationResult(user, null))
-    .catch(error => authenticationResult(null, error.code));
+    .then(user => authenticationResponse(user, null))
+    .catch(error => authenticationResponse(null, error.code));
 };
 
 export const signUp = (email, password) => {
@@ -35,8 +35,8 @@ export const signUp = (email, password) => {
   return firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(user => authenticationResult(user, null))
-    .catch(error => authenticationResult(null, error.code));
+    .then(user => authenticationResponse(user, null))
+    .catch(error => authenticationResponse(null, error.code));
 };
 
 export const signOut = () => firebase.auth().signOut();
