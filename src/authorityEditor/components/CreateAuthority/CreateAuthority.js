@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import AuthorityEditor from '../AuthorityEditor';
-import { createAuthority } from '../../../common/services/authoritiesApi';
+import { createAuthority } from '../../../common/services/authorityApi';
 
 export default function CreateAuthority(props) {
   const { currentUser } = props;
