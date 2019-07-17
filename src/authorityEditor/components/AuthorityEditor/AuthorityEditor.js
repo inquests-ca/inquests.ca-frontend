@@ -58,11 +58,13 @@ export default function AuthorityEditor(props) {
   const [created, setCreated] = useState(false);
   // TODO: display Toast when authority successfully created.
 
+  const { pageTitle, submitActionLabel, onSubmit } = props;
+
   const handleSubmit = async event => {
     event.preventDefault();
     setSubmitError(null);
     setIsSubmitting(true);
-    const result = await props.onSubmit(data);
+    const result = await onSubmit(data);
     setIsSubmitting(false);
     if (result.error) {
       setSubmitError(result.error);
@@ -82,7 +84,7 @@ export default function AuthorityEditor(props) {
   return (
     <Container maxWidth="xs" className={classes.layout}>
       <Typography component="h1" variant="h5">
-        {props.pageTitle}
+        {pageTitle}
       </Typography>
       <form onSubmit={handleSubmit} className={classes.form}>
         <TextField
@@ -109,7 +111,7 @@ export default function AuthorityEditor(props) {
           color="primary"
           fullWidth
         >
-          {props.submitActionLabel}
+          {submitActionLabel}
         </Button>
       </form>
       {isSubmitting && <CircularProgress className={classes.progress} />}
