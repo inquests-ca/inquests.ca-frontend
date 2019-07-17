@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
@@ -25,6 +26,8 @@ export default function AuthorityTable(props) {
   const [authorities, setAuthorities] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
 
+  const { className } = props;
+
   const fetchInquests = async () => {
     setIsFetching(true);
     const response = await fetchNoAuth('/api/inquests');
@@ -47,9 +50,9 @@ export default function AuthorityTable(props) {
   const classes = useStyles();
 
   return (
-    <div className={classes.layout}>
+    <div className={clsx(className, classes.layout)}>
       {authorities && (
-        <Paper className={props.className}>
+        <Paper>
           <Table>
             <TableHead>
               <TableRow>

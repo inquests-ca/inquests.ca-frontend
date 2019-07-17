@@ -19,7 +19,7 @@ export default function AccountMenu(props) {
   const [anchor, setAnchor] = useState(null);
   const isOpen = Boolean(anchor);
 
-  const { currentUser } = props;
+  const { className, currentUser } = props;
 
   const handleOpen = event => setAnchor(event.currentTarget);
   const handleClose = () => setAnchor(null);
@@ -32,7 +32,7 @@ export default function AccountMenu(props) {
   const classes = useStyles();
 
   return (
-    <div className={props.className}>
+    <div className={className}>
       <IconButton
         aria-label="Account of current user"
         aria-controls="menu-appbar"
