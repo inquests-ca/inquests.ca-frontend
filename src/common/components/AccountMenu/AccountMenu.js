@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -16,6 +17,8 @@ const useStyles = makeStyles(theme => ({
 export default function AccountMenu(props) {
   const [anchor, setAnchor] = useState(null);
   const isOpen = Boolean(anchor);
+
+  const { currentUser } = props;
 
   const handleOpen = event => setAnchor(event.currentTarget);
   const handleClose = () => setAnchor(null);
@@ -44,8 +47,13 @@ export default function AccountMenu(props) {
         open={isOpen}
         onClose={handleClose}
       >
+        <MenuItem>{currentUser.email}</MenuItem>
         <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
       </Menu>
     </div>
   );
 }
+
+AccountMenu.propTypes = {
+  currentUser: PropTypes.object.isRequired
+};
