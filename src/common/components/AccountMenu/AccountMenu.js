@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+// TODO: display name in Profile menu rather than email.
 export default function AccountMenu(props) {
   const [anchor, setAnchor] = useState(null);
   const isOpen = Boolean(anchor);
