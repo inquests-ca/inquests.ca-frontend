@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import * as firebase from 'firebase/app';
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -16,6 +15,7 @@ import AuthorityViewer from '../../../authorityViewer';
 import AuthorityCreator from '../../../authorityEditor';
 import SignIn from '../../../signIn';
 import SignUp from '../../../signUp';
+import { subscribeIdTokenChangeEvent } from '../../services/firebase';
 
 const theme = createMuiTheme({
   palette: {
@@ -29,23 +29,34 @@ const theme = createMuiTheme({
 });
 
 export default function App() {
-  const [isSignedIn, setIsSignedIn] = useState(null);
+  const [currentUser, setCurrentUser] = useState(undefined);
+  const adminAuthorization =
+    currentUser && currentUser.authorization === 'admin';
 
-  // Callback will be invoked upon sign-in, sign-out, and token expiration.
-  firebase.auth().onIdTokenChanged(user => setIsSignedIn(user !== null));
+  const handleIdTokenChange = user => setCurrentUser(user);
 
-  if (isSignedIn === null) return <LoadingPage />;
+  useEffect(() => {
+    const unsubscribe = subscribeIdTokenChangeEvent(handleIdTokenChange);
+    return unsubscribe;
+  }, []);
+
+  if (currentUser === undefined) return <LoadingPage />;
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <NavHeader isSignedIn={isSignedIn} />
+        <NavHeader currentUser={currentUser} />
         <Switch>
           <Route exact={true} path="/" component={AuthorityViewer} />
-          {!isSignedIn && <Route path="/signup" component={SignUp} />}
-          {!isSignedIn && <Route path="/signin" component={SignIn} />}
-          {isSignedIn && <Route path="/create" component={AuthorityCreator} />}
+          {!currentUser && <Route path="/signup" component={SignUp} />}
+          {!currentUser && <Route path="/signin" component={SignIn} />}
+          {adminAuthorization && (
+            <Route
+              path="/create"
+              render={() => <AuthorityCreator currentUser={currentUser} />}
+            />
+          )}
           <Redirect to="/" />
         </Switch>
       </Router>

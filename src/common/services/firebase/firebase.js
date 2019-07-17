@@ -41,5 +41,20 @@ export const signUp = (email, password) => {
 
 export const signOut = () => firebase.auth().signOut();
 
-export const isUserSignedIn = () => firebase.auth().currentUser !== null;
-export const getBearerToken = () => firebase.auth().currentUser.getIdToken();
+const asUser = async firebaseUser => {
+  if (firebaseUser === null) return null;
+  const email = firebaseUser.email;
+  const tokenResult = await firebaseUser.getIdTokenResult();
+  const token = tokenResult.token;
+  const authorization = tokenResult.claims.admin ? 'admin' : 'user';
+  return { email, token, authorization };
+};
+
+// Callback is invoked upon sign-in, sign-out, and token expiration.
+export const subscribeIdTokenChangeEvent = callback => {
+  const unsubscribe = firebase.auth().onIdTokenChanged(async firebaseUser => {
+    const user = await asUser(firebaseUser);
+    callback(user);
+  });
+  return unsubscribe;
+};

@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/ToolBar';
@@ -57,7 +58,13 @@ function NavItem(props) {
   );
 }
 
+// TODO: fix positioning of account menu.
+// TODO: make the Create Authority link a button.
 export default function NavHeader(props) {
+  const { currentUser } = props;
+  const adminAuthorization =
+    currentUser && currentUser.authorization === 'admin';
+
   const classes = useStyles();
 
   return (
@@ -68,20 +75,29 @@ export default function NavHeader(props) {
             Inquests.ca
           </Link>
         </Typography>
-        {!props.isSignedIn && (
+        {!currentUser && (
           <NavItem>
             <NavLink to="/signup" label="Sign Up" />
             &nbsp;or&nbsp;
             <NavLink to="/signin" label="Sign In" />
           </NavItem>
         )}
-        {props.isSignedIn && (
+        {adminAuthorization && (
           <NavItem>
             <NavLink to="/create" label="Create Authority" />
           </NavItem>
         )}
-        {props.isSignedIn && <AccountMenu className={classes.accountMenu} />}
+        {currentUser && (
+          <AccountMenu
+            currentUser={currentUser}
+            className={classes.accountMenu}
+          />
+        )}
       </ToolBar>
     </AppBar>
   );
 }
+
+NavHeader.propTypes = {
+  currentUser: PropTypes.object
+};
