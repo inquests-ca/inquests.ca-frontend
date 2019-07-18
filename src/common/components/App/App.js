@@ -1,30 +1,65 @@
-import React, { useState } from 'react';
-import * as firebase from 'firebase/app';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch
+} from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 
 import LoadingPage from '../LoadingPage';
-import NavMenu from '../NavMenu';
+import NavHeader from '../NavHeader';
+import AuthorityViewer from '../../../authorityViewer';
+import AuthorityCreator from '../../../authorityEditor';
 import SignIn from '../../../signIn';
 import SignUp from '../../../signUp';
-import ViewInquests from '../../../viewInquests';
+import { subscribeToIdTokenChangeEvent } from '../../services/firebase';
+
+const theme = createMuiTheme({
+  palette: {
+    background: {
+      default: '#f9f9f9'
+    },
+    text: {
+      link: '#2681db'
+    }
+  }
+});
 
 export default function App() {
-  const [isSignedIn, setIsSignedIn] = useState(null);
+  const [currentUser, setCurrentUser] = useState(undefined);
+  const adminAuthorization =
+    currentUser && currentUser.authorization === 'admin';
 
-  // Callback will be invoked upon sign-in, sign-out, and token expiration.
-  firebase.auth().onIdTokenChanged(user => setIsSignedIn(user !== null));
+  const handleIdTokenChange = user => setCurrentUser(user);
 
-  if (isSignedIn === null) return <LoadingPage />;
+  useEffect(() => {
+    const unsubscribe = subscribeToIdTokenChangeEvent(handleIdTokenChange);
+    return unsubscribe;
+  }, []);
+
+  if (currentUser === undefined) return <LoadingPage />;
 
   return (
-    <Router>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <NavMenu isSignedIn={isSignedIn} />
-      <Route exact={true} path="/" component={ViewInquests} />
-      {!isSignedIn && <Route path="/signup" component={SignUp} />}
-      {!isSignedIn && <Route path="/signin" component={SignIn} />}
-      {isSignedIn && <Route path="/" render={() => <Redirect to="/" />} />}
-    </Router>
+      <Router>
+        <NavHeader currentUser={currentUser} />
+        <Switch>
+          <Route exact={true} path="/" component={AuthorityViewer} />
+          {!currentUser && <Route path="/signup" component={SignUp} />}
+          {!currentUser && <Route path="/signin" component={SignIn} />}
+          {adminAuthorization && (
+            <Route
+              path="/create"
+              render={() => <AuthorityCreator currentUser={currentUser} />}
+            />
+          )}
+          <Redirect to="/" />
+        </Switch>
+      </Router>
+    </ThemeProvider>
   );
 }

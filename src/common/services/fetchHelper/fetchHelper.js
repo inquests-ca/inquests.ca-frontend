@@ -1,5 +1,3 @@
-import { isUserSignedIn, getBearerToken } from '../firebase';
-
 const defaultOptions = {
   credentials: 'omit'
 };
@@ -7,11 +5,8 @@ const defaultOptions = {
 export const fetchNoAuth = (url, options = {}) =>
   fetch(url, { ...defaultOptions, ...options });
 
-export const fetchWithAuth = async (url, options = {}) => {
-  if (!isUserSignedIn())
-    throw new Error('No user is signed in, cannot authenticate request.');
-
-  const token = await getBearerToken();
+export const fetchWithAuth = async (user, url, options = {}) => {
+  const { token } = user;
   return await fetch(url, {
     ...defaultOptions,
     ...options,

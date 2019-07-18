@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
@@ -21,9 +22,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InquestTable(props) {
-  const [inquests, setInquests] = useState(null);
+export default function AuthorityTable(props) {
+  const [authorities, setAuthorities] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
+
+  const { className } = props;
 
   const fetchInquests = async () => {
     setIsFetching(true);
@@ -36,20 +39,20 @@ export default function InquestTable(props) {
         return;
       }
       setIsFetching(false);
-      setInquests(json);
+      setAuthorities(json);
     }
   };
 
   useEffect(() => {
-    if (!inquests && !isFetching) fetchInquests();
+    if (!authorities && !isFetching) fetchInquests();
   });
 
   const classes = useStyles();
 
   return (
-    <div className={classes.layout}>
-      {inquests && (
-        <Paper className={props.className}>
+    <div className={clsx(className, classes.layout)}>
+      {authorities && (
+        <Paper>
           <Table>
             <TableHead>
               <TableRow>
@@ -58,10 +61,10 @@ export default function InquestTable(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {inquests.map((inquest, i) => (
+              {authorities.map((authority, i) => (
                 <TableRow key={i}>
-                  <TableCell>{inquest.title}</TableCell>
-                  <TableCell>{inquest.description}</TableCell>
+                  <TableCell>{authority.title}</TableCell>
+                  <TableCell>{authority.description}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
