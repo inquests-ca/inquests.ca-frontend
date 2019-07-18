@@ -7,8 +7,6 @@ import ToolBar from '@material-ui/core/ToolBar';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
-import AccountMenu from '../AccountMenu';
-
 const useStyles = makeStyles(theme => ({
   navMenu: {
     borderTop: `5px solid ${theme.palette.common.black}`,
@@ -21,15 +19,13 @@ const useStyles = makeStyles(theme => ({
   },
   navTextLink: {
     textDecoration: 'none',
+    cursor: 'pointer',
     color: theme.palette.text.link
   },
   navHeader: {
     flexGrow: 1
   },
   navItem: {
-    marginLeft: theme.spacing(4)
-  },
-  accountMenu: {
     marginLeft: theme.spacing(4)
   }
 }));
@@ -41,6 +37,16 @@ function NavLink(props) {
     <Link to={props.to} className={classes.navTextLink}>
       {props.label}
     </Link>
+  );
+}
+
+function NavAction(props) {
+  const classes = useStyles();
+
+  return (
+    <span onClick={props.action} className={classes.navTextLink}>
+      {props.label}
+    </span>
   );
 }
 
@@ -57,8 +63,6 @@ function NavItem(props) {
   );
 }
 
-// TODO: fix positioning of account menu.
-// TODO: make the Create Authority link a button.
 export default function NavHeader(props) {
   const { currentUser } = props;
   const adminAuthorization =
@@ -69,28 +73,27 @@ export default function NavHeader(props) {
   return (
     <AppBar position="fixed" className={classes.navMenu}>
       <ToolBar>
-        <Typography variant="h4" className={classes.navHeader}>
+        <Typography variant="h5" className={classes.navHeader}>
           <Link to="/" className={classes.navTextDefault}>
             Inquests.ca
           </Link>
         </Typography>
         {!currentUser && (
           <NavItem>
-            <NavLink to="/signup" label="Sign Up" />
+            <NavLink label="Sign Up" to="/signup" />
             &nbsp;or&nbsp;
-            <NavLink to="/signin" label="Sign In" />
+            <NavLink label="Sign In" to="/signin" />
           </NavItem>
         )}
         {adminAuthorization && (
           <NavItem>
-            <NavLink to="/create" label="Create Authority" />
+            <NavLink label="Create Authority" to="/create" />
           </NavItem>
         )}
         {currentUser && (
-          <AccountMenu
-            currentUser={currentUser}
-            className={classes.accountMenu}
-          />
+          <NavItem>
+            <NavAction label="Sign Out" action={currentUser.signOut} />
+          </NavItem>
         )}
       </ToolBar>
     </AppBar>

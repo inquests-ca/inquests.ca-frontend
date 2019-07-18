@@ -39,22 +39,25 @@ export const signUp = (email, password) => {
     .catch(error => authenticationResponse(null, error.code));
 };
 
-export const signOut = () => firebase.auth().signOut();
-
-const asUser = async firebaseUser => {
-  if (firebaseUser === null) return null;
-  const email = firebaseUser.email;
+// Wrapper around Firebase user with additional helper methods.
+const user = async firebaseUser => {
   const tokenResult = await firebaseUser.getIdTokenResult();
   const token = tokenResult.token;
   const authorization = tokenResult.claims.admin ? 'admin' : 'user';
-  return { email, token, authorization };
+  const email = firebaseUser.email;
+  const signOut = () => firebase.auth().signOut();
+  return { email, token, authorization, signOut };
 };
 
 // Callback is invoked upon sign-in, sign-out, and token expiration.
 export const subscribeToIdTokenChangeEvent = callback => {
-  const unsubscribe = firebase.auth().onIdTokenChanged(async firebaseUser => {
-    const user = await asUser(firebaseUser);
-    callback(user);
-  });
+  const handleIdTokenChanged = async firebaseUser => {
+    if (firebaseUser === null) {
+      callback(null);
+    } else {
+      callback(await user(firebaseUser));
+    }
+  };
+  const unsubscribe = firebase.auth().onIdTokenChanged(handleIdTokenChanged);
   return unsubscribe;
 };
