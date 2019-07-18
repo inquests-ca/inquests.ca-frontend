@@ -51,7 +51,7 @@ const asUser = async firebaseUser => {
 };
 
 // Callback is invoked upon sign-in, sign-out, and token expiration.
-export const subscribeIdTokenChangeEvent = callback => {
+export const subscribeToIdTokenChangeEvent = callback => {
   const unsubscribe = firebase.auth().onIdTokenChanged(async firebaseUser => {
     const user = await asUser(firebaseUser);
     callback(user);

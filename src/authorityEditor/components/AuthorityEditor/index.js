@@ -1,1 +1,1 @@
-export { default } from './AuthorityEditor';
+export { default } from './AuthorityEditor.js';

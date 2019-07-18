@@ -1,1 +1,1 @@
-export { default } from './CreateAuthority';
+export { default } from './CreateAuthority.js';

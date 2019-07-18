@@ -15,7 +15,7 @@ import AuthorityViewer from '../../../authorityViewer';
 import AuthorityCreator from '../../../authorityEditor';
 import SignIn from '../../../signIn';
 import SignUp from '../../../signUp';
-import { subscribeIdTokenChangeEvent } from '../../services/firebase';
+import { subscribeToIdTokenChangeEvent } from '../../services/firebase';
 
 const theme = createMuiTheme({
   palette: {
@@ -36,7 +36,7 @@ export default function App() {
   const handleIdTokenChange = user => setCurrentUser(user);
 
   useEffect(() => {
-    const unsubscribe = subscribeIdTokenChangeEvent(handleIdTokenChange);
+    const unsubscribe = subscribeToIdTokenChangeEvent(handleIdTokenChange);
     return unsubscribe;
   }, []);
 
