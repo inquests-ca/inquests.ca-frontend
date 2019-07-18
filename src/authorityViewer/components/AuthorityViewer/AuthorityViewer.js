@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
-import InquestTable from '../InquestTable';
+import AuthorityTable from '../AuthorityTable';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ViewInquests() {
+export default function AuthorityViewer() {
   const classes = useStyles();
 
   return (
@@ -30,7 +30,7 @@ export default function ViewInquests() {
       <Typography variant="h6" className={classes.subtitle}>
         The guide to Canadian inquest authorities
       </Typography>
-      <InquestTable className={classes.table} />
+      <AuthorityTable className={classes.table} />
     </Container>
   );
 }

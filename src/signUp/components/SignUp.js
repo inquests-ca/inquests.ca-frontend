@@ -42,6 +42,9 @@ const errorMessages = {
   'auth/weak-password': 'Password should be at least 6 characters'
 };
 
+// TODO: add name field.
+// TODO: add optional profession/title field (with options such as Coroner,
+// TODO: Lawyer, student).
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

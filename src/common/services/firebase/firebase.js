@@ -18,15 +18,15 @@ export const init = () => {
   firebase.initializeApp(firebaseConfig);
 };
 
-const authenticationResult = (user, errorCode) => ({ user, errorCode });
+const authenticationResponse = (user, errorCode) => ({ user, errorCode });
 
 export const signIn = (email, password) => {
   // TODO: use async await syntax.
   return firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then(user => authenticationResult(user, null))
-    .catch(error => authenticationResult(null, error.code));
+    .then(user => authenticationResponse(user, null))
+    .catch(error => authenticationResponse(null, error.code));
 };
 
 export const signUp = (email, password) => {
@@ -35,9 +35,29 @@ export const signUp = (email, password) => {
   return firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(user => authenticationResult(user, null))
-    .catch(error => authenticationResult(null, error.code));
+    .then(user => authenticationResponse(user, null))
+    .catch(error => authenticationResponse(null, error.code));
 };
 
-export const isUserSignedIn = () => firebase.auth().currentUser !== null;
-export const getBearerToken = () => firebase.auth().currentUser.getIdToken();
+// Wrapper around Firebase user with additional helper methods.
+const user = async firebaseUser => {
+  const tokenResult = await firebaseUser.getIdTokenResult();
+  const token = tokenResult.token;
+  const authorization = tokenResult.claims.admin ? 'admin' : 'user';
+  const email = firebaseUser.email;
+  const signOut = () => firebase.auth().signOut();
+  return { email, token, authorization, signOut };
+};
+
+// Callback is invoked upon sign-in, sign-out, and token expiration.
+export const subscribeToIdTokenChangeEvent = callback => {
+  const handleIdTokenChanged = async firebaseUser => {
+    if (firebaseUser === null) {
+      callback(null);
+    } else {
+      callback(await user(firebaseUser));
+    }
+  };
+  const unsubscribe = firebase.auth().onIdTokenChanged(handleIdTokenChanged);
+  return unsubscribe;
+};

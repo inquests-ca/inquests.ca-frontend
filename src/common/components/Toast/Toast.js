@@ -31,20 +31,23 @@ const useStyles = makeStyles(theme => ({
 
 export default function Toast(props) {
   const classes = useStyles();
+
+  const { className, message, onClose, variant } = props;
+
   const Icon = iconVariants[props.variant];
 
   return (
     <SnackbarContent
-      className={clsx(classes[props.variant], props.className)}
+      className={clsx(classes[variant], className)}
       aria-describedby="client-snackbar"
       message={
         <span className={classes.message}>
           <Icon className={clsx(classes.icon, classes.iconVariant)} />
-          {props.message}
+          {message}
         </span>
       }
       action={
-        <IconButton key="close" aria-label="Close" onClick={props.onClose}>
+        <IconButton key="close" aria-label="Close" onClick={onClose}>
           <CloseIcon className={classes.icon} />
         </IconButton>
       }
