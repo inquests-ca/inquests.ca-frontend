@@ -30,8 +30,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(4)
   },
   accountMenu: {
-    marginLeft: theme.spacing(4),
-    marginRight: theme.spacing(4)
+    marginLeft: theme.spacing(4)
   }
 }));
 

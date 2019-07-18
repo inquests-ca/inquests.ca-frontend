@@ -5,12 +5,17 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 
 import { signOut } from '../../services/firebase';
 
 const useStyles = makeStyles(theme => ({
   accountMenuIcon: {
     color: theme.palette.primary.main
+  },
+  // TODO: Add styling for profile menu item to prevent ripples.
+  accountProfileMenuItem: {
+    padding: theme.spacing(2)
   }
 }));
 
@@ -45,10 +50,17 @@ export default function AccountMenu(props) {
       <Menu
         id="menu-appbar"
         anchorEl={anchor}
+        transformOrigin={{
+          // TODO: calculate this value.
+          vertical: -55,
+          horizontal: 'left'
+        }}
         open={isOpen}
         onClose={handleClose}
       >
-        <MenuItem>{currentUser.email}</MenuItem>
+        <Typography className={classes.accountProfileMenuItem} variant="body1">
+          {currentUser.email}
+        </Typography>
         <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
       </Menu>
     </div>
