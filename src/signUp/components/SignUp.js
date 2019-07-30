@@ -3,10 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
+import FormTextField from '../../common/components/FormTextField';
 import Toast from '../../common/components/Toast';
 import { signUp } from '../../common/services/firebase';
 
@@ -46,8 +46,7 @@ const errorMessages = {
 // TODO: add optional profession/title field (with options such as Coroner,
 // TODO: Lawyer, student).
 export default function SignUp() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [data, setData] = useState({});
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [signUpError, setSignUpError] = useState(null);
 
@@ -55,6 +54,7 @@ export default function SignUp() {
     event.preventDefault();
     setSignUpError(null);
     setIsSigningUp(true);
+    const { email, password } = data;
     const result = await signUp(email, password);
     // If the sign up is successful, this component will be unmounted.
     // Therefore, only perform state updates if an error occured.
@@ -66,8 +66,7 @@ export default function SignUp() {
     }
   };
 
-  const handleEmailChange = event => setEmail(event.target.value);
-  const handlePasswordChange = event => setPassword(event.target.value);
+  const handleDataChange = (key, value) => setData({ ...data, [key]: value });
   const handleSignUpErrorClosed = () => setSignUpError(null);
 
   const classes = useStyles();
@@ -86,29 +85,25 @@ export default function SignUp() {
         />
       )}
       <form onSubmit={handleSubmit} className={classes.form}>
-        <TextField
-          onChange={handleEmailChange}
-          disabled={isSigningUp}
+        <FormTextField
           label="Email"
+          dataKey="email"
           name="email"
           autoComplete="email"
           required
-          variant="outlined"
           autoFocus
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          onChange={handlePasswordChange}
+          onChange={handleDataChange}
           disabled={isSigningUp}
+        />
+        <FormTextField
           label="Password"
+          dataKey="password"
           name="password"
           type="password"
           autoComplete="current-password"
           required
-          variant="outlined"
-          fullWidth
-          margin="normal"
+          onChange={handleDataChange}
+          disabled={isSigningUp}
         />
         <Button
           className={classes.submit}

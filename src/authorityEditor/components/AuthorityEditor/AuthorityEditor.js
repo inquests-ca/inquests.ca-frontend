@@ -5,9 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
-import MuiTextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import FormTextField from '../../../common/components/FormTextField';
 import Toast from '../../../common/components/Toast';
 
 const useStyles = makeStyles(theme => ({
@@ -32,22 +32,6 @@ const useStyles = makeStyles(theme => ({
     bottom: theme.spacing(2)
   }
 }));
-
-function TextField(props) {
-  return (
-    <MuiTextField
-      onChange={event => props.onChange(props.dataKey, event.target.value)}
-      label={props.label}
-      name={props.name}
-      required={props.required}
-      autoFocus={props.autoFocus}
-      disabled={props.disabled}
-      variant="outlined"
-      margin="normal"
-      fullWidth
-    />
-  );
-}
 
 // This component serves as a general editor for creating or modifying
 // authorities.
@@ -87,7 +71,7 @@ export default function AuthorityEditor(props) {
         {pageTitle}
       </Typography>
       <form onSubmit={handleSubmit} className={classes.form}>
-        <TextField
+        <FormTextField
           label="Title"
           dataKey="title"
           name="title"
@@ -96,7 +80,7 @@ export default function AuthorityEditor(props) {
           onChange={handleDataChange}
           disabled={isSubmitting}
         />
-        <TextField
+        <FormTextField
           label="Description"
           dataKey="description"
           name="description"
