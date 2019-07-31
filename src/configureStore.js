@@ -4,10 +4,10 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from './rootReducer.js';
 
 // TODO: logging.
-export default function configureStore(preloadedState) {
+export default preloadedState => {
   return createStore(
     rootReducer,
     preloadedState,
     applyMiddleware(thunkMiddleware)
   );
-}
+};
