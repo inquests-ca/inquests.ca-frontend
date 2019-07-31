@@ -1,11 +1,26 @@
-export const SIGN_IN = 'SIGN_IN';
-export const SIGN_OUT = 'SIGN_OUT';
+import { signOut as signOutUser } from '../services/userManagement';
+import { getUser } from '../services/userApi';
 
-export const signIn = user => ({
-  type: SIGN_IN,
-  user
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+
+const setCurrentUser = currentUser => ({
+  type: SET_CURRENT_USER,
+  currentUser
 });
 
-export const signOut = () => ({
-  type: SIGN_OUT
-});
+export const handleFirebaseInitialized = firebaseUser => async dispatch => {
+  if (firebaseUser) {
+    // TODO: handle case of error.
+    const { user, error } = await getUser();
+    if (!error) dispatch(setCurrentUser(user));
+  } else {
+    dispatch(setCurrentUser(null));
+  }
+};
+
+export const handleAuthentication = user => setCurrentUser(user);
+
+export const signOut = userData => async dispatch => {
+  await signOutUser(userData);
+  dispatch(setCurrentUser(null));
+};
