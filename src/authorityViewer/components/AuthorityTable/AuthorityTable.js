@@ -9,8 +9,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import { fetchNoAuth } from '../../../common/services/fetchHelper';
-
 const useStyles = makeStyles(theme => ({
   layout: {
     display: 'flex',
@@ -30,17 +28,11 @@ export default function AuthorityTable(props) {
 
   const fetchInquests = async () => {
     setIsFetching(true);
-    const response = await fetchNoAuth('/api/inquests');
-    if (response.ok) {
-      let json;
-      try {
-        json = await response.json();
-      } catch (e) {
-        return;
-      }
-      setIsFetching(false);
-      setAuthorities(json);
-    }
+    // Sleeping is used to demonstrate loader UI.
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // TODO: populate with real data.
+    setAuthorities([{ title: 'Title', description: 'Description' }]);
+    setIsFetching(false);
   };
 
   useEffect(() => {
