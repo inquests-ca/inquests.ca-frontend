@@ -1,1 +1,1 @@
-export { default } from './components/AuthorityViewer';
+export { default } from './components/CaspioEmbedding';
