@@ -3,7 +3,7 @@ const defaultOptions = {
 };
 
 export const fetchNoAuth = (url, options = {}) =>
-  fetch(url, { ...defaultOptions, ...options });
+  fetch(window._config.api.invokeUrl + url, { ...defaultOptions, ...options });
 
 export const fetchWithAuth = async (user, url, options = {}) => {
   const { token } = user;

@@ -1,9 +1,29 @@
-import { fetchWithAuth } from '../fetchHelper';
+import { fetchNoAuth, fetchWithAuth } from '../fetchHelper';
 
-const authorityResponse = (authority, error) => ({ authority, error });
+// TODO: is this good practice?
+// TODO: move to common file.
+const response = (data, error) => ({ data, error });
+
+export const getAuthorities = async keywords => {
+  const queryParams = keywords.length
+    ? '?' + keywords.map(keyword => `keyword[]=${keyword}`).join('&')
+    : '';
+  const url = `/authorities${queryParams}`;
+
+  const res = await fetchNoAuth(url);
+
+  if (!res.ok) return response(null, 'Failed to fetch authorities.');
+
+  try {
+    const authorities = await res.json();
+    return response(authorities, null);
+  } catch (e) {
+    return response(null, 'Invalid response from server.');
+  }
+};
 
 export const createAuthority = async (user, authority) => {
-  const response = await fetchWithAuth(user, '/api/inquests', {
+  const res = await fetchWithAuth(user, '/inquests', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -11,13 +31,12 @@ export const createAuthority = async (user, authority) => {
     body: JSON.stringify(authority)
   });
 
-  if (!response.ok)
-    return authorityResponse(null, 'Failed to create authority.');
+  if (!res.ok) return response(null, 'Failed to create authority.');
 
   try {
     const authority = await response.json();
-    return authorityResponse(authority, null);
+    return response(authority, null);
   } catch (e) {
-    return authorityResponse(null, 'Invalid response from server.');
+    return response(null, 'Invalid response from server.');
   }
 };

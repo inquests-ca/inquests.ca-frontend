@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
@@ -9,14 +8,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-import { fetchNoAuth } from '../../../common/services/fetchHelper';
+import { getAuthorities } from '../../../common/services/authorityApi';
 
 const useStyles = makeStyles(theme => ({
-  layout: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
   progress: {
     marginTop: theme.spacing(4)
   }
@@ -26,31 +20,38 @@ export default function AuthorityTable(props) {
   const [authorities, setAuthorities] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
 
-  const { className } = props;
-
-  const fetchInquests = async () => {
-    setIsFetching(true);
-    const response = await fetchNoAuth('/api/inquests');
-    if (response.ok) {
-      let json;
-      try {
-        json = await response.json();
-      } catch (e) {
-        return;
-      }
-      setIsFetching(false);
-      setAuthorities(json);
-    }
-  };
+  const { className, keywords } = props;
 
   useEffect(() => {
-    if (!authorities && !isFetching) fetchInquests();
-  });
+    const fetchAuthorities = async () => {
+      const response = await getAuthorities([]);
+      if (!response.error) {
+        setAuthorities(response.data);
+        setIsFetching(false);
+      }
+    };
+
+    setIsFetching(true);
+    fetchAuthorities();
+  }, []);
+
+  useEffect(() => {
+    const fetchAuthorities = async () => {
+      const response = await getAuthorities(keywords);
+      if (!response.error) {
+        setAuthorities(response.data);
+        setIsFetching(false);
+      }
+    };
+
+    setIsFetching(true);
+    fetchAuthorities();
+  }, [keywords]);
 
   const classes = useStyles();
 
   return (
-    <div className={clsx(className, classes.layout)}>
+    <div className={className}>
       {authorities && (
         <Paper>
           <Table>
@@ -63,7 +64,7 @@ export default function AuthorityTable(props) {
             <TableBody>
               {authorities.map((authority, i) => (
                 <TableRow key={i}>
-                  <TableCell>{authority.title}</TableCell>
+                  <TableCell>{authority.name}</TableCell>
                   <TableCell>{authority.description}</TableCell>
                 </TableRow>
               ))}
