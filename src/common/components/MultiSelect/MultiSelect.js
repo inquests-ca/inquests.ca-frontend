@@ -9,9 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 const useStyles = makeStyles(theme => ({
   select: {
-    margin: theme.spacing(2),
-    minWidth: 200,
-    maxWidth: 300
+    width: 200
   }
 }));
 
@@ -32,8 +30,8 @@ export default function MultiSelect(props) {
         onChange={handleChange}
         renderValue={renderLabel}
       >
-        {items.map(item => (
-          <MenuItem key={item.value} value={item.value}>
+        {items.map((item, i) => (
+          <MenuItem key={i} value={item.value}>
             <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
             <ListItemText primary={item.label} />
           </MenuItem>
