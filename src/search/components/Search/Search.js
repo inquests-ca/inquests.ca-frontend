@@ -6,7 +6,7 @@ import SearchMenu from '../SearchMenu';
 import SearchResults from '../SearchResults';
 import SearchResultAuthority from '../SearchResultAuthority';
 import SearchResultInquest from '../SearchResultInquest';
-import { fetchJson, encodeQueryData } from '../../../common/services/requestUtils';
+import { fetchJson, encodeQueryData } from 'common/services/requestUtils';
 
 const useStyles = makeStyles(theme => ({
   layout: {

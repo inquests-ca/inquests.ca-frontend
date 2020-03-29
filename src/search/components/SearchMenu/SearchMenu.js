@@ -5,8 +5,8 @@ import Paper from '@material-ui/core/Paper';
 
 import SearchAuthorities from '../SearchAuthorities';
 import SearchInquests from '../SearchInquests';
-import RadioButtons from '../../../common/components/RadioButtons';
-import { fetchJson } from '../../../common/services/requestUtils';
+import RadioButtons from 'common/components/RadioButtons';
+import { fetchJson } from 'common/services/requestUtils';
 
 const useStyles = makeStyles(theme => ({
   layout: {

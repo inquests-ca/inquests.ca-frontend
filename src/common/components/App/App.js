@@ -1,11 +1,12 @@
 import React from 'react';
+
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
-import Search from '../../../search';
-import NavHeader from '../NavHeader';
+import Search from 'search';
+import NavHeader from 'common/components/NavHeader';
 
 const theme = createMuiTheme({
   palette: {

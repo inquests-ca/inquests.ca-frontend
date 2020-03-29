@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import MultiSelect from '../../../common/components/MultiSelect';
-import SingleSelect from '../../../common/components/SingleSelect';
+import MultiSelect from 'common/components/MultiSelect';
+import SingleSelect from 'common/components/SingleSelect';
 
 const useStyles = makeStyles(theme => ({
   searchComponent: {
