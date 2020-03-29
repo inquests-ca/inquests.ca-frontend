@@ -1,6 +1,5 @@
 export default {
   api: {
-    // TODO: get production invokeUrl
-    invokeUrl: 'http://127.0.0.1:9000'
+    invokeUrl: 'https://kbuo2nq6wb.execute-api.us-east-1.amazonaws.com/prod'
   }
 };
