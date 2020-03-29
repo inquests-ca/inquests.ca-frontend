@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import config from '../../../config.prod.js';
+const API_URL = process.env.REACT_APP_API_URL;
 
 const response = (data, error) => ({ data, error });
 
@@ -27,7 +27,7 @@ export const fetchJson = async (url, user = null, options = {}) => {
 
   let res;
   try {
-    res = await fetch(config.api.invokeUrl + url, options);
+    res = await fetch(API_URL + url, options);
     if (!res.ok) return response(null, res.statusText);
   } catch (e) {
     return response(null, 'Unknown network error occurred.');
