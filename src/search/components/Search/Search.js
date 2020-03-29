@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -6,8 +6,7 @@ import SearchMenu from '../SearchMenu';
 import SearchResults from '../SearchResults';
 import SearchResultAuthority from '../SearchResultAuthority';
 import SearchResultInquest from '../SearchResultInquest';
-import { getAuthorities } from '../../../common/services/authorityApi';
-import { getInquests } from '../../../common/services/inquestApi';
+import { fetchJson, encodeQueryData } from '../../../common/services/requestUtils';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -31,33 +30,28 @@ const useStyles = makeStyles(theme => ({
 
 export default function Search(props) {
   const [searchType, setSearchType] = useState('authority');
-  const [query, setQuery] = useState({});
   const [inquests, setInquests] = useState(null);
   const [authorities, setAuthorities] = useState(null);
 
   const { className } = props;
 
-  useEffect(() => {
+  const handleSearchTypeChange = newSearchType => setSearchType(newSearchType);
+
+  const handleAuthorityQueryChange = useCallback((keyword, jurisdiction) => {
     const fetchAuthorities = async () => {
-      const response = await getAuthorities(query);
+      const response = await fetchJson(`/authorities${encodeQueryData({ keyword, jurisdiction })}`);
       if (!response.error) setAuthorities(response.data);
     };
     fetchAuthorities();
-  }, [query]);
+  }, []);
 
-  useEffect(() => {
+  const handleInquestQueryChange = useCallback((keyword, jurisdiction) => {
     const fetchInquests = async () => {
-      const response = await getInquests(query);
+      const response = await fetchJson(`/inquests${encodeQueryData({ keyword, jurisdiction })}`);
       if (!response.error) setInquests(response.data);
     };
     fetchInquests();
-  }, [query]);
-
-  const handleSearchTypeChange = newSearchType => {
-    setSearchType(newSearchType);
-    setQuery({});
-  };
-  const handleQueryChange = newQuery => setQuery(newQuery);
+  }, []);
 
   // TODO: try to reduce this kind of branching logic if possible. Consider refactoring to avoid this check.
   let searchResults;
@@ -78,7 +72,8 @@ export default function Search(props) {
         className={classes.searchMenu}
         searchType={searchType}
         onSearchTypeChange={handleSearchTypeChange}
-        onQueryChange={handleQueryChange}
+        onAuthorityQueryChange={handleAuthorityQueryChange}
+        onInquestQueryChange={handleInquestQueryChange}
       />
       {searchResults && (
         <SearchResults className={classes.searchResults}>{searchResults}</SearchResults>

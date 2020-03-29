@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
 import MultiSelect from '../../../common/components/MultiSelect';
-import { buildAuthorityQuery, getAuthorityKeywords } from '../../../common/services/authorityApi';
+import SingleSelect from '../../../common/components/SingleSelect';
+
+const useStyles = makeStyles(theme => ({
+  searchComponent: {
+    marginBottom: theme.spacing(4)
+  }
+}));
 
 export default function SearchAuthorities(props) {
-  // TODO: add keyword fetching indicator.
-  // TODO: every time this component is unmounted then mounted, keywords are fetched again.
-  // TODO: (cont.) consider lifting state into parent component which would also prevent callbacks
-  // TODO: (cont.) on an unmounted component.
-  const [keywords, setKeywords] = useState(null);
+  // TODO: add fetching indicator.
   const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [selectedJurisdiction, setSelectedJurisdiction] = useState('');
 
-  const { className, onQueryChange } = props;
+  const { className, keywords, jurisdictions, onQueryChange } = props;
 
   useEffect(() => {
-    const fetchKeywords = async () => {
-      const response = await getAuthorityKeywords();
-      if (!response.error) setKeywords(response.data);
-    };
-    fetchKeywords();
-  }, []);
+    onQueryChange(selectedKeywords, selectedJurisdiction);
+  }, [onQueryChange, selectedKeywords, selectedJurisdiction]);
 
-  const handleKeywordsChange = newSelectedKeywords => {
-    setSelectedKeywords(newSelectedKeywords);
-    onQueryChange(buildAuthorityQuery(newSelectedKeywords));
-  };
+  const handleKeywordsChange = newSelectedKeywords => setSelectedKeywords(newSelectedKeywords);
+  const handleJurisdictionChange = newSelectedJurisdiction =>
+    setSelectedJurisdiction(newSelectedJurisdiction);
 
   const keywordItems =
     keywords &&
@@ -33,18 +32,36 @@ export default function SearchAuthorities(props) {
       value: keyword.authorityKeywordID
     }));
 
+  const jurisdictionItems =
+    jurisdictions &&
+    jurisdictions.map(jurisdiction => ({
+      // TODO: consider defining federal jurisdictions in a way other than subdivision == NULL, such that fetching names is easier.
+      label: jurisdiction.code,
+      value: jurisdiction.jurisdictionID
+    }));
+
+  const classes = useStyles();
+
   return (
     <div className={className}>
       {keywords && (
         <MultiSelect
-          inputLabel="keywords-label"
-          inputId="keywords"
+          className={classes.searchComponent}
           items={keywordItems}
           selectedValues={selectedKeywords}
           onChange={handleKeywordsChange}
           renderLabel={selected =>
             selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
           }
+        />
+      )}
+      {jurisdictions && (
+        <SingleSelect
+          className={classes.searchComponent}
+          items={jurisdictionItems}
+          emptyItem
+          selectedValue={selectedJurisdiction}
+          onChange={handleJurisdictionChange}
         />
       )}
     </div>
