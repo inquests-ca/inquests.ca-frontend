@@ -9,8 +9,11 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles(theme => ({
   layout: {
     textAlign: 'left',
-    height: 100,
-    margin: theme.spacing(1)
+    maxHeight: 200,
+    margin: theme.spacing(2)
+  },
+  primary: {
+    color: 'darkred'
   }
 }));
 
@@ -24,9 +27,14 @@ export default function SearchResultInquest(props) {
     <Card className={clsx(className, classes.layout)}>
       <CardActionArea>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography variant="h6" component="h2">
             {inquest.name}
           </Typography>
+          {inquest.primary ? (
+            <Typography className={classes.primary} gutterBottom variant="subtitle1" component="h3">
+              Principal
+            </Typography>
+          ) : null}
           <Typography variant="body2" color="textSecondary" component="p">
             {inquest.description}
           </Typography>
