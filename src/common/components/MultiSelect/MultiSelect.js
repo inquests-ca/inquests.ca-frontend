@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,19 +10,22 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 const useStyles = makeStyles(theme => ({
   select: {
-    width: 200
+    minWidth: 200
+  },
+  fullWidth: {
+    width: '100%'
   }
 }));
 
 export default function MultiSelect(props) {
-  const { className, items, selectedValues, onChange, renderLabel } = props;
+  const { className, items, selectedValues, onChange, renderLabel, fullWidth } = props;
 
   const handleChange = event => onChange(event.target.value);
 
   const classes = useStyles();
 
   return (
-    <FormControl className={className}>
+    <FormControl className={fullWidth ? clsx(className, classes.fullWidth) : className}>
       <Select
         className={classes.select}
         multiple
@@ -46,5 +50,6 @@ MultiSelect.propTypes = {
   items: PropTypes.array.isRequired,
   selectedValues: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
-  renderLabel: PropTypes.func.isRequired
+  renderLabel: PropTypes.func.isRequired,
+  fullWidth: PropTypes.bool
 };
