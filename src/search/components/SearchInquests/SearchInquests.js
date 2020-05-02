@@ -35,9 +35,8 @@ export default function SearchInquests(props) {
   const jurisdictionItems =
     jurisdictions &&
     jurisdictions.map(jurisdiction => ({
-      // TODO: consider defining federal jurisdictions in a way other than subdivision == NULL, such that fetching names is easier.
-      label: jurisdiction.code,
-      value: jurisdiction.jurisdictionID
+      label: jurisdiction.name,
+      value: jurisdiction.jurisdictionId
     }));
 
   const classes = useStyles();
