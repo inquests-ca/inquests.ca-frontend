@@ -1,10 +1,15 @@
 import React from 'react';
 import clsx from 'clsx';
+import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
+import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+
+import { toIsoDateString } from 'common/services/utils';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -12,34 +17,72 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 200,
     margin: theme.spacing(2)
   },
+  // Prevent default anchor styling.
+  nav: {
+    textDecoration: 'none',
+    color: 'inherit'
+  },
+  titleContainer: {
+    padding: 0,
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  title: {
+    color: theme.palette.primary.main
+  },
   primary: {
-    color: 'darkred'
+    color: theme.palette.secondary.main
+  },
+  multiline: {
+    whiteSpace: 'pre-line'
   }
 }));
 
 export default function SearchResultAuthority(props) {
   const { className, authority } = props;
 
+  const primaryDocument = _.find(authority.authorityDocuments, doc => doc.isPrimary);
+
   const classes = useStyles();
 
-  // TODO: add link to authority page.
   return (
     <Card className={clsx(className, classes.layout)}>
-      <CardActionArea>
-        <CardContent>
-          <Typography variant="h6" component="h2">
-            {authority.name}
-          </Typography>
-          {authority.primary ? (
-            <Typography className={classes.primary} gutterBottom variant="subtitle1" component="h3">
-              Principal
+      <Link to={`/authority/${authority.authorityId}`} className={classes.nav}>
+        <CardActionArea>
+          <CardContent>
+            <Container className={classes.titleContainer}>
+              <Typography className={classes.title} variant="subtitle1" component="h2">
+                {authority.name}
+              </Typography>
+              {authority.isPrimary ? (
+                <Typography className={classes.primary} variant="subtitle1" component="h3">
+                  Principal
+                </Typography>
+              ) : null}
+            </Container>
+            <Typography
+              className={classes.multiline}
+              variant="subtitle2"
+              component="h3"
+              gutterBottom
+            >
+              {primaryDocument.citation}
+              {'\n'}
+              {primaryDocument.source.name}
+              {'\n'}
+              {toIsoDateString(primaryDocument.created)}
             </Typography>
-          ) : null}
-          <Typography variant="body2" color="textSecondary" component="p">
-            {authority.description}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+            <Typography
+              className={classes.multiline}
+              variant="body2"
+              color="textSecondary"
+              component="p"
+            >
+              {authority.overview}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Link>
     </Card>
   );
 }
