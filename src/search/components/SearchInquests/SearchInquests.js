@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
 import MultiSelect from 'common/components/MultiSelect';
 
@@ -11,14 +12,18 @@ const useStyles = makeStyles(theme => ({
 
 export default function SearchInquests(props) {
   // TODO: add fetching indicator.
+  const [textSearch, setTextSearch] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState([]);
 
   const { className, keywords, onQueryChange } = props;
 
   useEffect(() => {
-    onQueryChange(selectedKeywords);
-  }, [onQueryChange, selectedKeywords]);
+    onQueryChange(textSearch, selectedKeywords);
+  }, [onQueryChange, textSearch, selectedKeywords]);
 
+  const handleTextSearchChange = event => {
+    if (event.key === 'Enter') setTextSearch(event.target.value);
+  };
   const handleKeywordsChange = newSelectedKeywords => setSelectedKeywords(newSelectedKeywords);
 
   const keywordItems =
@@ -32,6 +37,14 @@ export default function SearchInquests(props) {
 
   return (
     <div className={className}>
+      <TextField
+        className={classes.searchComponent}
+        onKeyPress={handleTextSearchChange}
+        label="Search Inquests"
+        name="search"
+        type="search"
+        fullWidth
+      />
       {keywords && (
         <MultiSelect
           className={classes.searchComponent}
@@ -41,6 +54,7 @@ export default function SearchInquests(props) {
           renderLabel={selected =>
             selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
           }
+          fullWidth
         />
       )}
     </div>
