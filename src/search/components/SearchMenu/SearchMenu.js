@@ -10,8 +10,9 @@ import { fetchJson } from 'common/services/requestUtils';
 
 const useStyles = makeStyles(theme => ({
   layout: {
+    // Using the width property does not work here.
     minWidth: 300,
-    maxWith: 350,
+    maxWidth: 300,
     padding: theme.spacing(4)
   },
   searchComponent: {
@@ -23,7 +24,6 @@ export default function SearchMenu(props) {
   // TODO: add fetching indicator.
   const [inquestKeywords, setInquestKeywords] = useState(null);
   const [authorityKeywords, setAuthorityKeywords] = useState(null);
-  const [jurisdictions, setJurisdictions] = useState(null);
 
   const {
     className,
@@ -42,14 +42,9 @@ export default function SearchMenu(props) {
       const response = await fetchJson('/authorityKeywords');
       if (!response.error) setAuthorityKeywords(response.data);
     };
-    const fetchJurisdictions = async () => {
-      const response = await fetchJson('/jurisdictions');
-      if (!response.error) setJurisdictions(response.data);
-    };
 
     fetchInquestKeywords();
     fetchAuthorityKeywords();
-    fetchJurisdictions();
   }, []);
 
   const searchTypeItems = [
@@ -71,18 +66,10 @@ export default function SearchMenu(props) {
         label="Search for"
       />
       {searchType === 'authority' && (
-        <SearchAuthorities
-          keywords={authorityKeywords}
-          jurisdictions={jurisdictions}
-          onQueryChange={onAuthorityQueryChange}
-        />
+        <SearchAuthorities keywords={authorityKeywords} onQueryChange={onAuthorityQueryChange} />
       )}
       {searchType === 'inquest' && (
-        <SearchInquests
-          keywords={inquestKeywords}
-          jurisdictions={jurisdictions}
-          onQueryChange={onInquestQueryChange}
-        />
+        <SearchInquests keywords={inquestKeywords} onQueryChange={onInquestQueryChange} />
       )}
     </Paper>
   );

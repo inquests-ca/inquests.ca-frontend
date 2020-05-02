@@ -37,17 +37,17 @@ export default function Search(props) {
 
   const handleSearchTypeChange = newSearchType => setSearchType(newSearchType);
 
-  const handleAuthorityQueryChange = useCallback((keyword, jurisdiction) => {
+  const handleAuthorityQueryChange = useCallback(keyword => {
     const fetchAuthorities = async () => {
-      const response = await fetchJson(`/authorities${encodeQueryData({ keyword, jurisdiction })}`);
+      const response = await fetchJson(`/authorities${encodeQueryData({ keyword })}`);
       if (!response.error) setAuthorities(response.data);
     };
     fetchAuthorities();
   }, []);
 
-  const handleInquestQueryChange = useCallback((keyword, jurisdiction) => {
+  const handleInquestQueryChange = useCallback(keyword => {
     const fetchInquests = async () => {
-      const response = await fetchJson(`/inquests${encodeQueryData({ keyword, jurisdiction })}`);
+      const response = await fetchJson(`/inquests${encodeQueryData({ keyword })}`);
       if (!response.error) setInquests(response.data);
     };
     fetchInquests();

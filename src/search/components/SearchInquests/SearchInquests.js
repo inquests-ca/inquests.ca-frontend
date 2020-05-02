@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import MultiSelect from 'common/components/MultiSelect';
-import SingleSelect from 'common/components/SingleSelect';
 
 const useStyles = makeStyles(theme => ({
   searchComponent: {
@@ -13,30 +12,20 @@ const useStyles = makeStyles(theme => ({
 export default function SearchInquests(props) {
   // TODO: add fetching indicator.
   const [selectedKeywords, setSelectedKeywords] = useState([]);
-  const [selectedJurisdiction, setSelectedJurisdiction] = useState('');
 
-  const { className, keywords, jurisdictions, onQueryChange } = props;
+  const { className, keywords, onQueryChange } = props;
 
   useEffect(() => {
-    onQueryChange(selectedKeywords, selectedJurisdiction);
-  }, [onQueryChange, selectedKeywords, selectedJurisdiction]);
+    onQueryChange(selectedKeywords);
+  }, [onQueryChange, selectedKeywords]);
 
   const handleKeywordsChange = newSelectedKeywords => setSelectedKeywords(newSelectedKeywords);
-  const handleJurisdictionChange = newSelectedJurisdiction =>
-    setSelectedJurisdiction(newSelectedJurisdiction);
 
   const keywordItems =
     keywords &&
     keywords.map(keyword => ({
       label: keyword.name,
       value: keyword.inquestKeywordID
-    }));
-
-  const jurisdictionItems =
-    jurisdictions &&
-    jurisdictions.map(jurisdiction => ({
-      label: jurisdiction.name,
-      value: jurisdiction.jurisdictionId
     }));
 
   const classes = useStyles();
@@ -52,14 +41,6 @@ export default function SearchInquests(props) {
           renderLabel={selected =>
             selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
           }
-        />
-      )}
-      {jurisdictions && (
-        <SingleSelect
-          className={classes.searchComponent}
-          items={jurisdictionItems}
-          selectedValue={selectedJurisdiction}
-          onChange={handleJurisdictionChange}
         />
       )}
     </div>
