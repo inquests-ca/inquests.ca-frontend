@@ -54,14 +54,19 @@ export default function Search(props) {
   }, []);
 
   // TODO: try to reduce this kind of branching logic if possible. Consider refactoring to avoid this check.
-  let searchResults;
-  if (searchType === 'authority')
-    searchResults =
-      authorities &&
-      authorities.map((authority, i) => <SearchResultAuthority key={i} authority={authority} />);
-  else if (searchType === 'inquest')
-    searchResults =
-      inquests && inquests.map((inquest, i) => <SearchResultInquest key={i} inquest={inquest} />);
+  let count = null;
+  let searchResults = null;
+  if (searchType === 'authority' && authorities) {
+    count = authorities.count;
+    searchResults = authorities.data.map((authority, i) => (
+      <SearchResultAuthority key={i} authority={authority} />
+    ));
+  } else if (searchType === 'inquest' && inquests) {
+    count = inquests.count;
+    searchResults = inquests.data.map((inquest, i) => (
+      <SearchResultInquest key={i} inquest={inquest} />
+    ));
+  }
 
   const classes = useStyles();
 
@@ -76,7 +81,9 @@ export default function Search(props) {
         onInquestQueryChange={handleInquestQueryChange}
       />
       {searchResults && (
-        <SearchResults className={classes.searchResults}>{searchResults}</SearchResults>
+        <SearchResults className={classes.searchResults} count={count}>
+          {searchResults}
+        </SearchResults>
       )}
     </div>
   );

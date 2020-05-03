@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SearchResults(props) {
-  const { className, children } = props;
+  const { className, children, count } = props;
 
   const classes = useStyles();
 
@@ -27,10 +27,14 @@ export default function SearchResults(props) {
       </div>
     );
 
-  // TODO: consider adding header such as "X results".
   return (
     <div className={className}>
-      <Paper className={classes.searchResults}>{children}</Paper>
+      <Paper className={classes.searchResults}>
+        <Typography variant="h5" component="span">
+          {count} Results
+        </Typography>
+        {children}
+      </Paper>
     </div>
   );
 }
