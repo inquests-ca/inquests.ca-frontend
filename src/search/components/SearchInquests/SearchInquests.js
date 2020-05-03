@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-import MultiSelect from 'common/components/MultiSelect';
+import NestedMultiSelect from 'common/components/NestedMultiSelect';
 
 const useStyles = makeStyles(theme => ({
   searchComponent: {
@@ -28,9 +28,12 @@ export default function SearchInquests(props) {
 
   const keywordItems =
     keywords &&
-    keywords.map(keyword => ({
-      label: keyword.name,
-      value: keyword.inquestKeywordID
+    keywords.map(keywordCategory => ({
+      label: keywordCategory.name,
+      items: keywordCategory.inquestKeywords.map(keyword => ({
+        label: keyword.name,
+        value: keyword.inquestKeywordId
+      }))
     }));
 
   const classes = useStyles();
@@ -46,7 +49,7 @@ export default function SearchInquests(props) {
         fullWidth
       />
       {keywords && (
-        <MultiSelect
+        <NestedMultiSelect
           className={classes.searchComponent}
           items={keywordItems}
           selectedValues={selectedKeywords}
