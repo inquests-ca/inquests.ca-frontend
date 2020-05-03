@@ -4,12 +4,12 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
-  layout: {
-    padding: theme.spacing(1)
+  searchResults: {
+    padding: theme.spacing(4),
+    minWidth: '100%'
   },
   noResults: {
-    color: theme.palette.text.secondary,
-    fontStyle: 'italic'
+    color: theme.palette.text.secondary
   }
 }));
 
@@ -30,7 +30,7 @@ export default function SearchResults(props) {
   // TODO: consider adding header such as "X results".
   return (
     <div className={className}>
-      <Paper className={classes.layout}>{children}</Paper>}
+      <Paper className={classes.searchResults}>{children}</Paper>
     </div>
   );
 }

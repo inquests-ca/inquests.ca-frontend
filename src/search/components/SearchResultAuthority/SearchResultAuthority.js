@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   layout: {
     textAlign: 'left',
     maxHeight: 200,
-    margin: theme.spacing(2)
+    marginTop: theme.spacing(2)
   },
   // Prevent default anchor styling.
   nav: {
