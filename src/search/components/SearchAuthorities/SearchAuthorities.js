@@ -7,6 +7,7 @@ import SearchMenu from '../SearchMenu';
 import SearchResults from '../SearchResults';
 import SearchResultAuthority from '../SearchResultAuthority';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
+import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson, encodeQueryData } from 'common/services/requestUtils';
 
 const PAGINATION = 50;
@@ -43,15 +44,17 @@ export default function SearchAuthorities(props) {
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [page, setPage] = useState(1);
 
+  const isMounted = useMountedState();
+
   const { className } = props;
 
   useEffect(() => {
     const fetchKeywords = async () => {
       const response = await fetchJson('/authorityKeywords');
-      if (!response.error) setKeywords(response.data);
+      if (!response.error && isMounted()) setKeywords(response.data);
     };
     fetchKeywords();
-  }, []);
+  }, [isMounted]);
 
   useEffect(() => {
     const fetchAuthorities = async () => {
@@ -61,10 +64,10 @@ export default function SearchAuthorities(props) {
         offset: (page - 1) * PAGINATION
       };
       const response = await fetchJson(`/authorities${encodeQueryData(query)}`);
-      if (!response.error) setAuthorities(response.data);
+      if (!response.error && isMounted()) setAuthorities(response.data);
     };
     fetchAuthorities();
-  }, [textSearch, selectedKeywords, page]);
+  }, [textSearch, selectedKeywords, page, isMounted]);
 
   const handleTextSearchChange = event => {
     if (event.key === 'Enter') {
