@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
-import Search from 'search';
+import { SearchAuthorities, SearchInquests } from 'search';
 import NavHeader from 'common/components/NavHeader';
 
 const theme = createMuiTheme({
@@ -26,7 +26,8 @@ export default function App() {
       <Router>
         <NavHeader />
         <Switch>
-          <Route exact={true} path="/" component={Search} />
+          <Route exact={true} path="/authorities" component={SearchAuthorities} />
+          <Route exact={true} path="/inquests" component={SearchInquests} />
           <Redirect to="/" />
         </Switch>
       </Router>

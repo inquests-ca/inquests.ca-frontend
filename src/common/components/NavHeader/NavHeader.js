@@ -28,9 +28,30 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+function NavLink(props) {
+  const { classes } = props;
+
+  return (
+    <Link to={props.to} className={classes.navTextLink}>
+      {props.label}
+    </Link>
+  );
+}
+
+function NavItem(props) {
+  const { classes } = props;
+
+  return (
+    <Typography variant="body1" className={clsx(classes.navItem, classes.navTextDefault)}>
+      {props.children}
+    </Typography>
+  );
+}
+
 export default function NavHeader(props) {
   const classes = useStyles();
 
+  // TODO: there should be some visual separation for Authorities, Inquests, and Sign Up/Sign In functionality.
   return (
     <AppBar position="fixed" className={classes.navMenu}>
       <Toolbar>
@@ -39,6 +60,12 @@ export default function NavHeader(props) {
             Inquests.ca
           </Link>
         </Typography>
+        <NavItem classes={classes}>
+          <NavLink classes={classes} label="Authorities" to="/authorities" />
+        </NavItem>
+        <NavItem classes={classes}>
+          <NavLink classes={classes} label="Inquests" to="/inquests" />
+        </NavItem>
       </Toolbar>
     </AppBar>
   );

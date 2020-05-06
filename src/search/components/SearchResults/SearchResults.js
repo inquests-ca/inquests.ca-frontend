@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
-  searchResults: {
+  layout: {
     padding: theme.spacing(4),
     minWidth: '100%'
   },
@@ -29,7 +29,7 @@ export default function SearchResults(props) {
 
   return (
     <div className={className}>
-      <Paper className={classes.searchResults}>
+      <Paper className={classes.layout}>
         <Typography variant="h5" component="span">
           {count} Results
         </Typography>
