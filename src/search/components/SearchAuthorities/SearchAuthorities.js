@@ -9,6 +9,8 @@ import SearchResultAuthority from '../SearchResultAuthority';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import { fetchJson, encodeQueryData } from 'common/services/requestUtils';
 
+const PAGINATION = 50;
+
 const useStyles = makeStyles(theme => ({
   layout: {
     // TODO: better way of setting top margin.
@@ -39,6 +41,7 @@ export default function SearchAuthorities(props) {
 
   const [textSearch, setTextSearch] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [page, setPage] = useState(1);
 
   const { className } = props;
 
@@ -52,18 +55,28 @@ export default function SearchAuthorities(props) {
 
   useEffect(() => {
     const fetchAuthorities = async () => {
-      const response = await fetchJson(
-        `/authorities${encodeQueryData({ q: textSearch, keyword: selectedKeywords })}`
-      );
+      const query = {
+        q: textSearch,
+        keyword: selectedKeywords,
+        offset: (page - 1) * PAGINATION
+      };
+      const response = await fetchJson(`/authorities${encodeQueryData(query)}`);
       if (!response.error) setAuthorities(response.data);
     };
     fetchAuthorities();
-  }, [textSearch, selectedKeywords]);
+  }, [textSearch, selectedKeywords, page]);
 
   const handleTextSearchChange = event => {
-    if (event.key === 'Enter') setTextSearch(event.target.value);
+    if (event.key === 'Enter') {
+      setPage(1);
+      setTextSearch(event.target.value);
+    }
   };
-  const handleKeywordsChange = newSelectedKeywords => setSelectedKeywords(newSelectedKeywords);
+  const handleKeywordsChange = newSelectedKeywords => {
+    setPage(1);
+    setSelectedKeywords(newSelectedKeywords);
+  };
+  const hanldePageChange = newPage => setPage(newPage);
 
   const keywordItems =
     keywords &&
@@ -102,7 +115,13 @@ export default function SearchAuthorities(props) {
         )}
       </SearchMenu>
       {authorities && (
-        <SearchResults className={classes.searchResultsLayout} count={authorities.count}>
+        <SearchResults
+          className={classes.searchResultsLayout}
+          count={authorities.count}
+          pagination={PAGINATION}
+          page={page}
+          onPageChange={hanldePageChange}
+        >
           {authorities.data.map((authority, i) => (
             <SearchResultAuthority key={i} authority={authority} />
           ))}

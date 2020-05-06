@@ -9,6 +9,8 @@ import SearchResultInquest from '../SearchResultInquest';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import { fetchJson, encodeQueryData } from 'common/services/requestUtils';
 
+const PAGINATION = 50;
+
 const useStyles = makeStyles(theme => ({
   layout: {
     // TODO: better way of setting top margin.
@@ -39,6 +41,7 @@ export default function SearchInquests(props) {
 
   const [textSearch, setTextSearch] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [page, setPage] = useState(1);
 
   const { className } = props;
 
@@ -52,18 +55,28 @@ export default function SearchInquests(props) {
 
   useEffect(() => {
     const fetchInquests = async () => {
-      const response = await fetchJson(
-        `/inquests${encodeQueryData({ q: textSearch, keyword: selectedKeywords })}`
-      );
+      const query = {
+        q: textSearch,
+        keyword: selectedKeywords,
+        offset: (page - 1) * PAGINATION
+      };
+      const response = await fetchJson(`/inquests${encodeQueryData(query)}`);
       if (!response.error) setInquests(response.data);
     };
     fetchInquests();
-  }, [textSearch, selectedKeywords]);
+  }, [textSearch, selectedKeywords, page]);
 
   const handleTextSearchChange = event => {
-    if (event.key === 'Enter') setTextSearch(event.target.value);
+    if (event.key === 'Enter') {
+      setPage(1);
+      setTextSearch(event.target.value);
+    }
   };
-  const handleKeywordsChange = newSelectedKeywords => setSelectedKeywords(newSelectedKeywords);
+  const handleKeywordsChange = newSelectedKeywords => {
+    setPage(1);
+    setSelectedKeywords(newSelectedKeywords);
+  };
+  const hanldePageChange = newPage => setPage(newPage);
 
   const keywordItems =
     keywords &&
@@ -102,7 +115,13 @@ export default function SearchInquests(props) {
         )}
       </SearchMenu>
       {inquests && (
-        <SearchResults className={classes.searchResultsLayout} count={inquests.count}>
+        <SearchResults
+          className={classes.searchResultsLayout}
+          count={inquests.count}
+          pagination={PAGINATION}
+          page={page}
+          onPageChange={hanldePageChange}
+        >
           {inquests.data.map((inquest, i) => (
             <SearchResultInquest key={i} inquest={inquest} />
           ))}
