@@ -7,4 +7,3 @@
 ### React Best Practices
 
 - [ ] Are PropTypes defined for custom components?
-- [ ] Is the useEffect callback only invoked as necessary?
