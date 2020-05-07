@@ -77,7 +77,7 @@ export default function SearchAuthorities(props) {
     setPage(1);
     setSelectedKeywords(newSelectedKeywords);
   };
-  const hanldePageChange = newPage => setPage(newPage);
+  const handlePageChange = newPage => setPage(newPage);
 
   const keywordItems =
     keywords &&
@@ -121,7 +121,7 @@ export default function SearchAuthorities(props) {
           count={authorities.count}
           pagination={PAGINATION}
           page={page}
-          onPageChange={hanldePageChange}
+          onPageChange={handlePageChange}
         >
           {authorities.data.map((authority, i) => (
             <SearchResultAuthority key={i} authority={authority} />

@@ -78,7 +78,7 @@ export default function SearchInquests(props) {
     setPage(1);
     setSelectedKeywords(newSelectedKeywords);
   };
-  const hanldePageChange = newPage => setPage(newPage);
+  const handlePageChange = newPage => setPage(newPage);
 
   const keywordItems =
     keywords &&
@@ -122,7 +122,7 @@ export default function SearchInquests(props) {
           count={inquests.count}
           pagination={PAGINATION}
           page={page}
-          onPageChange={hanldePageChange}
+          onPageChange={handlePageChange}
         >
           {inquests.data.map((inquest, i) => (
             <SearchResultInquest key={i} inquest={inquest} />
