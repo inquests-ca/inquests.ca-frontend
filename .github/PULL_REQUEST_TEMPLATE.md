@@ -7,5 +7,6 @@
 ### React Best Practices
 
 - [ ] Are PropTypes defined for custom components?
+- [ ] Is the useEffect hook only invoked as necessary?
 
 ---
