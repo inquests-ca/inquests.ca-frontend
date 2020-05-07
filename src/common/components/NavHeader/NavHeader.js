@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
+// TODO: note that offset doesn't match header. Consider using Material UI native toolbar instead.
 const useStyles = makeStyles(theme => ({
   navMenu: {
     borderTop: `5px solid ${theme.palette.common.black}`,
@@ -25,7 +26,8 @@ const useStyles = makeStyles(theme => ({
   },
   navItem: {
     marginLeft: theme.spacing(4)
-  }
+  },
+  offset: theme.mixins.toolbar
 }));
 
 function NavLink(props) {
@@ -53,20 +55,23 @@ export default function NavHeader(props) {
 
   // TODO: there should be some visual separation for Authorities, Inquests, and Sign Up/Sign In functionality.
   return (
-    <AppBar position="fixed" className={classes.navMenu}>
-      <Toolbar>
-        <Typography variant="h5" className={classes.navHeader}>
-          <Link to="/" className={classes.navTextDefault}>
-            Inquests.ca
-          </Link>
-        </Typography>
-        <NavItem classes={classes}>
-          <NavLink classes={classes} label="Authorities" to="/authorities" />
-        </NavItem>
-        <NavItem classes={classes}>
-          <NavLink classes={classes} label="Inquests" to="/inquests" />
-        </NavItem>
-      </Toolbar>
-    </AppBar>
+    <React.Fragment>
+      <AppBar position="fixed" className={classes.navMenu}>
+        <Toolbar>
+          <Typography variant="h5" className={classes.navHeader}>
+            <Link to="/" className={classes.navTextDefault}>
+              Inquests.ca
+            </Link>
+          </Typography>
+          <NavItem classes={classes}>
+            <NavLink classes={classes} label="Authorities" to="/authorities" />
+          </NavItem>
+          <NavItem classes={classes}>
+            <NavLink classes={classes} label="Inquests" to="/inquests" />
+          </NavItem>
+        </Toolbar>
+      </AppBar>
+      <div className={classes.offset} />
+    </React.Fragment>
   );
 }
