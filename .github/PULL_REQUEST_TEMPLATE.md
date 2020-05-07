@@ -7,3 +7,5 @@
 ### React Best Practices
 
 - [ ] Are PropTypes defined for custom components?
+
+---
