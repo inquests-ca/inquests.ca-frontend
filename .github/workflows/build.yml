@@ -1,6 +1,9 @@
-name: Node.js CI
+name: Node.js CI/CD
 
-on: push
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -29,4 +32,5 @@ jobs:
 
       - name: Copy build files to AWS S3
         run: |
-          aws s3 sync ./build s3://staging.inquests.ca/temp
+          aws s3 rm --recursive s3://staging.inquests.ca/
+          aws s3 sync ./build s3://staging.inquests.ca/
