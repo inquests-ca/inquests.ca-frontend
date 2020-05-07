@@ -260,7 +260,7 @@ export default function ViewAuthority(props) {
 
   useEffect(() => {
     const fetchAuthority = async () => {
-      const response = await fetchJson(`/authority/${authorityId}`);
+      const response = await fetchJson(`/authorities/${authorityId}`);
       if (!response.error && isMounted()) setAuthority(response.data);
     };
     fetchAuthority();

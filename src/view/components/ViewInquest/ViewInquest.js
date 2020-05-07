@@ -253,7 +253,7 @@ export default function ViewInquest(props) {
 
   useEffect(() => {
     const fetchInquest = async () => {
-      const response = await fetchJson(`/inquest/${inquestId}`);
+      const response = await fetchJson(`/inquests/${inquestId}`);
       if (!response.error && isMounted()) setInquest(response.data);
     };
     fetchInquest();
