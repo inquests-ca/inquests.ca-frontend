@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/ToolBar';
@@ -40,34 +39,17 @@ function NavLink(props) {
   );
 }
 
-function NavAction(props) {
-  const classes = useStyles();
-
-  return (
-    <span onClick={props.action} className={classes.navTextLink}>
-      {props.label}
-    </span>
-  );
-}
-
 function NavItem(props) {
   const classes = useStyles();
 
   return (
-    <Typography
-      variant="body1"
-      className={clsx(classes.navItem, classes.navTextDefault)}
-    >
+    <Typography variant="body1" className={clsx(classes.navItem, classes.navTextDefault)}>
       {props.children}
     </Typography>
   );
 }
 
 export default function NavHeader(props) {
-  const { currentUser } = props;
-  const adminAuthorization =
-    currentUser && currentUser.authorization === 'admin';
-
   const classes = useStyles();
 
   return (
@@ -78,28 +60,7 @@ export default function NavHeader(props) {
             Inquests.ca
           </Link>
         </Typography>
-        {!currentUser && (
-          <NavItem>
-            <NavLink label="Sign Up" to="/signup" />
-            &nbsp;or&nbsp;
-            <NavLink label="Sign In" to="/signin" />
-          </NavItem>
-        )}
-        {adminAuthorization && (
-          <NavItem>
-            <NavLink label="Create Authority" to="/create" />
-          </NavItem>
-        )}
-        {currentUser && (
-          <NavItem>
-            <NavAction label="Sign Out" action={currentUser.signOut} />
-          </NavItem>
-        )}
       </ToolBar>
     </AppBar>
   );
 }
-
-NavHeader.propTypes = {
-  currentUser: PropTypes.object
-};
