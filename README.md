@@ -1,76 +1,27 @@
-# inquests.ca
+# inquests.ca frontend
 
-<a href="inquests.ca">inquests.ca</a> is a website which provides public access to inquest-related rulings, findings, and other authorities.
+![Node.js CI CD](https://github.com/inquests-ca/inquests.ca-frontend/workflows/Node.js%20CI%20CD/badge.svg)
 
-This repo is for the website front end. It is written in JavaScript with React.
+[inquests.ca](http://inquests.ca) is a website which provides public access to Canadian inquests and inquest guidance.
 
----
+The front end is written in JavaScript with React, bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Background
 
-## Available Scripts
+<!-- TODO: consider moving this to my personal website to avoid redundancy between repos. -->
+<!-- TODO: is this all applicable to Ontario law? -->
+An inquest, also known as a fatality inquiry in some jurisdictions, is a public hearing meant to focus public attention on the circumstances of a death. Inquests are not meant to provide findings of blame (e.g., an inquest will not make a finding of criminality), but rather inquests are inquisitorial processes which answer questions about the circumstances of a death.
 
-In the project directory, you can run:
+In Ontario, an inquest is conducted by a coroner before a jury. The jury is tasked with making findings about the circumstances of a death, but they may also provide recommendations to prevent future deaths under similar circumstances.
 
-### `npm start`
+[inquests.ca](http://inquests.ca) provides a database of inquests and authorities.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+An inquest includes logistical details of the inquest, information about the deceased, and documents such as the verdict and exhibits.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+An authority provides guidance for inquests. Inquests are conducted under the common law model, meaning that precedence applies (i.e., a ruling made at one inquest may apply to future rulings at inquests).
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+1. Clone this repo and `cd` into the project root.
+2. `npm install`
+3. `npm start`
