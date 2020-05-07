@@ -1,12 +1,12 @@
 import React from 'react';
-
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch, useRouteMatch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
 import { SearchAuthorities, SearchInquests } from 'search';
 import NavHeader from 'common/components/NavHeader';
+import { ViewAuthority, ViewInquest } from 'view';
 
 const theme = createMuiTheme({
   palette: {
@@ -19,6 +19,30 @@ const theme = createMuiTheme({
   }
 });
 
+function Authority() {
+  const match = useRouteMatch();
+
+  return (
+    <Switch>
+      <Route path={`${match.path}/:authorityId`}>
+        <ViewAuthority />
+      </Route>
+    </Switch>
+  );
+}
+
+function Inquest() {
+  const match = useRouteMatch();
+
+  return (
+    <Switch>
+      <Route path={`${match.path}/:inquestId`}>
+        <ViewInquest />
+      </Route>
+    </Switch>
+  );
+}
+
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -28,7 +52,9 @@ export default function App() {
         <Switch>
           <Route exact={true} path="/authorities" component={SearchAuthorities} />
           <Route exact={true} path="/inquests" component={SearchInquests} />
-          <Redirect to="/" />
+          <Route path="/authority" component={Authority} />
+          <Route path="/inquest" component={Inquest} />
+          <Redirect to="/authorities" />
         </Switch>
       </Router>
     </ThemeProvider>
