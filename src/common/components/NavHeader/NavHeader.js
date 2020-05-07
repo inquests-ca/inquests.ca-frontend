@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,26 +27,6 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(4)
   }
 }));
-
-function NavLink(props) {
-  const classes = useStyles();
-
-  return (
-    <Link to={props.to} className={classes.navTextLink}>
-      {props.label}
-    </Link>
-  );
-}
-
-function NavItem(props) {
-  const classes = useStyles();
-
-  return (
-    <Typography variant="body1" className={clsx(classes.navItem, classes.navTextDefault)}>
-      {props.children}
-    </Typography>
-  );
-}
 
 export default function NavHeader(props) {
   const classes = useStyles();
