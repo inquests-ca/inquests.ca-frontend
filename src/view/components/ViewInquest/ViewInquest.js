@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import _ from 'lodash';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import MuiLink from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
 
 import useMountedState from 'common/hooks/useMountedState';
@@ -54,6 +54,11 @@ const useStyles = makeStyles(theme => ({
   },
   invisible: {
     visibility: 'hidden'
+  },
+  // Overrides default anchor styling from anchor elements.
+  internalLink: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main
   }
 }));
 
@@ -209,7 +214,7 @@ function DocumentsSection(props) {
           {doc.name}&nbsp;&mdash;&nbsp;
           {_.sortBy(doc.inquestDocumentLinks, 'isFree').map((documentLink, i) => (
             <span key={i}>
-              <Link href={documentLink.link}>{documentLink.documentSource.name}</Link>
+              <MuiLink href={documentLink.link}>{documentLink.documentSource.name}</MuiLink>
               {i !== doc.inquestDocumentLinks.length - 1 ? ', ' : ''}
             </span>
           ))}
@@ -230,7 +235,11 @@ function InternalLinksSection(props) {
         <TextRow name="Related&nbsp;Authorities" classes={classes}>
           {authorities.length
             ? authorities.map((authority, i) => (
-                <Link key={i} href={`/authority/${authority.authorityId}`}>
+                <Link
+                  className={classes.internalLink}
+                  key={i}
+                  to={`/authority/${authority.authorityId}`}
+                >
                   {authority.name}
                   <br />
                 </Link>

@@ -14,12 +14,11 @@ const PAGINATION = 50;
 
 const useStyles = makeStyles(theme => ({
   layout: {
-    marginTop: theme.spacing(4),
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'stretch',
     // TODO: better way of setting height.
-    height: '85vh'
+    height: '90vh'
   },
   searchMenuLayout: {
     margin: theme.spacing(4),
