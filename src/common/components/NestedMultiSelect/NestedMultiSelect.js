@@ -22,7 +22,12 @@ const useStyles = makeStyles(theme => ({
 export default function NestedMultiSelect(props) {
   const { className, items, selectedValues, onChange, renderLabel, fullWidth } = props;
 
-  const handleChange = event => onChange(event.target.value);
+  const handleChange = event => {
+    // Clicking a ListSubheader element also causes tihs event to be fired off with value undefined.
+    // Discard these events.
+    if (event.target.value.some(value => value === undefined)) event.preventDefault();
+    else onChange(event.target.value);
+  };
 
   const classes = useStyles();
 
