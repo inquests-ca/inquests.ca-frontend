@@ -72,6 +72,10 @@ export default function SearchAuthorities(props) {
       setTextSearch(event.target.value);
     }
   };
+  const handleTextSearchLostFocus = event => {
+    setPage(1);
+    setTextSearch(event.target.value);
+  };
   const handleKeywordsChange = newSelectedKeywords => {
     setPage(1);
     setSelectedKeywords(newSelectedKeywords);
@@ -96,6 +100,7 @@ export default function SearchAuthorities(props) {
         <TextField
           className={classes.searchMenuComponent}
           onKeyPress={handleTextSearchChange}
+          onBlur={handleTextSearchLostFocus}
           label="Search Authorities"
           name="search"
           type="search"
