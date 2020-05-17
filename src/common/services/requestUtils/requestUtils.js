@@ -9,7 +9,7 @@ export const encodeQueryData = queryData => {
   const queryDataStrings = _.map(queryData, (value, key) => {
     // Arrays are passed in query parameters as follows (note double underscore): a=value1__value2
     // TODO: use another delimiter to separate array values.
-    if (Array.isArray(value)) return `${key}=${value.join('__')}`;
+    if (Array.isArray(value) && value.length) return `${key}=${value.join('__')}`;
     else if (value && typeof value == 'string') return `${key}=${value}`;
     else if (_.includes(['number', 'boolean'], typeof value)) return `${key}=${value}`;
     else return '';
