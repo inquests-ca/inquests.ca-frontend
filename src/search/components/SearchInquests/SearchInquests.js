@@ -57,8 +57,8 @@ export default function SearchInquests(props) {
   useEffect(() => {
     const fetchInquests = async () => {
       const query = {
-        q: textSearch,
-        keyword: selectedKeywords,
+        text: textSearch,
+        keywords: selectedKeywords,
         offset: (page - 1) * PAGINATION
       };
       const response = await fetchJson(`/inquests${encodeQueryData(query)}`);

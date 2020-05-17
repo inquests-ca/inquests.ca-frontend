@@ -56,8 +56,8 @@ export default function SearchAuthorities(props) {
   useEffect(() => {
     const fetchAuthorities = async () => {
       const query = {
-        q: textSearch,
-        keyword: selectedKeywords,
+        text: textSearch,
+        keywords: selectedKeywords,
         offset: (page - 1) * PAGINATION
       };
       const response = await fetchJson(`/authorities${encodeQueryData(query)}`);
