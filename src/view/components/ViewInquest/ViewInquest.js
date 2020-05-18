@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import MuiLink from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
 
+import Dialog from 'common/components/Dialog';
 import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson } from 'common/services/requestUtils';
 import { toReadableDateString } from 'common/services/utils';
@@ -59,6 +60,10 @@ const useStyles = makeStyles(theme => ({
   internalLink: {
     textDecoration: 'none',
     color: theme.palette.primary.main
+  },
+  // Adds anchor styling to anchor elements without href attribute.
+  modalLink: {
+    cursor: 'pointer'
   }
 }));
 
@@ -202,25 +207,46 @@ function DeceasedSection(props) {
 
 // TODO: display other document data as needed (creation date).
 function DocumentsSection(props) {
-  const { documents, classes } = props;
+  const { documents, onDialogOpen, onDialogClose, dialogOpen, classes } = props;
+
+  const dialogTitle = 'No Document Link';
+  const dialogContent = `
+    Sorry, Inquests.ca does not currently have a link to this document. It may be that no public
+    link exists, or there may be copyright or other issues which prevent posting a link. If you are
+    aware of a public link, please feel free to forward it to the website Administrator.
+  `;
 
   // TODO: display document type.
   // TODO: how to sort documents?
   // TODO: is it safe to have a user-inputted href?
   return (
-    <Section header="Documents" classes={classes}>
-      {documents.map((doc, i) => (
-        <span className={classes.doc} key={i}>
-          {doc.name}&nbsp;&mdash;&nbsp;
-          {_.sortBy(doc.inquestDocumentLinks, 'isFree').map((documentLink, i) => (
-            <span key={i}>
-              <MuiLink href={documentLink.link}>{documentLink.documentSource.name}</MuiLink>
-              {i !== doc.inquestDocumentLinks.length - 1 ? ', ' : ''}
-            </span>
-          ))}
-        </span>
-      ))}
-    </Section>
+    <React.Fragment>
+      <Dialog
+        onClose={onDialogClose}
+        open={dialogOpen}
+        title={dialogTitle}
+        content={dialogContent}
+      />
+      <Section header="Documents" classes={classes}>
+        {documents.map((doc, i) => (
+          <span className={classes.doc} key={i}>
+            {doc.name}&nbsp;&mdash;&nbsp;
+            {doc.inquestDocumentLinks.length ? (
+              _.sortBy(doc.inquestDocumentLinks, 'isFree').map((documentLink, i) => (
+                <span key={i}>
+                  <MuiLink href={documentLink.link}>{documentLink.documentSource.name}</MuiLink>
+                  {i !== doc.inquestDocumentLinks.length - 1 ? ', ' : ''}
+                </span>
+              ))
+            ) : (
+              <MuiLink className={classes.modalLink} onClick={onDialogOpen}>
+                No Document Link
+              </MuiLink>
+            )}
+          </span>
+        ))}
+      </Section>
+    </React.Fragment>
   );
 }
 
@@ -253,6 +279,7 @@ function InternalLinksSection(props) {
 
 export default function ViewInquest(props) {
   const [inquest, setInquest] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { inquestId } = useParams();
 
@@ -268,6 +295,9 @@ export default function ViewInquest(props) {
     fetchInquest();
   }, [inquestId, isMounted]);
 
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+
   const classes = useStyles();
 
   // TODO: fetching indicator.
@@ -278,7 +308,13 @@ export default function ViewInquest(props) {
       <HeaderSection inquest={inquest} classes={classes} />
       <DetailsSection inquest={inquest} classes={classes} />
       <DeceasedSection deceasedList={inquest.deceased} classes={classes} />
-      <DocumentsSection documents={inquest.inquestDocuments} classes={classes} />
+      <DocumentsSection
+        documents={inquest.inquestDocuments}
+        onDialogOpen={handleDialogOpen}
+        onDialogClose={handleDialogClose}
+        dialogOpen={dialogOpen}
+        classes={classes}
+      />
       <InternalLinksSection authorities={inquest.authorities} classes={classes} />
     </Container>
   );

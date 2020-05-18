@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import MuiLink from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
 
+import Dialog from 'common/components/Dialog';
 import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson } from 'common/services/requestUtils';
 import { toReadableDateString } from 'common/services/utils';
@@ -59,6 +60,10 @@ const useStyles = makeStyles(theme => ({
   internalLink: {
     textDecoration: 'none',
     color: theme.palette.primary.main
+  },
+  // Adds anchor styling to anchor elements without href attribute.
+  modalLink: {
+    cursor: 'pointer'
   }
 }));
 
@@ -158,35 +163,56 @@ function DetailsSection(props) {
 
 // TODO: display other document data as needed (citation, creation date).
 function DocumentsSection(props) {
-  const { documents, classes } = props;
+  const { documents, onDialogOpen, onDialogClose, dialogOpen, classes } = props;
 
   const documentsSorted = _.reverse(_.sortBy(documents, ['isPrimary', 'source.rank']));
+
+  const dialogTitle = 'No Document Link';
+  const dialogContent = `
+    Sorry, Inquests.ca does not currently have a link to this document. It may be that no public
+    link exists, or there may be copyright or other issues which prevent posting a link. If you are
+    aware of a public link, please feel free to forward it to the website Administrator.
+  `;
 
   // TODO: display document type.
   // TODO: clean up UI.
   // TODO: is it safe to have a user-inputted href?
   return (
-    <Section header="Documents" classes={classes}>
-      {documentsSorted.map((doc, i) => (
-        <span className={classes.doc} key={i}>
-          {documents.length > 1 ? (
-            doc.isPrimary ? (
-              <span className={classes.primary}>&#9733;&nbsp;&nbsp;</span>
+    <React.Fragment>
+      <Dialog
+        onClose={onDialogClose}
+        open={dialogOpen}
+        title={dialogTitle}
+        content={dialogContent}
+      />
+      <Section header="Documents" classes={classes}>
+        {documentsSorted.map((doc, i) => (
+          <span className={classes.doc} key={i}>
+            {documents.length > 1 ? (
+              doc.isPrimary ? (
+                <span className={classes.primary}>&#9733;&nbsp;&nbsp;</span>
+              ) : (
+                <span className={classes.invisible}>&#9733;&nbsp;&nbsp;</span>
+              )
+            ) : null}
+            {doc.source.code},&nbsp;
+            {doc.name}&nbsp;<i>({doc.citation})</i>&nbsp;&mdash;&nbsp;
+            {doc.authorityDocumentLinks.length ? (
+              _.sortBy(doc.authorityDocumentLinks, 'isFree').map((documentLink, i) => (
+                <span key={i}>
+                  <MuiLink href={documentLink.link}>{documentLink.documentSource.name}</MuiLink>
+                  {i !== doc.authorityDocumentLinks.length - 1 ? ', ' : ''}
+                </span>
+              ))
             ) : (
-              <span className={classes.invisible}>&#9733;&nbsp;&nbsp;</span>
-            )
-          ) : null}
-          {doc.source.code},&nbsp;
-          {doc.name}&nbsp;<i>({doc.citation})</i>&nbsp;&mdash;&nbsp;
-          {_.sortBy(doc.authorityDocumentLinks, 'isFree').map((documentLink, i) => (
-            <span key={i}>
-              <MuiLink href={documentLink.link}>{documentLink.documentSource.name}</MuiLink>
-              {i !== doc.authorityDocumentLinks.length - 1 ? ', ' : ''}
-            </span>
-          ))}
-        </span>
-      ))}
-    </Section>
+              <MuiLink className={classes.modalLink} onClick={onDialogOpen}>
+                No Document Link
+              </MuiLink>
+            )}
+          </span>
+        ))}
+      </Section>
+    </React.Fragment>
   );
 }
 
@@ -260,6 +286,7 @@ function InternalLinksSection(props) {
 
 export default function ViewAuthority(props) {
   const [authority, setAuthority] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { authorityId } = useParams();
 
@@ -275,6 +302,9 @@ export default function ViewAuthority(props) {
     fetchAuthority();
   }, [authorityId, isMounted]);
 
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+
   const classes = useStyles();
 
   if (authority === null) return null;
@@ -284,7 +314,13 @@ export default function ViewAuthority(props) {
     <Container className={clsx(className, classes.layout)}>
       <HeaderSection authority={authority} classes={classes} />
       <DetailsSection authority={authority} classes={classes} />
-      <DocumentsSection documents={authority.authorityDocuments} classes={classes} />
+      <DocumentsSection
+        documents={authority.authorityDocuments}
+        onDialogOpen={handleDialogOpen}
+        onDialogClose={handleDialogClose}
+        dialogOpen={dialogOpen}
+        classes={classes}
+      />
       <InternalLinksSection authority={authority} classes={classes} />
     </Container>
   );
