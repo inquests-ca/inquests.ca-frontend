@@ -13,6 +13,7 @@ import Dialog from 'common/components/Dialog';
 import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson } from 'common/services/requestUtils';
 import { toReadableDateString } from 'common/services/utils';
+import LoadingPage from 'common/components/LoadingPage';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -300,8 +301,7 @@ export default function ViewInquest(props) {
 
   const classes = useStyles();
 
-  // TODO: fetching indicator.
-  if (inquest === null) return null;
+  if (inquest === null) return <LoadingPage />;
 
   return (
     <Container className={clsx(className, classes.layout)}>

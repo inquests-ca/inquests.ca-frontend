@@ -9,6 +9,7 @@ import SearchResultAuthority from '../SearchResultAuthority';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson, encodeQueryData } from 'common/services/requestUtils';
+import LoadingPage from 'common/components/LoadingPage';
 
 const PAGINATION = 50;
 
@@ -93,6 +94,9 @@ export default function SearchAuthorities(props) {
     }));
 
   const classes = useStyles();
+
+  // TODO: show loading indicator every time a new search is performed.
+  if (authorities === null || keywords === null) return <LoadingPage />;
 
   return (
     <div className={clsx(className, classes.layout)}>

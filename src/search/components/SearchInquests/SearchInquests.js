@@ -9,6 +9,7 @@ import SearchResultInquest from '../SearchResultInquest';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson, encodeQueryData } from 'common/services/requestUtils';
+import LoadingPage from 'common/components/LoadingPage';
 
 const PAGINATION = 50;
 
@@ -94,6 +95,9 @@ export default function SearchInquests(props) {
     }));
 
   const classes = useStyles();
+
+  // TODO: show loading indicator every time a new search is performed.
+  if (inquests === null || keywords === null) return <LoadingPage />;
 
   return (
     <div className={clsx(className, classes.layout)}>

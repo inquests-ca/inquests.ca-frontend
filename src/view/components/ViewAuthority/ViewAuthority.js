@@ -13,6 +13,7 @@ import Dialog from 'common/components/Dialog';
 import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson } from 'common/services/requestUtils';
 import { toReadableDateString } from 'common/services/utils';
+import LoadingPage from 'common/components/LoadingPage';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -307,7 +308,7 @@ export default function ViewAuthority(props) {
 
   const classes = useStyles();
 
-  if (authority === null) return null;
+  if (authority === null) return <LoadingPage />;
 
   // TODO: fetching indicator.
   return (
