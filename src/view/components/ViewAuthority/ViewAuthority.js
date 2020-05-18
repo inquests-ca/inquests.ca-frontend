@@ -195,8 +195,8 @@ function DocumentsSection(props) {
                 <span className={classes.invisible}>&#9733;&nbsp;&nbsp;</span>
               )
             ) : null}
-            {doc.source.code},&nbsp;
-            {doc.name}&nbsp;<i>({doc.citation})</i>&nbsp;&mdash;&nbsp;
+            <b>{doc.source.code}</b>,&nbsp;
+            {doc.citation}&nbsp;&mdash;&nbsp;
             {doc.authorityDocumentLinks.length ? (
               _.sortBy(doc.authorityDocumentLinks, 'isFree').map((documentLink, i) => (
                 <span key={i}>
