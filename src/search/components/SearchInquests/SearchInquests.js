@@ -11,7 +11,7 @@ import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson, encodeQueryData } from 'common/services/requestUtils';
 import LoadingPage from 'common/components/LoadingPage';
 
-const PAGINATION = 50;
+const PAGINATION = 12;
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -34,7 +34,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// TODO: add fetching indicator for keywords.
 export default function SearchInquests(props) {
   const [inquests, setInquests] = useState(null);
   const [keywords, setKeywords] = useState(null);
@@ -60,7 +59,8 @@ export default function SearchInquests(props) {
       const query = {
         text: textSearch,
         keywords: selectedKeywords,
-        offset: (page - 1) * PAGINATION
+        offset: (page - 1) * PAGINATION,
+        limit: PAGINATION
       };
       const response = await fetchJson(`/inquests${encodeQueryData(query)}`);
       if (!response.error && isMounted()) setInquests(response.data);
