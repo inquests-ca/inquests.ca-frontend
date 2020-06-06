@@ -262,13 +262,7 @@ function InternalLinksSection(props) {
   return (
     <Section header="Internal Links" classes={classes}>
       <Table classes={classes}>
-        <TextRow name="Related&nbsp;Inquests" classes={classes}>
-          {internalLinksList('inquest', inquests)}
-        </TextRow>
-        <TextRow name="See&nbsp;Also" classes={classes}>
-          {internalLinksList('authority', authorityRelated)}
-        </TextRow>
-        <TextRow name="Cites" classes={classes}>
+        <TextRow name="Citations" classes={classes}>
           {internalLinksList('authority', authorityCitations)}
         </TextRow>
         <TextRow name="Cited&nbsp;By" classes={classes}>
@@ -279,6 +273,12 @@ function InternalLinksSection(props) {
         </TextRow>
         <TextRow name="Superceded&nbsp;By" classes={classes}>
           {internalLinksList('authority', authoritySupercededBy)}
+        </TextRow>
+        <TextRow name="Related&nbsp;Inquests" classes={classes}>
+          {internalLinksList('inquest', inquests)}
+        </TextRow>
+        <TextRow name="See&nbsp;Also" classes={classes}>
+          {internalLinksList('authority', authorityRelated)}
         </TextRow>
       </Table>
     </Section>
