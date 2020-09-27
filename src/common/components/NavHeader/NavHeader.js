@@ -5,10 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import MuiLink from '@material-ui/core/Link';
 import { Link } from 'react-router-dom';
-
-const TERMS_OF_USE = 'https://inquests-ca-resources.s3.amazonaws.com/TermsOfUse.pdf';
 
 const useStyles = makeStyles(theme => ({
   navMenu: {
@@ -29,16 +26,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function NavButton(props) {
-  const { classes, to, label, external } = props;
-
-  // External meaning external to React app, not necessarily an external website
-  // TODO: remove underline on hover.
-  if (external)
-    return (
-      <MuiLink href={to} className={clsx(classes.navItem, classes.navReset)}>
-        <Button>{label}</Button>
-      </MuiLink>
-    );
+  const { classes, to, label } = props;
 
   return (
     <Link to={to} className={clsx(classes.navItem, classes.navReset)}>
@@ -61,7 +49,6 @@ export default function NavHeader(props) {
           </Typography>
           <NavButton classes={classes} to="/authorities" label="Authorities" />
           <NavButton classes={classes} to="/inquests" label="Inquests" />
-          <NavButton classes={classes} to={TERMS_OF_USE} label="Terms of Use" external />
         </Toolbar>
       </AppBar>
       <div className={classes.offset} />
