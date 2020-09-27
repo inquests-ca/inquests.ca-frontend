@@ -1,41 +1,36 @@
-name: Build and Deploy
+name: Node.js CI CD
 
 on:
   push:
     branches:
       - master
 
-env:
-  AWS_S3_BUCKET: inquests.ca
-  NODE_VERSION: '12.x'
-
 jobs:
-  build-and-deploy:
-    name: Build and Deploy
-
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ env.NODE_VERSION }}
+      - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 12.x
 
-      - name: Configure AWS credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Build project
-        run: |
-          npm ci
-          npm run build
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Run build script
+        run: npm run build
 
       - name: Copy build files to AWS S3
         run: |
-          aws s3 rm --recursive s3://${{ env.AWS_S3_BUCKET }}
-          aws s3 sync ./build s3://${{ env.AWS_S3_BUCKET }}
+          aws s3 rm --recursive s3://staging.inquests.ca/
+          aws s3 sync ./build s3://staging.inquests.ca/
