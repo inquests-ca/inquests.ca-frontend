@@ -2,8 +2,8 @@ import _ from 'lodash';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-interface Response {
-  data?: any;
+interface Response<T> {
+  data?: T;
   error?: string;
 }
 
@@ -27,11 +27,12 @@ const getQueryString = (queryData: QueryData): string => {
   else return '';
 };
 
-export const fetchJson = async (
+// TODO: define type for options.
+export const fetchJson = async <T>(
   url: string,
   queryData?: QueryData,
   options?: any
-): Promise<Response> => {
+): Promise<Response<T>> => {
   const queryString = queryData ? getQueryString(queryData) : '';
 
   let res;
@@ -44,7 +45,7 @@ export const fetchJson = async (
 
   try {
     const json = await res.json();
-    return { data: json };
+    return { data: json as T };
   } catch (e) {
     return { error: 'Unable to parse response into JSON.' };
   }
