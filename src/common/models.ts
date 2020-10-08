@@ -33,7 +33,7 @@ export interface AuthorityDocument {
   isPrimary?: number;
   name: string;
   citation: string | null;
-  created: Date | null;
+  created: string | null;
   source: Source;
   authority: Authority;
   authorityDocumentType: AuthorityDocumentType;
@@ -73,7 +73,7 @@ export interface Deceased {
   inquestTypeId: string;
   deathMannerId: string;
   deathCause: string;
-  deathDate: Date;
+  deathDate: string;
   lastName: string | null;
   givenNames: string | null;
   age: number | null;
@@ -98,8 +98,8 @@ export interface Inquest {
   synopsis: string;
   notes: string | null;
   presidingOfficer: string;
-  start: Date;
-  end: Date | null;
+  start: string;
+  end: string | null;
   sittingDays: number | null;
   exhibits: number | null;
   remarks: string | null;
@@ -122,7 +122,7 @@ export interface InquestDocument {
   inquestId: number;
   inquestDocumentTypeId: string | null;
   name: string;
-  created: Date;
+  created: string;
   inquest: Inquest;
   inquestDocumentType: InquestDocumentType;
   inquestDocumentLinks: InquestDocumentLink[];
