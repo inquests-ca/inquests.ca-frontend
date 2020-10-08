@@ -2,9 +2,14 @@ import _ from 'lodash';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const response = (data, error) => ({ data, error });
+interface Response {
+  data?: any;
+  error?: string;
+}
 
-export const encodeQueryData = queryData => {
+type QueryData = Record<string, string | number | (string | number)[]>;
+
+const getQueryString = (queryData: QueryData): string => {
   // Generate list of query parameter strings from object (e.g., { a: 1, b: 2 } -> ['a=1', 'b=2']).
   const queryDataStrings = _.map(queryData, (value, key) => {
     // Arrays are passed in query parameters as follows (note double underscore): a=value1__value2
@@ -16,28 +21,31 @@ export const encodeQueryData = queryData => {
   });
 
   // Filter out empty strings and join into single string.
-  const queryDataString = _.filter(queryDataStrings, q => q).join('&');
+  const queryDataString = _.filter(queryDataStrings, (q) => q).join('&');
 
-  if (queryDataString) return '?' + queryDataString;
+  if (queryDataString) return `?${queryDataString}`;
   else return '';
 };
 
-export const fetchJson = async (url, user = null, options = {}) => {
-  // Add authorization header if a user is passed in.
-  if (user) options.headers.Authorization = `Bearer ${user.token}`;
+export const fetchJson = async (
+  url: string,
+  queryData?: QueryData,
+  options?: any
+): Promise<Response> => {
+  const queryString = queryData ? getQueryString(queryData) : '';
 
   let res;
   try {
-    res = await fetch(API_URL + url, options);
-    if (!res.ok) return response(null, res.statusText);
+    res = await fetch(API_URL + url + queryString, options);
+    if (!res.ok) return { error: res.statusText };
   } catch (e) {
-    return response(null, 'Unknown network error occurred.');
+    return { error: 'Unknown network error occurred.' };
   }
 
   try {
     const json = await res.json();
-    return response(json, null);
+    return { data: json };
   } catch (e) {
-    return response(null, 'Invalid JSON response from server.');
+    return { error: 'Unable to parse response into JSON.' };
   }
 };
