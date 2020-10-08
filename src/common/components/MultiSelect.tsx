@@ -1,14 +1,15 @@
 import React from 'react';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import MuiMenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 
-const useStyles = makeStyles(theme => ({
+import { MenuItem } from 'common/types';
+
+const useStyles = makeStyles((theme) => ({
   select: {
     minWidth: 200
   },
@@ -17,10 +18,25 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MultiSelect(props) {
-  const { className, items, selectedValues, onChange, renderLabel, fullWidth } = props;
+interface MultiSelectProps {
+  items: MenuItem[];
+  selectedValues: string[];
+  onChange: (value: string[]) => void;
+  renderLabel: (value: string[]) => React.ReactNode;
+  fullWidth: boolean;
+  className?: string;
+}
 
-  const handleChange = event => onChange(event.target.value);
+const MultiSelect = ({
+  items,
+  selectedValues,
+  onChange,
+  renderLabel,
+  fullWidth,
+  className
+}: MultiSelectProps) => {
+  const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) =>
+    onChange(event.target.value as string[]);
 
   const classes = useStyles();
 
@@ -32,24 +48,17 @@ export default function MultiSelect(props) {
         displayEmpty
         value={selectedValues}
         onChange={handleChange}
-        renderValue={renderLabel}
+        renderValue={(value: unknown) => renderLabel(value as string[])}
       >
         {items.map((item, i) => (
-          <MenuItem key={i} value={item.value}>
+          <MuiMenuItem key={i} value={item.value}>
             <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
             <ListItemText primary={item.label} />
-          </MenuItem>
+          </MuiMenuItem>
         ))}
       </Select>
     </FormControl>
   );
-}
-
-MultiSelect.propTypes = {
-  className: PropTypes.string,
-  items: PropTypes.array.isRequired,
-  selectedValues: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired,
-  renderLabel: PropTypes.func.isRequired,
-  fullWidth: PropTypes.bool
 };
+
+export default MultiSelect;

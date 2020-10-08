@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -9,7 +8,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 
-const useStyles = makeStyles(theme => ({
+import { MenuItemGroup } from 'common/types';
+
+const useStyles = makeStyles((_theme) => ({
   select: {
     minWidth: 200
   },
@@ -18,15 +19,30 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// TODO: achieve nesting with submenus rather than headers.
-export default function NestedMultiSelect(props) {
-  const { className, items, selectedValues, onChange, renderLabel, fullWidth } = props;
+interface NestedMultiSelectProps {
+  items: MenuItemGroup[];
+  selectedValues: string[];
+  onChange: (value: string[]) => void;
+  renderLabel: (value: string[]) => React.ReactNode;
+  fullWidth: boolean;
+  className?: string;
+}
 
-  const handleChange = event => {
+// TODO: achieve nesting with submenus rather than headers.
+const NestedMultiSelect = ({
+  items,
+  selectedValues,
+  onChange,
+  renderLabel,
+  fullWidth,
+  className
+}: NestedMultiSelectProps) => {
+  const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     // Clicking a ListSubheader element also causes tihs event to be fired off with value undefined.
     // Discard these events.
-    if (event.target.value.some(value => value === undefined)) event.preventDefault();
-    else onChange(event.target.value);
+    const selectedItems = event.target.value as string[];
+    if (selectedItems.some((value) => value === undefined)) event.preventDefault();
+    else onChange(selectedItems);
   };
 
   const classes = useStyles();
@@ -39,7 +55,7 @@ export default function NestedMultiSelect(props) {
         displayEmpty
         value={selectedValues}
         onChange={handleChange}
-        renderValue={renderLabel}
+        renderValue={(value: unknown) => renderLabel(value as string[])}
       >
         {items.map((group, i) => [
           <ListSubheader key={i} disableSticky>
@@ -55,13 +71,6 @@ export default function NestedMultiSelect(props) {
       </Select>
     </FormControl>
   );
-}
-
-NestedMultiSelect.propTypes = {
-  className: PropTypes.string,
-  items: PropTypes.array.isRequired,
-  selectedValues: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired,
-  renderLabel: PropTypes.func.isRequired,
-  fullWidth: PropTypes.bool
 };
+
+export default NestedMultiSelect;

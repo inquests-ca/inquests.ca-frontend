@@ -1,15 +1,23 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-export default function RadioButtons(props) {
-  const { className, items, selectedValue, onChange, legend } = props;
+import { MenuItem } from 'common/types';
 
-  const handleChange = event => onChange(event.target.value);
+interface RadioButtonProps {
+  legend: string;
+  items: MenuItem[];
+  selectedValue: string;
+  onChange: (value: string) => void;
+  className?: string;
+}
+
+const RadioButtons = ({ legend, items, selectedValue, onChange, className }: RadioButtonProps) => {
+  const handleChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) =>
+    onChange(value);
 
   return (
     <div className={className}>
@@ -23,12 +31,6 @@ export default function RadioButtons(props) {
       </FormControl>
     </div>
   );
-}
-
-RadioButtons.propTypes = {
-  className: PropTypes.string,
-  items: PropTypes.array.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  legend: PropTypes.string
 };
+
+export default RadioButtons;

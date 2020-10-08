@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   layout: {
     display: 'flex',
     flexDirection: 'column',
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function LoadingPage() {
+const LoadingPage = () => {
   const classes = useStyles();
 
   return (
@@ -20,4 +20,6 @@ export default function LoadingPage() {
       <CircularProgress />
     </div>
   );
-}
+};
+
+export default LoadingPage;
