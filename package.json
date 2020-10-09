@@ -26,6 +26,10 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -41,6 +45,6 @@
   "devDependencies": {
     "@types/lodash": "^4.14.161",
     "@types/react-router-dom": "^5.1.5",
-    "prettier": "^1.19.1"
+    "prettier": "^2.1.2"
   }
 }
