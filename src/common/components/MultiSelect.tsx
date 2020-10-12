@@ -11,11 +11,11 @@ import { MenuItem } from 'common/types';
 
 const useStyles = makeStyles((theme) => ({
   select: {
-    minWidth: 200
+    minWidth: 200,
   },
   fullWidth: {
-    width: '100%'
-  }
+    width: '100%',
+  },
 }));
 
 interface MultiSelectProps {
@@ -33,7 +33,7 @@ const MultiSelect = ({
   onChange,
   renderLabel,
   fullWidth,
-  className
+  className,
 }: MultiSelectProps) => {
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) =>
     onChange(event.target.value as string[]);

@@ -12,11 +12,11 @@ import { MenuItemGroup } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
   select: {
-    minWidth: 200
+    minWidth: 200,
   },
   fullWidth: {
-    width: '100%'
-  }
+    width: '100%',
+  },
 }));
 
 interface NestedMultiSelectProps {
@@ -35,7 +35,7 @@ const NestedMultiSelect = ({
   onChange,
   renderLabel,
   fullWidth,
-  className
+  className,
 }: NestedMultiSelectProps) => {
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     // Clicking a ListSubheader element also causes tihs event to be fired off with value undefined.
@@ -66,7 +66,7 @@ const NestedMultiSelect = ({
               <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
               <ListItemText primary={item.label} />
             </MenuItem>
-          ))
+          )),
         ])}
       </Select>
     </FormControl>

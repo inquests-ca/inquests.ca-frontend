@@ -17,29 +17,29 @@ import LoadingPage from 'common/components/LoadingPage';
 import { Authority, Deceased, Inquest, InquestDocument } from 'common/models';
 import {
   TEXT_DOCUMENT_MISSING_DIALOG_CONTENT,
-  TEXT_DOCUMENT_MISSING_DIALOG_TITLE
+  TEXT_DOCUMENT_MISSING_DIALOG_TITLE,
 } from 'common/constants';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
-    marginTop: theme.spacing(6)
+    marginTop: theme.spacing(6),
   },
   headerSection: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   document: {
-    display: 'block'
+    display: 'block',
   },
   primary: {
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
   invisible: {
-    visibility: 'hidden'
+    visibility: 'hidden',
   },
   // Adds anchor styling to anchor elements without href attribute.
   modalLink: {
-    cursor: 'pointer'
-  }
+    cursor: 'pointer',
+  },
 }));
 
 const HeaderSection = ({ inquest, classes }: { inquest: Inquest; classes: any }) => (
@@ -118,7 +118,7 @@ const DeceasedSection = ({ deceasedList, classes }: { deceasedList: Deceased[]; 
 const DocumentsSection = ({
   documents,
   onDialogOpen,
-  classes
+  classes,
 }: {
   documents: InquestDocument[];
   onDialogOpen: () => void;

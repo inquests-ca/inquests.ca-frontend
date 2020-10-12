@@ -10,17 +10,17 @@ import { URL_TERMS_OF_USE } from 'common/constants';
 
 const useStyles = makeStyles((theme) => ({
   navMenu: {
-    backgroundColor: theme.palette.common.white
+    backgroundColor: theme.palette.common.white,
   },
   // Removes default anchor styling from anchor elements.
   navReset: {
     textDecoration: 'none',
-    color: theme.palette.text.primary
+    color: theme.palette.text.primary,
   },
   navHeader: {
-    flexGrow: 1
+    flexGrow: 1,
   },
-  offset: theme.mixins.toolbar
+  offset: theme.mixins.toolbar,
 }));
 
 const NavHeader = () => {

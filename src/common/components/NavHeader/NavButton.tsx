@@ -9,11 +9,11 @@ const useStyles = makeStyles((theme) => ({
   // Removes default anchor styling from anchor elements.
   navReset: {
     textDecoration: 'none',
-    color: theme.palette.text.primary
+    color: theme.palette.text.primary,
   },
   navItem: {
-    marginLeft: theme.spacing(4)
-  }
+    marginLeft: theme.spacing(4),
+  },
 }));
 
 interface NavButtonProps {

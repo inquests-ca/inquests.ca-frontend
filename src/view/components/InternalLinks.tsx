@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme) => ({
   // Overrides default anchor styling from anchor elements.
   internalLink: {
     textDecoration: 'none',
-    color: theme.palette.primary.main
-  }
+    color: theme.palette.primary.main,
+  },
 }));
 
 interface AuthorityInternalLinksProps {

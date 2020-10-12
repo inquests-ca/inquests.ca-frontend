@@ -17,29 +17,29 @@ import LoadingPage from 'common/components/LoadingPage';
 import { Authority, AuthorityDocument } from 'common/models';
 import {
   TEXT_DOCUMENT_MISSING_DIALOG_CONTENT,
-  TEXT_DOCUMENT_MISSING_DIALOG_TITLE
+  TEXT_DOCUMENT_MISSING_DIALOG_TITLE,
 } from 'common/constants';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
-    marginTop: theme.spacing(6)
+    marginTop: theme.spacing(6),
   },
   headerSection: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   document: {
-    display: 'block'
+    display: 'block',
   },
   primary: {
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
   invisible: {
-    visibility: 'hidden'
+    visibility: 'hidden',
   },
   // Adds anchor styling to anchor elements without href attribute.
   modalLink: {
-    cursor: 'pointer'
-  }
+    cursor: 'pointer',
+  },
 }));
 
 const HeaderSection = ({ authority, classes }: { authority: Authority; classes: any }) => {
@@ -88,7 +88,7 @@ const DetailsSection = ({ authority }: { authority: Authority }) => (
 const DocumentsSection = ({
   documents,
   onDialogOpen,
-  classes
+  classes,
 }: {
   documents: AuthorityDocument[];
   onDialogOpen: () => void;
@@ -130,7 +130,7 @@ const InternalLinksSection = ({ authority }: { authority: Authority }) => {
     authorityCitations,
     authorityCitedBy,
     authoritySuperceded,
-    authoritySupercededBy
+    authoritySupercededBy,
   } = authority;
 
   // Hide this section if the authority does not contain internal links.
@@ -142,7 +142,7 @@ const InternalLinksSection = ({ authority }: { authority: Authority }) => {
         authorityCitations,
         authorityCitedBy,
         authoritySuperceded,
-        authoritySupercededBy
+        authoritySupercededBy,
       ],
       (arr) => !arr.length
     )

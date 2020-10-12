@@ -7,15 +7,15 @@ import Pagination from '@material-ui/lab/Pagination';
 const useStyles = makeStyles((theme) => ({
   layout: {
     padding: theme.spacing(4),
-    minWidth: '100%'
+    minWidth: '100%',
   },
   noResults: {
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   // TODO: center.
   pagination: {
-    margin: theme.spacing(4)
-  }
+    margin: theme.spacing(4),
+  },
 }));
 
 interface SearchResultsProps {
@@ -33,7 +33,7 @@ const SearchResults = ({
   count,
   page,
   pagination,
-  onPageChange
+  onPageChange,
 }: SearchResultsProps) => {
   const handlePageChange = (_event: React.ChangeEvent<unknown>, newPage: number) =>
     onPageChange(newPage);

@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme) => ({
     // Using the width property does not work here.
     minWidth: 300,
     maxWidth: 300,
-    padding: theme.spacing(4)
-  }
+    padding: theme.spacing(4),
+  },
 }));
 
 interface SearchMenuProps {

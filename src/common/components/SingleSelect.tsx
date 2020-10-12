@@ -8,8 +8,8 @@ import { MenuItem } from 'common/types';
 
 const useStyles = makeStyles((theme) => ({
   select: {
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
 interface SingleSelectProps {
@@ -25,7 +25,7 @@ const SingleSelect = ({
   emptyItem,
   selectedValue,
   onChange,
-  className
+  className,
 }: SingleSelectProps) => {
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) =>
     onChange(event.target.value as string[]);

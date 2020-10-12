@@ -11,26 +11,26 @@ import { makeStyles } from '@material-ui/core/styles';
 // TODO: center toast text.
 const iconVariants = {
   error: ErrorIcon,
-  warning: WarningIcon
+  warning: WarningIcon,
 };
 
 const useStyles = makeStyles((theme) => ({
   error: {
-    backgroundColor: theme.palette.error.dark
+    backgroundColor: theme.palette.error.dark,
   },
   warning: {
-    backgroundColor: theme.palette.warning.dark
+    backgroundColor: theme.palette.warning.dark,
   },
   message: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   icon: {
-    fontSize: 20
+    fontSize: 20,
   },
   iconVariant: {
-    marginRight: theme.spacing(1)
-  }
+    marginRight: theme.spacing(1),
+  },
 }));
 
 interface ToastProps {

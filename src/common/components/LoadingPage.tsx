@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '90vh'
-  }
+    height: '90vh',
+  },
 }));
 
 const LoadingPage = () => {

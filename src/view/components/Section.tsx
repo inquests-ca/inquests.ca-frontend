@@ -8,12 +8,12 @@ const useStyles = makeStyles((theme) => ({
   section: {
     padding: theme.spacing(2),
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   sectionDivider: {
     height: '2px',
-    marginBottom: theme.spacing(2)
-  }
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 interface SectionProps {
