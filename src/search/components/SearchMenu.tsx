@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   layout: {
     // Using the width property does not work here.
     minWidth: 300,
@@ -12,10 +12,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SearchMenu(props) {
-  const { className, children } = props;
+interface SearchMenuProps {
+  children: React.ReactNode;
+  className?: string;
+}
 
+const SearchMenu = ({ className, children }: SearchMenuProps) => {
   const classes = useStyles();
 
   return <Paper className={clsx(className, classes.layout)}>{children}</Paper>;
-}
+};
+
+export default SearchMenu;

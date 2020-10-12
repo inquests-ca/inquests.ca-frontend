@@ -9,66 +9,62 @@ import CardContent from '@material-ui/core/CardContent';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
-import { toIsoDateString } from 'common/services/utils';
+import { toIsoDateString } from 'common/utils/dateUtils';
+import { Authority, AuthorityDocument } from 'common/models';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   layout: {
     textAlign: 'left',
     maxHeight: 200,
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   // Prevent default anchor styling.
   nav: {
     textDecoration: 'none',
-    color: 'inherit'
+    color: 'inherit',
   },
   titleContainer: {
     padding: 0,
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   title: {
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
   },
   primary: {
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
   multiline: {
-    whiteSpace: 'pre-line'
-  }
+    whiteSpace: 'pre-line',
+  },
 }));
 
-export default function SearchResultInquest(props) {
-  const { className, inquest } = props;
+interface AuthoritySearchResultProps {
+  authority: Authority;
+  className?: string;
+}
 
-  // Used to create an overview if one is not provided.
-  const createOverview = inquest => {
-    // In most cases there is only one deceased. Handle this case separately to avoid unnecessary computation.
-    if (inquest.deceased.length === 1) {
-      const deceased = inquest.deceased[0];
-      return `${deceased.inquestType.name} — ${deceased.deathManner.name} — ${deceased.deathCause}`;
-    } else {
-      const inquestTypes = _.uniq(inquest.deceased.map(d => d.inquestType.name)).join(', ');
-      const mannersOfDeath = _.uniq(inquest.deceased.map(d => d.deathManner.name)).join(', ');
-      const causesOfDeath = inquest.deceased.map(d => d.deathCause).join(', ');
-      return `${inquestTypes} — ${mannersOfDeath} — ${causesOfDeath}`;
-    }
-  };
+export const AuthoritySearchResult = ({ className, authority }: AuthoritySearchResultProps) => {
+  const primaryDocument = _.find(
+    authority.authorityDocuments,
+    (document) => document.isPrimary
+  ) as AuthorityDocument;
 
   const classes = useStyles();
 
+  // TODO: remove extra whitespace between fields when one field is undefined.
   return (
     <Card className={clsx(className, classes.layout)}>
-      <Link to={`/inquest/${inquest.inquestId}`} className={classes.nav}>
+      <Link to={`/authority/${authority.authorityId}`} className={classes.nav}>
         <CardActionArea>
           <CardContent>
             <Container className={classes.titleContainer}>
               <Typography className={classes.title} variant="subtitle1" component="h2">
-                {inquest.name}
+                {authority.name}
               </Typography>
-              {inquest.isPrimary ? (
+              {authority.isPrimary ? (
                 <Typography className={classes.primary} variant="subtitle1" component="h3">
-                  Pivotal
+                  Principal
                 </Typography>
               ) : null}
             </Container>
@@ -78,9 +74,11 @@ export default function SearchResultInquest(props) {
               component="h3"
               gutterBottom
             >
-              {inquest.jurisdiction.name}
+              {primaryDocument.citation}
               {'\n'}
-              {toIsoDateString(inquest.start)}
+              {primaryDocument.source.name}
+              {'\n'}
+              {primaryDocument.created && toIsoDateString(primaryDocument.created)}
             </Typography>
             <Typography
               className={classes.multiline}
@@ -88,11 +86,11 @@ export default function SearchResultInquest(props) {
               color="textSecondary"
               component="p"
             >
-              {inquest.overview || createOverview(inquest)}
+              {authority.overview}
             </Typography>
           </CardContent>
         </CardActionArea>
       </Link>
     </Card>
   );
-}
+};

@@ -1,54 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 
-import SearchMenu from '../SearchMenu';
-import SearchResults from '../SearchResults';
-import SearchResultAuthority from '../SearchResultAuthority';
+import SearchMenu from './SearchMenu';
+import SearchResults from './SearchResults';
+import { AuthoritySearchResult } from './AuthoritySearchResult';
+import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import useMountedState from 'common/hooks/useMountedState';
-import { fetchJson, encodeQueryData } from 'common/services/requestUtils';
+import { fetchJson } from 'common/utils/requestUtils';
 import LoadingPage from 'common/components/LoadingPage';
+import { Authority, AuthorityCategory } from 'common/models';
+import { DataWithCount } from 'common/types';
 
 const PAGINATION = 12;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   layout: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'stretch',
-    height: '90vh'
+    height: '90vh',
   },
   searchMenuLayout: {
     margin: theme.spacing(4),
-    marginRight: 0
+    marginRight: 0,
   },
   searchMenuComponent: {
-    marginBottom: theme.spacing(4)
+    marginBottom: theme.spacing(4),
   },
   searchResultsLayout: {
     margin: theme.spacing(4),
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 
-export default function SearchAuthorities(props) {
-  const [authorities, setAuthorities] = useState(null);
-  const [keywords, setKeywords] = useState(null);
+const AuthoritySearch = () => {
+  const [authorityCount, setAuthorityCount] = useState(0);
+  const [authorities, setAuthorities] = useState<Authority[] | null>(null);
+  const [keywords, setKeywords] = useState<AuthorityCategory[] | null>(null);
 
   const [textSearch, setTextSearch] = useState('');
-  const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [page, setPage] = useState(1);
 
   const isMounted = useMountedState();
 
-  const { className } = props;
-
   useEffect(() => {
-    const fetchKeywords = async () => {
-      const response = await fetchJson('/authorityKeywords');
-      if (!response.error && isMounted()) setKeywords(response.data);
+    const fetchKeywords = async (): Promise<void> => {
+      const response = await fetchJson<AuthorityCategory[]>('/authorityKeywords');
+      if (!response.error && isMounted()) setKeywords(response.data!);
     };
     fetchKeywords();
   }, [isMounted]);
@@ -59,55 +59,50 @@ export default function SearchAuthorities(props) {
         text: textSearch,
         keywords: selectedKeywords,
         offset: (page - 1) * PAGINATION,
-        limit: PAGINATION
+        limit: PAGINATION,
       };
-      const response = await fetchJson(`/authorities${encodeQueryData(query)}`);
-      if (!response.error && isMounted()) setAuthorities(response.data);
+      const response = await fetchJson<DataWithCount<Authority[]>>('/authorities', query);
+      if (!response.error && isMounted()) {
+        setAuthorities(response.data!.data);
+        setAuthorityCount(response.data!.count);
+      }
     };
     fetchAuthorities();
   }, [textSearch, selectedKeywords, page, isMounted]);
 
-  const handleTextSearchChange = event => {
-    if (event.key === 'Enter') {
-      setPage(1);
-      setTextSearch(event.target.value);
-    }
-  };
-  const handleTextSearchLostFocus = event => {
+  const handleTextSearch = (text: string): void => {
     setPage(1);
-    setTextSearch(event.target.value);
+    setTextSearch(text);
   };
-  const handleKeywordsChange = newSelectedKeywords => {
+
+  const handleKeywordsChange = (newSelectedKeywords: string[]): void => {
     setPage(1);
     setSelectedKeywords(newSelectedKeywords);
   };
-  const handlePageChange = newPage => setPage(newPage);
 
-  const keywordItems =
-    keywords &&
-    keywords.map(keywordCategory => ({
-      label: keywordCategory.name,
-      items: keywordCategory.authorityKeywords.map(keyword => ({
-        label: keyword.name,
-        value: keyword.authorityKeywordId
-      }))
-    }));
+  const handlePageChange = (newPage: number): void => setPage(newPage);
 
   const classes = useStyles();
 
   // TODO: show loading indicator every time a new search is performed.
   if (authorities === null || keywords === null) return <LoadingPage />;
 
+  const keywordItems = keywords.map((keywordCategory) => ({
+    label: keywordCategory.name,
+    items: keywordCategory.authorityKeywords.map((keyword) => ({
+      label: keyword.name,
+      value: keyword.authorityKeywordId,
+    })),
+  }));
+
   return (
-    <div className={clsx(className, classes.layout)}>
+    <div className={classes.layout}>
       <SearchMenu className={classes.searchMenuLayout}>
-        <TextField
+        <SearchField
           className={classes.searchMenuComponent}
-          onKeyPress={handleTextSearchChange}
-          onBlur={handleTextSearchLostFocus}
+          onSearch={handleTextSearch}
           label="Search Authorities"
           name="search"
-          type="search"
           fullWidth
         />
         {keywords && (
@@ -116,7 +111,7 @@ export default function SearchAuthorities(props) {
             items={keywordItems}
             selectedValues={selectedKeywords}
             onChange={handleKeywordsChange}
-            renderLabel={selected =>
+            renderLabel={(selected) =>
               selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
             }
             fullWidth
@@ -126,16 +121,18 @@ export default function SearchAuthorities(props) {
       {authorities && (
         <SearchResults
           className={classes.searchResultsLayout}
-          count={authorities.count}
+          count={authorityCount}
           pagination={PAGINATION}
           page={page}
           onPageChange={handlePageChange}
         >
-          {authorities.data.map((authority, i) => (
-            <SearchResultAuthority key={i} authority={authority} />
+          {authorities.map((authority, i) => (
+            <AuthoritySearchResult key={i} authority={authority} />
           ))}
         </SearchResults>
       )}
     </div>
   );
-}
+};
+
+export default AuthoritySearch;

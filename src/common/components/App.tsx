@@ -4,16 +4,16 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
-import { SearchAuthorities, SearchInquests } from 'search';
+import { AuthoritySearch, InquestSearch } from 'search';
 import NavHeader from 'common/components/NavHeader';
 import { ViewAuthority, ViewInquest } from 'view';
 
 const theme = createMuiTheme({
   palette: {
     background: {
-      default: '#f9f9f9'
-    }
-  }
+      default: '#f9f9f9',
+    },
+  },
 });
 
 const App = () => {
@@ -23,8 +23,8 @@ const App = () => {
       <Router>
         <NavHeader />
         <Switch>
-          <Route exact={true} path="/authorities" component={SearchAuthorities} />
-          <Route exact={true} path="/inquests" component={SearchInquests} />
+          <Route exact={true} path="/authorities" component={AuthoritySearch} />
+          <Route exact={true} path="/inquests" component={InquestSearch} />
           <Route path="/authority/:authorityId" component={ViewAuthority} />
           <Route path="/inquest/:inquestId" component={ViewInquest} />
           <Redirect to="/authorities" />

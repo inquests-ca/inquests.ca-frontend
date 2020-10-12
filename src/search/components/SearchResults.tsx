@@ -1,11 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   layout: {
     padding: theme.spacing(4),
     minWidth: '100%'
@@ -19,10 +18,25 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SearchResults(props) {
-  const { className, children, count, page, pagination, onPageChange } = props;
+interface SearchResultsProps {
+  children: React.ReactNode;
+  count: number;
+  page: number;
+  pagination: number;
+  onPageChange: (page: number) => void;
+  className?: string;
+}
 
-  const handlePageChange = (_, newPage) => onPageChange(newPage);
+const SearchResults = ({
+  className,
+  children,
+  count,
+  page,
+  pagination,
+  onPageChange
+}: SearchResultsProps) => {
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, newPage: number) =>
+    onPageChange(newPage);
 
   const classes = useStyles();
 
@@ -51,12 +65,6 @@ export default function SearchResults(props) {
       />
     </div>
   );
-}
-
-SearchResults.propTypes = {
-  children: PropTypes.array,
-  count: PropTypes.number.isRequired,
-  page: PropTypes.number.isRequired,
-  pagination: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired
 };
+
+export default SearchResults;

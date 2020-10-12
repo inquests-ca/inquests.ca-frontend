@@ -1,55 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 
-import SearchMenu from '../SearchMenu';
-import SearchResults from '../SearchResults';
-import SearchResultInquest from '../SearchResultInquest';
+import SearchMenu from './SearchMenu';
+import SearchResults from './SearchResults';
+import { InquestSearchResult } from './InquestSearchResult';
+import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import useMountedState from 'common/hooks/useMountedState';
-import { fetchJson, encodeQueryData } from 'common/services/requestUtils';
+import { fetchJson } from 'common/utils/requestUtils';
 import LoadingPage from 'common/components/LoadingPage';
+import { Inquest, InquestCategory } from 'common/models';
+import { DataWithCount } from 'common/types';
 
 const PAGINATION = 12;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   layout: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'stretch',
-    // TODO: better way of setting height.
-    height: '90vh'
+    height: '90vh',
   },
   searchMenuLayout: {
     margin: theme.spacing(4),
-    marginRight: 0
+    marginRight: 0,
   },
   searchMenuComponent: {
-    marginBottom: theme.spacing(4)
+    marginBottom: theme.spacing(4),
   },
   searchResultsLayout: {
     margin: theme.spacing(4),
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 
-export default function SearchInquests(props) {
-  const [inquests, setInquests] = useState(null);
-  const [keywords, setKeywords] = useState(null);
+const InquestSearch = () => {
+  const [inquestCount, setInquestCount] = useState(0);
+  const [inquests, setInquests] = useState<Inquest[] | null>(null);
+  const [keywords, setKeywords] = useState<InquestCategory[] | null>(null);
 
   const [textSearch, setTextSearch] = useState('');
-  const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [page, setPage] = useState(1);
 
   const isMounted = useMountedState();
 
-  const { className } = props;
-
   useEffect(() => {
-    const fetchKeywords = async () => {
-      const response = await fetchJson('/inquestKeywords');
-      if (!response.error && isMounted()) setKeywords(response.data);
+    const fetchKeywords = async (): Promise<void> => {
+      const response = await fetchJson<InquestCategory[]>('/inquestKeywords');
+      if (!response.error && isMounted()) setKeywords(response.data!);
     };
     fetchKeywords();
   }, [isMounted]);
@@ -60,55 +59,50 @@ export default function SearchInquests(props) {
         text: textSearch,
         keywords: selectedKeywords,
         offset: (page - 1) * PAGINATION,
-        limit: PAGINATION
+        limit: PAGINATION,
       };
-      const response = await fetchJson(`/inquests${encodeQueryData(query)}`);
-      if (!response.error && isMounted()) setInquests(response.data);
+      const response = await fetchJson<DataWithCount<Inquest[]>>('/inquests', query);
+      if (!response.error && isMounted()) {
+        setInquests(response.data!.data);
+        setInquestCount(response.data!.count);
+      }
     };
     fetchInquests();
   }, [textSearch, selectedKeywords, page, isMounted]);
 
-  const handleTextSearchChange = event => {
-    if (event.key === 'Enter') {
-      setPage(1);
-      setTextSearch(event.target.value);
-    }
-  };
-  const handleTextSearchLostFocus = event => {
+  const handleTextSearch = (text: string): void => {
     setPage(1);
-    setTextSearch(event.target.value);
+    setTextSearch(text);
   };
-  const handleKeywordsChange = newSelectedKeywords => {
+
+  const handleKeywordsChange = (newSelectedKeywords: string[]): void => {
     setPage(1);
     setSelectedKeywords(newSelectedKeywords);
   };
-  const handlePageChange = newPage => setPage(newPage);
 
-  const keywordItems =
-    keywords &&
-    keywords.map(keywordCategory => ({
-      label: keywordCategory.name,
-      items: keywordCategory.inquestKeywords.map(keyword => ({
-        label: keyword.name,
-        value: keyword.inquestKeywordId
-      }))
-    }));
+  const handlePageChange = (newPage: number): void => setPage(newPage);
 
   const classes = useStyles();
 
   // TODO: show loading indicator every time a new search is performed.
   if (inquests === null || keywords === null) return <LoadingPage />;
 
+  const keywordItems = keywords.map((keywordCategory) => ({
+    label: keywordCategory.name,
+    items: keywordCategory.inquestKeywords.map((keyword) => ({
+      label: keyword.name,
+      value: keyword.inquestKeywordId,
+    })),
+  }));
+
   return (
-    <div className={clsx(className, classes.layout)}>
+    <div className={classes.layout}>
       <SearchMenu className={classes.searchMenuLayout}>
-        <TextField
+        <SearchField
           className={classes.searchMenuComponent}
-          onKeyPress={handleTextSearchChange}
-          onBlur={handleTextSearchLostFocus}
+          onSearch={handleTextSearch}
           label="Search Inquests"
           name="search"
-          type="search"
           fullWidth
         />
         {keywords && (
@@ -117,7 +111,7 @@ export default function SearchInquests(props) {
             items={keywordItems}
             selectedValues={selectedKeywords}
             onChange={handleKeywordsChange}
-            renderLabel={selected =>
+            renderLabel={(selected) =>
               selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
             }
             fullWidth
@@ -127,16 +121,18 @@ export default function SearchInquests(props) {
       {inquests && (
         <SearchResults
           className={classes.searchResultsLayout}
-          count={inquests.count}
+          count={inquestCount}
           pagination={PAGINATION}
           page={page}
           onPageChange={handlePageChange}
         >
-          {inquests.data.map((inquest, i) => (
-            <SearchResultInquest key={i} inquest={inquest} />
+          {inquests.map((inquest, i) => (
+            <InquestSearchResult key={i} inquest={inquest} />
           ))}
         </SearchResults>
       )}
     </div>
   );
-}
+};
+
+export default InquestSearch;
