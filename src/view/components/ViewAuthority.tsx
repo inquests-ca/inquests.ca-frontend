@@ -11,8 +11,8 @@ import { Table, Row } from './Table';
 import { InquestInternalLinks, AuthorityInternalLinks } from './InternalLinks';
 import Dialog from 'common/components/Dialog';
 import useMountedState from 'common/hooks/useMountedState';
-import { fetchJson } from 'common/utils/requestUtils';
-import { toReadableDateString } from 'common/utils/dateUtils';
+import { fetchJson } from 'common/utils/request';
+import { toReadableDateString } from 'common/utils/date';
 import LoadingPage from 'common/components/LoadingPage';
 import { Authority, AuthorityDocument } from 'common/models';
 import {

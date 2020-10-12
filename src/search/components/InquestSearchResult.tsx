@@ -9,7 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
-import { toIsoDateString } from 'common/utils/dateUtils';
+import { toIsoDateString } from 'common/utils/date';
 import { Inquest } from 'common/models';
 
 // TODO: share styles with AuthoritySearchResult.

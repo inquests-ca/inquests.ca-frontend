@@ -7,7 +7,7 @@ import { InquestSearchResult } from './InquestSearchResult';
 import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import useMountedState from 'common/hooks/useMountedState';
-import { fetchJson } from 'common/utils/requestUtils';
+import { fetchJson } from 'common/utils/request';
 import LoadingPage from 'common/components/LoadingPage';
 import { Inquest, InquestCategory } from 'common/models';
 import { DataWithCount } from 'common/types';
