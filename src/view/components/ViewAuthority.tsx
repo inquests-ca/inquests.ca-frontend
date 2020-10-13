@@ -211,7 +211,6 @@ const ViewAuthority = () => {
 
   if (authority === null) return <LoadingPage />;
 
-  // TODO: fetching indicator.
   return (
     <Container className={classes.layout}>
       <HeaderSection authority={authority} classes={classes} />

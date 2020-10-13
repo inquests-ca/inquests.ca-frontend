@@ -48,7 +48,7 @@ interface AuthoritySearchResultProps {
 export const AuthoritySearchResult = ({ authority, className }: AuthoritySearchResultProps) => {
   const primaryDocument = _.find(
     authority.authorityDocuments,
-    (document) => document.isPrimary
+    (doc) => doc.isPrimary
   ) as AuthorityDocument;
 
   const classes = useStyles();

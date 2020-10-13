@@ -39,7 +39,7 @@ export const Row = ({ name, children, compact }: RowProps) => {
   const classes = useStyles();
 
   // Do not display missing data.
-  if (children === null) return null;
+  if (!children) return null;
 
   return (
     <tr>
