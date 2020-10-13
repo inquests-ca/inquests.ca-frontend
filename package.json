@@ -6,11 +6,16 @@
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.2.1",
     "@material-ui/lab": "^4.0.0-alpha.52",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.2",
+    "@types/react": "^16.9.50",
+    "@types/react-dom": "^16.9.8",
     "lodash": "^4.17.15",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.1.0",
-    "react-scripts": "^3.4.3"
+    "react-scripts": "^3.4.3",
+    "typescript": "^4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -19,7 +24,21 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "no-useless-return": "warn",
+      "prefer-const": [
+        "warn",
+        {
+          "destructuring": "all"
+        }
+      ],
+      "prefer-template": "warn"
+    }
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true
   },
   "browserslist": {
     "production": [
@@ -34,6 +53,8 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "@types/lodash": "^4.14.161",
+    "@types/react-router-dom": "^5.1.5",
+    "prettier": "^2.1.2"
   }
 }
