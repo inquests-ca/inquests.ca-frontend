@@ -28,12 +28,12 @@ interface SearchResultsProps {
 }
 
 const SearchResults = ({
-  className,
   children,
   count,
   page,
   pagination,
   onPageChange,
+  className,
 }: SearchResultsProps) => {
   const handlePageChange = (_event: React.ChangeEvent<unknown>, newPage: number) =>
     onPageChange(newPage);

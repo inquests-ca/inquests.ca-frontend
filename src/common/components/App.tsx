@@ -16,22 +16,20 @@ const theme = createMuiTheme({
   },
 });
 
-const App = () => {
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <NavHeader />
-        <Switch>
-          <Route exact={true} path="/authorities" component={AuthoritySearch} />
-          <Route exact={true} path="/inquests" component={InquestSearch} />
-          <Route path="/authority/:authorityId" component={ViewAuthority} />
-          <Route path="/inquest/:inquestId" component={ViewInquest} />
-          <Redirect to="/authorities" />
-        </Switch>
-      </Router>
-    </ThemeProvider>
-  );
-};
+const App = () => (
+  <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <Router>
+      <NavHeader />
+      <Switch>
+        <Route exact={true} path="/authorities" component={AuthoritySearch} />
+        <Route exact={true} path="/inquests" component={InquestSearch} />
+        <Route path="/authority/:authorityId" component={ViewAuthority} />
+        <Route path="/inquest/:inquestId" component={ViewInquest} />
+        <Redirect to="/authorities" />
+      </Switch>
+    </Router>
+  </ThemeProvider>
+);
 
 export default App;

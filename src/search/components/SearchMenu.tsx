@@ -17,7 +17,7 @@ interface SearchMenuProps {
   className?: string;
 }
 
-const SearchMenu = ({ className, children }: SearchMenuProps) => {
+const SearchMenu = ({ children, className }: SearchMenuProps) => {
   const classes = useStyles();
 
   return <Paper className={clsx(className, classes.layout)}>{children}</Paper>;

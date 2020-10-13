@@ -12,10 +12,10 @@ interface DialogProps {
 }
 
 const Dialog = ({ title, content, open, onClose }: DialogProps) => (
-  <MuiDialog open={open} onClose={onClose} aria-labelledby="simple-dialog-title">
-    <DialogTitle id="simple-dialog-title">{title}</DialogTitle>
+  <MuiDialog open={open} onClose={onClose} aria-labelledby="dialog-title">
+    <DialogTitle id="dialog-title">{title}</DialogTitle>
     <DialogContent>
-      <DialogContentText id="alert-dialog-description">{content}</DialogContentText>
+      <DialogContentText>{content}</DialogContentText>
     </DialogContent>
   </MuiDialog>
 );

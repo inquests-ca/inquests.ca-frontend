@@ -33,9 +33,6 @@ const useStyles = makeStyles((theme) => ({
   primary: {
     color: theme.palette.secondary.main,
   },
-  invisible: {
-    visibility: 'hidden',
-  },
   // Adds anchor styling to anchor elements without href attribute.
   modalLink: {
     cursor: 'pointer',

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
-  nameCol: {
+  keyColumn: {
     textAlign: 'right',
     verticalAlign: 'top',
     paddingRight: theme.spacing(1),
@@ -13,12 +13,8 @@ const useStyles = makeStyles((theme) => ({
   bottomPadded: {
     paddingBottom: theme.spacing(1),
   },
-  specialValue: {
-    color: theme.palette.text.secondary,
-    fontStyle: 'italic',
-  },
   multiline: {
-    // Used so newline characters are rendered as new lines.
+    // Used so newline characters are rendered.
     whiteSpace: 'pre-line',
   },
 }));
@@ -47,12 +43,12 @@ export const Row = ({ name, children, compact }: RowProps) => {
 
   return (
     <tr>
-      <td className={compact ? classes.nameCol : clsx(classes.nameCol, classes.bottomPadded)}>
+      <td className={compact ? classes.keyColumn : clsx(classes.keyColumn, classes.bottomPadded)}>
         <b>{name}:</b>
       </td>
       <td className={compact ? '' : classes.bottomPadded}>
         <Typography className={classes.multiline} variant="body2" component="p">
-          {children || <span className={classes.specialValue}>N/A</span>}
+          {children}
         </Typography>
       </td>
     </tr>

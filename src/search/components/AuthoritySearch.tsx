@@ -46,7 +46,7 @@ const AuthoritySearch = () => {
   const isMounted = useMountedState();
 
   useEffect(() => {
-    const fetchKeywords = async (): Promise<void> => {
+    const fetchKeywords = async () => {
       const response = await fetchJson<AuthorityCategory[]>('/authorityKeywords');
       if (!response.error && isMounted()) setKeywords(response.data!);
     };

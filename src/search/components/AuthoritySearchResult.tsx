@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { toIsoDateString } from 'common/utils/date';
 import { Authority, AuthorityDocument } from 'common/models';
 
+// TODO: share styles with InquestSearchResult.
 const useStyles = makeStyles((theme) => ({
   layout: {
     textAlign: 'left',
@@ -44,7 +45,7 @@ interface AuthoritySearchResultProps {
   className?: string;
 }
 
-export const AuthoritySearchResult = ({ className, authority }: AuthoritySearchResultProps) => {
+export const AuthoritySearchResult = ({ authority, className }: AuthoritySearchResultProps) => {
   const primaryDocument = _.find(
     authority.authorityDocuments,
     (document) => document.isPrimary

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   primary: {
     color: theme.palette.secondary.main,
   },
-  invisible: {
+  hidden: {
     visibility: 'hidden',
   },
   // Adds anchor styling to anchor elements without href attribute.
@@ -101,7 +101,7 @@ const DocumentsSection = ({
           doc.isPrimary ? (
             <span className={classes.primary}>&#9733;&nbsp;&nbsp;</span>
           ) : (
-            <span className={classes.invisible}>&#9733;&nbsp;&nbsp;</span>
+            <span className={classes.hidden}>&#9733;&nbsp;&nbsp;</span>
           )
         ) : null}
         <b>{doc.source.code}</b>,&nbsp;
