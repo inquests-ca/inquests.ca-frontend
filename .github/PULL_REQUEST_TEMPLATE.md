@@ -1,5 +1,11 @@
-### General
+Resolves ticket:
 
-- [ ] Have changes been tested locally?
+### Description
+
+_TODO..._
+
+### Checklist
+
+- [ ] Changes have been tested locally
 
 ---
