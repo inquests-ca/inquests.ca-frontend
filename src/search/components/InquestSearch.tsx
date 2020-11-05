@@ -47,7 +47,7 @@ const InquestSearch = () => {
 
   useEffect(() => {
     const fetchKeywords = async () => {
-      const response = await fetchJson<InquestCategory[]>('/inquestKeywords');
+      const response = await fetchJson<InquestCategory[]>('/keywords/inquest');
       if (!response.error && isMounted()) setKeywords(response.data!);
     };
     fetchKeywords();

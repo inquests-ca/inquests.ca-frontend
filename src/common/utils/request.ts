@@ -11,19 +11,23 @@ type QueryData = Record<string, string | number | (string | number)[]>;
 
 const getQueryString = (queryData: QueryData): string => {
   // Generate list of query parameter strings from object (e.g., { a: 1, b: 2 } -> ['a=1', 'b=2']).
-  const queryDataStrings = _.map(queryData, (value, key) => {
-    // Arrays are passed in query parameters as follows (note double underscore): a=value1__value2
-    // TODO: use another delimiter to separate array values.
-    if (Array.isArray(value) && value.length) return `${key}=${value.join('__')}`;
-    else if (value && typeof value == 'string') return `${key}=${value}`;
-    else if (_.includes(['number', 'boolean'], typeof value)) return `${key}=${value}`;
+  const queryStrings = _.map(queryData, (value, key) => {
+    // Arrays are passed in query parameters as follows: key[]=value1&key[]=value2
+    if (Array.isArray(value) && value.length)
+      return value.map((item) => `${key}[]=${item}`).join('&');
+    else if (
+      (typeof value === 'string' && value) ||
+      typeof value === 'number' ||
+      typeof value === 'boolean'
+    )
+      return `${key}=${value}`;
     else return '';
   });
 
   // Filter out empty strings and join into single string.
-  const queryDataString = _.filter(queryDataStrings, (q) => q).join('&');
+  const queryString = _.filter(queryStrings, (q) => q).join('&');
 
-  if (queryDataString) return `?${queryDataString}`;
+  if (queryString) return `?${queryString}`;
   else return '';
 };
 
