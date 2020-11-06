@@ -7,7 +7,8 @@ on:
 
 env:
   AWS_S3_BUCKET: inquests.ca
-  NODE_VERSION: '12.x'
+  AWS_CF_DISTRIBUTION: E2Q4H9UDPOROG0
+  NODE_VERSION: '14.x'
 
 jobs:
   build-and-deploy:
@@ -39,3 +40,9 @@ jobs:
         run: |
           aws s3 rm --recursive s3://${{ env.AWS_S3_BUCKET }}
           aws s3 sync ./build s3://${{ env.AWS_S3_BUCKET }}
+
+      - name: Invalidate AWS CloudFront cache
+        run: >
+          aws cloudfront create-invalidation
+          --distribution-id ${{ env.AWS_CF_DISTRIBUTION }}
+          --paths "/*"
