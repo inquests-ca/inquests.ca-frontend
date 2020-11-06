@@ -150,7 +150,7 @@ const InternalLinksSection = ({ authority }: { authority: Authority }) => {
     return null;
 
   return (
-    <Section header="Internal Links">
+    <Section header="Related">
       <Table>
         {!!authorityCitations.length && (
           <Row name="Citations">
