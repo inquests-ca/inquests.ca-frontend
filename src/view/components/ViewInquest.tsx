@@ -146,12 +146,8 @@ const InternalLinksSection = ({ authorities }: { authorities: Authority[] }) => 
   if (!authorities.length) return null;
 
   return (
-    <Section header="Internal Links">
-      <Table>
-        <Row name="Related&nbsp;Authorities">
-          <AuthorityInternalLinks authorities={authorities} />
-        </Row>
-      </Table>
+    <Section header="Related Authorities">
+      <AuthorityInternalLinks authorities={authorities} />
     </Section>
   );
 };
