@@ -15,7 +15,7 @@ import { useCallback, useEffect, useRef } from 'react';
  *      fetchData();
  *    }, [isMounted]);
  */
-export default () => {
+const useMountedState = () => {
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -29,3 +29,5 @@ export default () => {
 
   return useCallback(() => mountedRef.current, []);
 };
+
+export default useMountedState;
