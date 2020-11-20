@@ -7,6 +7,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
 import Search from 'search';
+import Homepage from 'home';
 import NavHeader from 'common/components/NavHeader';
 import { ViewAuthority, ViewInquest } from 'view';
 
@@ -34,10 +35,11 @@ const App = () => (
       <Router>
         <NavHeader />
         <Switch>
+          <Route exact={true} path="/" component={Homepage} />
           <Route path="/search" component={Search} />
           <Route path="/authority/:authorityId" component={ViewAuthority} />
           <Route path="/inquest/:inquestId" component={ViewInquest} />
-          <Redirect to="/search" />
+          <Redirect to="/" />
         </Switch>
       </Router>
       <ReactQueryDevtools />
