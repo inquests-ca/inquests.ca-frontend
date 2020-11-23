@@ -16,21 +16,10 @@ const PAGINATION = 12;
 
 const useStyles = makeStyles((theme) => ({
   layout: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    height: '90vh',
-  },
-  searchMenuLayout: {
     margin: theme.spacing(4),
-    marginRight: 0,
-  },
-  searchMenuComponent: {
-    marginBottom: theme.spacing(4),
-  },
-  searchResultsLayout: {
-    margin: theme.spacing(4),
-    flexGrow: 1,
+    display: 'grid',
+    gridTemplateColumns: '300px 1fr',
+    gridColumnGap: theme.spacing(4),
   },
 }));
 
@@ -76,30 +65,21 @@ const InquestSearch = () => {
 
   return (
     <div className={classes.layout}>
-      <SearchMenu className={classes.searchMenuLayout}>
-        <SearchField
-          className={classes.searchMenuComponent}
-          onSearch={handleTextSearch}
-          label="Search Inquests"
-          name="search"
-          fullWidth
-        />
+      <SearchMenu>
+        <SearchField onSearch={handleTextSearch} label="Search Inquests" name="search" />
         {keywords && (
           <NestedMultiSelect
-            className={classes.searchMenuComponent}
             items={keywordItems}
             selectedValues={selectedKeywords}
             onChange={handleKeywordsChange}
             renderLabel={(selected) =>
               selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
             }
-            fullWidth
           />
         )}
       </SearchMenu>
       {inquests && (
         <SearchResults
-          className={classes.searchResultsLayout}
           count={inquests.count}
           pagination={PAGINATION}
           page={page}

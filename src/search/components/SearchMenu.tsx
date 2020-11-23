@@ -5,10 +5,11 @@ import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
-    // Using the width property does not work here.
-    minWidth: 300,
-    maxWidth: 300,
     padding: theme.spacing(4),
+    height: `calc(100vh - ${theme.spacing(8)}px - 64px)`,
+    display: 'grid',
+    gridTemplateRows: 'min-content',
+    gridRowGap: theme.spacing(4),
   },
 }));
 

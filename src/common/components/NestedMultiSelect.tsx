@@ -11,9 +11,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { MenuItemGroup } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
-  select: {
-    minWidth: 200,
-  },
   fullWidth: {
     width: '100%',
   },
@@ -24,7 +21,7 @@ interface NestedMultiSelectProps {
   selectedValues: string[];
   onChange: (value: string[]) => void;
   renderLabel: (value: string[]) => React.ReactNode;
-  fullWidth: boolean;
+  fullWidth?: boolean;
   className?: string;
 }
 
@@ -50,7 +47,6 @@ const NestedMultiSelect = ({
   return (
     <FormControl className={fullWidth ? clsx(className, classes.fullWidth) : className}>
       <Select
-        className={classes.select}
         multiple
         displayEmpty
         value={selectedValues}

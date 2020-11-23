@@ -10,9 +10,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { MenuItem } from 'common/types';
 
 const useStyles = makeStyles((theme) => ({
-  select: {
-    minWidth: 200,
-  },
   fullWidth: {
     width: '100%',
   },
@@ -23,7 +20,7 @@ interface MultiSelectProps {
   selectedValues: string[];
   onChange: (value: string[]) => void;
   renderLabel: (value: string[]) => React.ReactNode;
-  fullWidth: boolean;
+  fullWidth?: boolean;
   className?: string;
 }
 
@@ -43,7 +40,6 @@ const MultiSelect = ({
   return (
     <FormControl className={fullWidth ? clsx(className, classes.fullWidth) : className}>
       <Select
-        className={classes.select}
         multiple
         displayEmpty
         value={selectedValues}
