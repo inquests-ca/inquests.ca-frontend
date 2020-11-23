@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
-import { InquestSearchResult } from './InquestSearchResult';
+import InquestSearchResult from './InquestSearchResult';
 import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import useMountedState from 'common/hooks/useMountedState';

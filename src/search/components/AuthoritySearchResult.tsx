@@ -45,7 +45,7 @@ interface AuthoritySearchResultProps {
   className?: string;
 }
 
-export const AuthoritySearchResult = ({ authority, className }: AuthoritySearchResultProps) => {
+const AuthoritySearchResult = ({ authority, className }: AuthoritySearchResultProps) => {
   const primaryDocument = _.find(
     authority.authorityDocuments,
     (doc) => doc.isPrimary
@@ -95,3 +95,5 @@ export const AuthoritySearchResult = ({ authority, className }: AuthoritySearchR
     </Card>
   );
 };
+
+export default AuthoritySearchResult;
