@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'grid',
     gridTemplateColumns: '300px 1fr',
     gridColumnGap: theme.spacing(4),
+    alignItems: 'start',
   },
 }));
 
