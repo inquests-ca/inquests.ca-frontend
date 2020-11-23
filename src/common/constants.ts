@@ -1,3 +1,5 @@
+export const PAGINATION = 12;
+
 export const URL_TERMS_OF_USE = 'https://inquests-ca-resources.s3.amazonaws.com/TermsOfUse.pdf';
 
 // TODO: use translations library.

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useQuery } from 'react-query';
 
 import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
 import AuthoritySearchResult from './AuthoritySearchResult';
+import { AuthorityQuery, fetchAuthorities } from '../utils/api';
 import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
-import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson } from 'common/utils/request';
 import LoadingPage from 'common/components/LoadingPage';
-import { Authority, AuthorityCategory } from 'common/models';
-import { DataWithCount } from 'common/types';
+import { AuthorityCategory } from 'common/models';
 
 const PAGINATION = 12;
 
@@ -35,44 +35,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AuthoritySearch = () => {
-  const [authorityCount, setAuthorityCount] = useState(0);
-  const [authorities, setAuthorities] = useState<Authority[] | null>(null);
-  const [keywords, setKeywords] = useState<AuthorityCategory[] | null>(null);
-
-  const [textSearch, setTextSearch] = useState('');
+  const [text, setText] = useState('');
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [page, setPage] = useState(1);
 
-  const isMounted = useMountedState();
+  const { data: keywords } = useQuery('authorityKeywords', () =>
+    fetchJson<AuthorityCategory[]>('/keywords/authority').then((response) => {
+      if (response.error) throw new Error(response.error);
+      return response.data!;
+    })
+  );
 
-  useEffect(() => {
-    const fetchKeywords = async () => {
-      const response = await fetchJson<AuthorityCategory[]>('/keywords/authority');
-      if (!response.error && isMounted()) setKeywords(response.data!);
-    };
-    fetchKeywords();
-  }, [isMounted]);
+  const authorityQuery: AuthorityQuery = { keywords: selectedKeywords, text, page };
+  const { data: authorities } = useQuery(
+    ['authorities', authorityQuery],
+    (_key: string, query: AuthorityQuery) => fetchAuthorities(query)
+  );
 
-  useEffect(() => {
-    const fetchAuthorities = async () => {
-      const query = {
-        text: textSearch,
-        keywords: selectedKeywords,
-        offset: (page - 1) * PAGINATION,
-        limit: PAGINATION,
-      };
-      const response = await fetchJson<DataWithCount<Authority[]>>('/authorities', query);
-      if (!response.error && isMounted()) {
-        setAuthorities(response.data!.data);
-        setAuthorityCount(response.data!.count);
-      }
-    };
-    fetchAuthorities();
-  }, [textSearch, selectedKeywords, page, isMounted]);
-
-  const handleTextSearch = (text: string): void => {
+  const handleTextSearch = (newText: string): void => {
     setPage(1);
-    setTextSearch(text);
+    setText(newText);
   };
 
   const handleKeywordsChange = (newSelectedKeywords: string[]): void => {
@@ -85,7 +67,7 @@ const AuthoritySearch = () => {
   const classes = useStyles();
 
   // TODO: show loading indicator every time a new search is performed.
-  if (authorities === null || keywords === null) return <LoadingPage />;
+  if (!authorities || !keywords) return <LoadingPage />;
 
   const keywordItems = keywords.map((keywordCategory) => ({
     label: keywordCategory.name,
@@ -121,12 +103,12 @@ const AuthoritySearch = () => {
       {authorities && (
         <SearchResults
           className={classes.searchResultsLayout}
-          count={authorityCount}
+          count={authorities.count}
           pagination={PAGINATION}
           page={page}
           onPageChange={handlePageChange}
         >
-          {authorities.map((authority, i) => (
+          {authorities.data.map((authority, i) => (
             <AuthoritySearchResult key={i} authority={authority} />
           ))}
         </SearchResults>
