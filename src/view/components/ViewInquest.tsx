@@ -159,10 +159,7 @@ const ViewInquest = () => {
 
   // TODO: on 404, redirect to homepage.
   const { data: inquest } = useQuery(['inquest', inquestId], (_key, inquestId: string) =>
-    fetchJson<Inquest>(`/inquests/${inquestId}`).then((response) => {
-      if (response.error) throw new Error(response.error);
-      return response.data!;
-    })
+    fetchJson<Inquest>(`/inquests/${inquestId}`)
   );
 
   const classes = useStyles();

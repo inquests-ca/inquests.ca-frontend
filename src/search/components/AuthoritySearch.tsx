@@ -40,10 +40,7 @@ const AuthoritySearch = () => {
   const [page, setPage] = useState(1);
 
   const { data: keywords } = useQuery('authorityKeywords', () =>
-    fetchJson<AuthorityCategory[]>('/keywords/authority').then((response) => {
-      if (response.error) throw new Error(response.error);
-      return response.data!;
-    })
+    fetchJson<AuthorityCategory[]>('/keywords/authority')
   );
 
   const authorityQuery: AuthorityQuery = { keywords: selectedKeywords, text, page };

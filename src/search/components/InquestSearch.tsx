@@ -40,10 +40,7 @@ const InquestSearch = () => {
   const [page, setPage] = useState(1);
 
   const { data: keywords } = useQuery('inquestKeywords', () =>
-    fetchJson<InquestCategory[]>('/keywords/inquest').then((response) => {
-      if (response.error) throw new Error(response.error);
-      return response.data!;
-    })
+    fetchJson<InquestCategory[]>('/keywords/inquest')
   );
 
   const inquestQuery: InquestQuery = { keywords: selectedKeywords, text, page };

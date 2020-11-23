@@ -2,11 +2,6 @@ import _ from 'lodash';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-interface Response<T> {
-  data?: T;
-  error?: string;
-}
-
 type QueryData = Record<string, string | number | (string | number)[]>;
 
 const getQueryString = (queryData: QueryData): string => {
@@ -36,21 +31,16 @@ export const fetchJson = async <T>(
   url: string,
   queryData?: QueryData,
   options?: any
-): Promise<Response<T>> => {
+): Promise<T> => {
   const queryString = queryData ? getQueryString(queryData) : '';
 
-  let res;
-  try {
-    res = await fetch(API_URL + url + queryString, options);
-    if (!res.ok) return { error: res.statusText };
-  } catch (e) {
-    return { error: 'Unknown network error occurred.' };
-  }
+  const res = await fetch(API_URL + url + queryString, options);
+  if (!res.ok) throw Error(res.statusText);
 
   try {
     const json = await res.json();
-    return { data: json as T };
+    return json as T;
   } catch (e) {
-    return { error: 'Unable to parse response into JSON.' };
+    throw Error('Unable to parse response into JSON.');
   }
 };

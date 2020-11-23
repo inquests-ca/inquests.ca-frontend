@@ -194,10 +194,7 @@ const ViewAuthority = () => {
 
   // TODO: on 404, redirect to homepage.
   const { data: authority } = useQuery(['authority', authorityId], (_key, authorityId: string) =>
-    fetchJson<Authority>(`/authorities/${authorityId}`).then((response) => {
-      if (response.error) throw new Error(response.error);
-      return response.data!;
-    })
+    fetchJson<Authority>(`/authorities/${authorityId}`)
   );
 
   const classes = useStyles();
