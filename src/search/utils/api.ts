@@ -14,9 +14,11 @@ export const fetchAuthorities = ({ text, keywords, page }: AuthorityQuery) => {
   const query = { text, keywords, limit: PAGINATION, offset: (page - 1) * PAGINATION };
   return fetchJson<DataWithCount<Authority[]>>('/authorities', query);
 };
+export const defaultAuthorityQuery = (): AuthorityQuery => ({ text: '', keywords: [], page: 1 });
 
 export type InquestQuery = BaseQuery;
-export const fetchInquests = async ({ text, keywords, page }: InquestQuery) => {
+export const fetchInquests = ({ text, keywords, page }: InquestQuery) => {
   const query = { text, keywords, limit: PAGINATION, offset: (page - 1) * PAGINATION };
   return fetchJson<DataWithCount<Inquest[]>>('/inquests', query);
 };
+export const defaultInquestQuery = (): InquestQuery => ({ text: '', keywords: [], page: 1 });

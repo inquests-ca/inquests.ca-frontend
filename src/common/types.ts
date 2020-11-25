@@ -1,3 +1,5 @@
+export type AuthorityOrInquest = 'authority' | 'inquest';
+
 export interface DataWithCount<T> {
   count: number;
   data: T;
