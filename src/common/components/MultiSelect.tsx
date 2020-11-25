@@ -3,20 +3,27 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import { MenuItem } from 'common/types';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_theme) => ({
   fullWidth: {
     width: '100%',
+  },
+  loading: {
+    display: 'grid',
+    justifyItems: 'center',
+    alignItems: 'center',
   },
 }));
 
 interface MultiSelectProps {
   items: MenuItem[];
+  loading?: boolean;
   selectedValues: string[];
   onChange: (value: string[]) => void;
   renderLabel: (value: string[]) => React.ReactNode;
@@ -26,6 +33,7 @@ interface MultiSelectProps {
 
 const MultiSelect = ({
   items,
+  loading,
   selectedValues,
   onChange,
   renderLabel,
@@ -46,12 +54,18 @@ const MultiSelect = ({
         onChange={handleChange}
         renderValue={(value: unknown) => renderLabel(value as string[])}
       >
-        {items.map((item, i) => (
-          <MuiMenuItem key={i} value={item.value}>
-            <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
-            <ListItemText primary={item.label} />
-          </MuiMenuItem>
-        ))}
+        {loading ? (
+          <div className={classes.loading}>
+            <CircularProgress />
+          </div>
+        ) : (
+          items.map((item, i) => (
+            <MuiMenuItem key={i} value={item.value}>
+              <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
+              <ListItemText primary={item.label} />
+            </MuiMenuItem>
+          ))
+        )}
       </Select>
     </FormControl>
   );

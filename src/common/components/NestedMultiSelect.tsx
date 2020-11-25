@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListSubheader from '@material-ui/core/ListSubheader';
@@ -14,10 +15,16 @@ const useStyles = makeStyles((_theme) => ({
   fullWidth: {
     width: '100%',
   },
+  loading: {
+    display: 'grid',
+    justifyItems: 'center',
+    alignItems: 'center',
+  },
 }));
 
 interface NestedMultiSelectProps {
   items: MenuItemGroup[];
+  loading?: boolean;
   selectedValues: string[];
   onChange: (value: string[]) => void;
   renderLabel: (value: string[]) => React.ReactNode;
@@ -28,6 +35,7 @@ interface NestedMultiSelectProps {
 // TODO: achieve nesting with submenus rather than headers.
 const NestedMultiSelect = ({
   items,
+  loading,
   selectedValues,
   onChange,
   renderLabel,
@@ -53,17 +61,23 @@ const NestedMultiSelect = ({
         onChange={handleChange}
         renderValue={(value: unknown) => renderLabel(value as string[])}
       >
-        {items.map((group, i) => [
-          <ListSubheader key={i} disableSticky>
-            {group.label}
-          </ListSubheader>,
-          group.items.map((item, i) => (
-            <MenuItem key={i} value={item.value}>
-              <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
-              <ListItemText primary={item.label} />
-            </MenuItem>
-          )),
-        ])}
+        {loading ? (
+          <div className={classes.loading}>
+            <CircularProgress />
+          </div>
+        ) : (
+          items.map((group, i) => [
+            <ListSubheader key={i} disableSticky>
+              {group.label}
+            </ListSubheader>,
+            group.items.map((item, i) => (
+              <MenuItem key={i} value={item.value}>
+                <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
+                <ListItemText primary={item.label} />
+              </MenuItem>
+            )),
+          ])
+        )}
       </Select>
     </FormControl>
   );
