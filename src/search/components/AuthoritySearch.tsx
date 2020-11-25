@@ -12,8 +12,7 @@ import { fetchJson } from 'common/utils/request';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { AuthorityCategory } from 'common/models';
 import { AuthorityOrInquest } from 'common/types';
-
-const PAGINATION = 12;
+import { PAGINATION } from 'common/constants';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
