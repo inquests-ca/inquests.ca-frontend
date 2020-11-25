@@ -9,7 +9,7 @@ import { InquestQuery, fetchInquests } from '../utils/api';
 import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import { fetchJson } from 'common/utils/request';
-import LoadingPage from 'common/components/LoadingPage';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { InquestCategory } from 'common/models';
 
 const PAGINATION = 12;
@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: '300px 1fr',
     gridColumnGap: theme.spacing(4),
     alignItems: 'start',
+  },
+  loading: {
+    alignSelf: 'center',
+    justifySelf: 'center',
   },
 }));
 
@@ -53,10 +57,7 @@ const InquestSearch = () => {
 
   const classes = useStyles();
 
-  // TODO: show loading indicator every time a new search is performed.
-  if (!inquests || !keywords) return <LoadingPage />;
-
-  const keywordItems = keywords.map((keywordCategory) => ({
+  const keywordItems = keywords?.map((keywordCategory) => ({
     label: keywordCategory.name,
     items: keywordCategory.inquestKeywords.map((keyword) => ({
       label: keyword.name,
@@ -64,22 +65,24 @@ const InquestSearch = () => {
     })),
   }));
 
+  // TODO: prevent flicker after search by displaying previous search results.
   return (
     <div className={classes.layout}>
       <SearchMenu>
         <SearchField onSearch={handleTextSearch} label="Search Inquests" name="search" />
-        {keywords && (
+        {
           <NestedMultiSelect
-            items={keywordItems}
+            items={keywordItems ?? []}
+            loading={!keywordItems}
             selectedValues={selectedKeywords}
             onChange={handleKeywordsChange}
             renderLabel={(selected) =>
               selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
             }
           />
-        )}
+        }
       </SearchMenu>
-      {inquests && (
+      {inquests ? (
         <SearchResults
           count={inquests.count}
           pagination={PAGINATION}
@@ -90,6 +93,8 @@ const InquestSearch = () => {
             <InquestSearchResult key={i} inquest={inquest} />
           ))}
         </SearchResults>
+      ) : (
+        <CircularProgress className={classes.loading} />
       )}
     </div>
   );
