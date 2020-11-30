@@ -48,7 +48,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
 
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
-  const handleKeywordsChange = (selectedKeywords: string[]): void =>
+  const handleKeywordsSelect = (selectedKeywords: string[]): void =>
     onQueryChange({ ...query, page: 1, keywords: selectedKeywords });
 
   const classes = useStyles();
@@ -75,8 +75,8 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           <NestedMultiSelect
             items={keywordItems ?? []}
             loading={!keywordItems}
-            selectedValues={query.keywords}
-            onChange={handleKeywordsChange}
+            defaultValues={query.keywords}
+            onSelect={handleKeywordsSelect}
             renderLabel={(selected) =>
               selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
             }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -25,8 +25,8 @@ const useStyles = makeStyles((_theme) => ({
 interface NestedMultiSelectProps {
   items: MenuItemGroup[];
   loading?: boolean;
-  selectedValues: string[];
-  onChange: (value: string[]) => void;
+  defaultValues?: string[];
+  onSelect: (value: string[]) => void;
   renderLabel: (value: string[]) => React.ReactNode;
   fullWidth?: boolean;
   className?: string;
@@ -36,18 +36,34 @@ interface NestedMultiSelectProps {
 const NestedMultiSelect = ({
   items,
   loading,
-  selectedValues,
-  onChange,
+  defaultValues,
+  onSelect,
   renderLabel,
   fullWidth,
   className,
 }: NestedMultiSelectProps) => {
+  const [values, setValues] = useState<string[]>([]);
+  const prevValues = useRef<string[]>([]);
+
+  useEffect(() => {
+    prevValues.current = defaultValues ?? [];
+    setValues(defaultValues ?? []);
+  }, [defaultValues]);
+
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     // Clicking a ListSubheader element also causes tihs event to be fired off with value undefined.
     // Discard these events.
-    const selectedItems = event.target.value as string[];
-    if (selectedItems.some((value) => value === undefined)) event.preventDefault();
-    else onChange(selectedItems);
+    const selectedValues = event.target.value as string[];
+    if (selectedValues.some((value) => value === undefined)) event.preventDefault();
+    else setValues(selectedValues);
+  };
+
+  const handleClose = () => {
+    // Only execute callback if values have changed.
+    if (values !== prevValues.current) {
+      onSelect(values);
+      prevValues.current = values;
+    }
   };
 
   const classes = useStyles();
@@ -57,8 +73,9 @@ const NestedMultiSelect = ({
       <Select
         multiple
         displayEmpty
-        value={selectedValues}
+        value={values}
         onChange={handleChange}
+        onClose={handleClose}
         renderValue={(value: unknown) => renderLabel(value as string[])}
       >
         {loading ? (
@@ -72,7 +89,7 @@ const NestedMultiSelect = ({
             </ListSubheader>,
             group.items.map((item, i) => (
               <MenuItem key={i} value={item.value}>
-                <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
+                <Checkbox checked={values.indexOf(item.value) > -1} />
                 <ListItemText primary={item.label} />
               </MenuItem>
             )),
