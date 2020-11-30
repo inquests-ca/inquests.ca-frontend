@@ -15,6 +15,9 @@ const useStyles = makeStyles((_theme) => ({
   fullWidth: {
     width: '100%',
   },
+  menu: {
+    maxHeight: '40%',
+  },
   loading: {
     display: 'grid',
     justifyItems: 'center',
@@ -77,6 +80,18 @@ const NestedMultiSelect = ({
         onChange={handleChange}
         onClose={handleClose}
         renderValue={(value: unknown) => renderLabel(value as string[])}
+        MenuProps={{
+          classes: { paper: classes.menu },
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left',
+          },
+          transformOrigin: {
+            vertical: 'top',
+            horizontal: 'left',
+          },
+          getContentAnchorEl: null,
+        }}
       >
         {loading ? (
           <div className={classes.loading}>
