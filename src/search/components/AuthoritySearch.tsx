@@ -71,7 +71,12 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
   return (
     <div className={classes.layout}>
       <SearchMenu searchType="authority" onSearchTypeChange={onSearchTypeChange}>
-        <SearchField onSearch={handleTextSearch} label="Search Authorities" name="search" />
+        <SearchField
+          defaultValue={query.text}
+          onSearch={handleTextSearch}
+          label="Search Authorities"
+          name="search"
+        />
         {
           <NestedMultiSelect
             items={keywordItems ?? []}

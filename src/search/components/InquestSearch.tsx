@@ -65,7 +65,12 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
   return (
     <div className={classes.layout}>
       <SearchMenu searchType="inquest" onSearchTypeChange={onSearchTypeChange}>
-        <SearchField onSearch={handleTextSearch} label="Search Inquests" name="search" />
+        <SearchField
+          defaultValue={query.text}
+          onSearch={handleTextSearch}
+          label="Search Inquests"
+          name="search"
+        />
         {
           <NestedMultiSelect
             items={keywordItems ?? []}

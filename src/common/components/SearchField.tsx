@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TextField from '@material-ui/core/TextField';
 
 interface SearchFieldProps {
+  defaultValue?: string;
   label: string;
   name: string;
   onSearch: (text: string) => void;
@@ -9,15 +10,27 @@ interface SearchFieldProps {
   className?: string;
 }
 
-const SearchField = ({ label, name, onSearch, fullWidth, className }: SearchFieldProps) => {
+const SearchField = ({
+  defaultValue,
+  label,
+  name,
+  onSearch,
+  fullWidth,
+  className,
+}: SearchFieldProps) => {
   const [text, setText] = useState('');
-  const prevText = useRef('');
+  const prevSearch = useRef('');
+
+  useEffect(() => {
+    prevSearch.current = defaultValue ?? '';
+    setText(defaultValue ?? '');
+  }, [defaultValue]);
 
   const handleSearch = (): void => {
     // Only perform search if the text field has changed.
-    if (text !== prevText.current) {
+    if (text !== prevSearch.current) {
       onSearch(text);
-      prevText.current = text;
+      prevSearch.current = text;
     }
   };
 
@@ -32,7 +45,8 @@ const SearchField = ({ label, name, onSearch, fullWidth, className }: SearchFiel
 
   return (
     <TextField
-      type={'search'}
+      value={text}
+      type="search"
       label={label}
       name={name}
       className={className}
