@@ -18,8 +18,14 @@ const theme = createMuiTheme({
   },
 });
 
-// TODO: adjust defaults.
-const queryCache = new QueryCache();
+const queryCache = new QueryCache({
+  defaultConfig: {
+    queries: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <ThemeProvider theme={theme}>
