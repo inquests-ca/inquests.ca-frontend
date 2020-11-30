@@ -1,18 +1,24 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from 'react-query';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
 import AuthoritySearchResult from './AuthoritySearchResult';
-import { AuthorityQuery, fetchAuthorities } from '../utils/api';
+import {
+  AuthorityQuery,
+  defaultAuthorityQuery,
+  authorityQuerySchema,
+  fetchAuthorities,
+} from '../utils/api';
 import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import { fetchJson } from 'common/utils/request';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { AuthorityCategory } from 'common/models';
 import { AuthorityOrInquest } from 'common/types';
 import { PAGINATION } from 'common/constants';
+import useQueryParams from 'common/hooks/useQueryParams';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -29,12 +35,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface AuthoritySearchProps {
-  query: AuthorityQuery;
   onQueryChange: (query: AuthorityQuery) => void;
   onSearchTypeChange: (searchType: AuthorityOrInquest) => void;
 }
 
-const AuthoritySearch = ({ query, onQueryChange, onSearchTypeChange }: AuthoritySearchProps) => {
+const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchProps) => {
+  const queryParams = useQueryParams<AuthorityQuery>(authorityQuerySchema);
+  const query = { ...defaultAuthorityQuery(), ...queryParams };
+
   const { data: keywords } = useQuery('authorityKeywords', () =>
     fetchJson<AuthorityCategory[]>('/keywords/authority')
   );

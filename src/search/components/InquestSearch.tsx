@@ -1,18 +1,19 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from 'react-query';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
 import InquestSearchResult from './InquestSearchResult';
-import { InquestQuery, fetchInquests } from '../utils/api';
+import { InquestQuery, inquestQuerySchema, defaultInquestQuery, fetchInquests } from '../utils/api';
 import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import { fetchJson } from 'common/utils/request';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { InquestCategory } from 'common/models';
 import { AuthorityOrInquest } from 'common/types';
 import { PAGINATION } from 'common/constants';
+import useQueryParams from 'common/hooks/useQueryParams';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -29,12 +30,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface InquestSearchProps {
-  query: InquestQuery;
   onQueryChange: (query: InquestQuery) => void;
   onSearchTypeChange: (searchType: AuthorityOrInquest) => void;
 }
 
-const InquestSearch = ({ query, onQueryChange, onSearchTypeChange }: InquestSearchProps) => {
+const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps) => {
+  const queryParams = useQueryParams<InquestQuery>(inquestQuerySchema);
+  const query = { ...defaultInquestQuery(), ...queryParams };
+
   const { data: keywords } = useQuery('inquestKeywords', () =>
     fetchJson<InquestCategory[]>('/keywords/inquest')
   );
