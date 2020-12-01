@@ -37,7 +37,7 @@ const App = () => (
           <Route exact={true} path="/search" component={Search} />
           <Route path="/authority/:authorityId" component={ViewAuthority} />
           <Route path="/inquest/:inquestId" component={ViewInquest} />
-          <Redirect to="/authorities" />
+          <Redirect to="/search" />
         </Switch>
       </Router>
       <ReactQueryDevtools />
