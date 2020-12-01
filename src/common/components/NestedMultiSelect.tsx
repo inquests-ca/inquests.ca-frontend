@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,6 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 
+import useDefaultState from 'common/hooks/useDefaultState';
 import { MenuItemGroup } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
@@ -45,13 +46,7 @@ const NestedMultiSelect = ({
   fullWidth,
   className,
 }: NestedMultiSelectProps) => {
-  const [values, setValues] = useState<string[]>([]);
-  const prevValues = useRef<string[]>([]);
-
-  useEffect(() => {
-    prevValues.current = defaultValues ?? [];
-    setValues(defaultValues ?? []);
-  }, [defaultValues]);
+  const [values, setValues, handleSelect] = useDefaultState(defaultValues ?? [], onSelect);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     // Clicking a ListSubheader element also causes tihs event to be fired off with value undefined.
@@ -59,14 +54,6 @@ const NestedMultiSelect = ({
     const selectedValues = event.target.value as string[];
     if (selectedValues.some((value) => value === undefined)) event.preventDefault();
     else setValues(selectedValues);
-  };
-
-  const handleClose = () => {
-    // Only execute callback if values have changed.
-    if (values !== prevValues.current) {
-      onSelect(values);
-      prevValues.current = values;
-    }
   };
 
   const classes = useStyles();
@@ -78,7 +65,7 @@ const NestedMultiSelect = ({
         displayEmpty
         value={values}
         onChange={handleChange}
-        onClose={handleClose}
+        onClose={handleSelect}
         renderValue={(value: unknown) => renderLabel(value as string[])}
         MenuProps={{
           classes: { paper: classes.menu },

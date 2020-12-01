@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
+
+import useDefaultState from 'common/hooks/useDefaultState';
 
 interface SearchFieldProps {
   defaultValue?: string;
@@ -18,28 +20,13 @@ const SearchField = ({
   fullWidth,
   className,
 }: SearchFieldProps) => {
-  const [text, setText] = useState('');
-  const prevSearch = useRef('');
-
-  useEffect(() => {
-    prevSearch.current = defaultValue ?? '';
-    setText(defaultValue ?? '');
-  }, [defaultValue]);
-
-  const handleSearch = (): void => {
-    // Only perform search if the text field has changed.
-    if (text !== prevSearch.current) {
-      onSearch(text);
-      prevSearch.current = text;
-    }
-  };
+  const [text, setText, handleSearch] = useDefaultState(defaultValue ?? '', onSearch);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void =>
     setText(event.currentTarget.value);
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (event.key === 'Enter') handleSearch();
-  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void =>
+    event.key === 'Enter' ? handleSearch() : undefined;
 
   const handleBlur = (): void => handleSearch();
 
