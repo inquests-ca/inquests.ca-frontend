@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-
 import _ from 'lodash';
 
 /**
  * Returns a stateful value, a function to update it, and a function which invokes the given
- * callback only when the value has changed.
+ * callback only when the stateful value has changed.
  *
  * @param defaultValue Dynamically changing default value.
- * @param callback Callback invoked when the returned function is called and the value has changed.
+ * @param callback Invoked when the returned handler function is called and the stateful value has since changed.
  */
 const useDefaultState = <T>(
   defaultValue: T,
