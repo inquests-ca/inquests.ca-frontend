@@ -11,7 +11,7 @@ import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import { fetchJson } from 'common/utils/request';
 import { InquestCategory } from 'common/models';
-import { AuthorityOrInquest } from 'common/types';
+import { SearchType } from 'common/types';
 import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface InquestSearchProps {
   onQueryChange: (query: InquestQuery) => void;
-  onSearchTypeChange: (searchType: AuthorityOrInquest) => void;
+  onSearchTypeChange: (searchType: SearchType) => void;
 }
 
 const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps) => {

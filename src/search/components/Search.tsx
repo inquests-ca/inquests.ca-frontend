@@ -5,16 +5,16 @@ import joi from 'joi';
 import AuthoritySearch from './AuthoritySearch';
 import InquestSearch from './InquestSearch';
 import { AuthorityQuery, InquestQuery } from 'search/utils/api';
-import { AuthorityOrInquest } from 'common/types';
+import { SearchType } from 'common/types';
 import useQueryParams from 'common/hooks/useQueryParams';
 import { stringifyQuery } from 'common/utils/request';
 
 const Search = () => {
   // Parse 'type' query parameter to determine whether to render authority- or inquest-search.
-  const query = useQueryParams<{ type: AuthorityOrInquest }>(
+  const query = useQueryParams<{ type: SearchType }>(
     joi.object({ type: joi.string().valid('authority', 'inquest') })
   );
-  const searchType: AuthorityOrInquest = (query && query.type) || 'authority';
+  const searchType: SearchType = (query && query.type) || 'authority';
 
   const history = useHistory();
 
@@ -22,7 +22,7 @@ const Search = () => {
     history.push(`/search${stringifyQuery({ type: searchType, ...query }, { encode: false })}`);
   };
 
-  const handleSearchTypeChange = (searchType: AuthorityOrInquest) => {
+  const handleSearchTypeChange = (searchType: SearchType) => {
     history.push(`/search${stringifyQuery({ type: searchType }, { encode: false })}`);
   };
 

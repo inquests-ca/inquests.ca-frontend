@@ -1,4 +1,4 @@
-export type AuthorityOrInquest = 'authority' | 'inquest';
+export type SearchType = 'authority' | 'inquest';
 
 export interface DataWithCount<T> {
   count: number;

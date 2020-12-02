@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 import RadioButtons from 'common/components/RadioButtons';
-import { AuthorityOrInquest } from 'common/types';
+import { SearchType } from 'common/types';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface SearchMenuProps {
-  searchType: AuthorityOrInquest;
-  onSearchTypeChange: (searchType: AuthorityOrInquest) => void;
+  searchType: SearchType;
+  onSearchTypeChange: (searchType: SearchType) => void;
   children: React.ReactNode;
   className?: string;
 }
@@ -34,7 +34,7 @@ const SearchMenu = ({ searchType, onSearchTypeChange, children, className }: Sea
           { value: 'inquest', label: 'Inquests' },
         ]}
         selectedValue={searchType}
-        onChange={(value: string) => onSearchTypeChange(value as AuthorityOrInquest)}
+        onChange={(value: string) => onSearchTypeChange(value as SearchType)}
       ></RadioButtons>
       {children}
     </Paper>
