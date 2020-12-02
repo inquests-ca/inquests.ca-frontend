@@ -70,7 +70,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
   // TODO: prevent flicker after search by displaying previous search results.
   return (
     <div className={classes.layout}>
-      <SearchMenu searchType="authority" onSearchTypeChange={onSearchTypeChange}>
+      <SearchMenu searchType={SearchType.Authority} onSearchTypeChange={onSearchTypeChange}>
         <SearchField
           defaultValue={query.text}
           onSearch={handleTextSearch}

@@ -64,7 +64,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
   // TODO: prevent flicker after search by displaying previous search results.
   return (
     <div className={classes.layout}>
-      <SearchMenu searchType="inquest" onSearchTypeChange={onSearchTypeChange}>
+      <SearchMenu searchType={SearchType.Inquest} onSearchTypeChange={onSearchTypeChange}>
         <SearchField
           defaultValue={query.text}
           onSearch={handleTextSearch}

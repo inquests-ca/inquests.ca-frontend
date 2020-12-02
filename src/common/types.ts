@@ -1,4 +1,7 @@
-export type SearchType = 'authority' | 'inquest';
+export enum SearchType {
+  Authority = 'authority',
+  Inquest = 'inquest',
+}
 
 export interface DataWithCount<T> {
   count: number;

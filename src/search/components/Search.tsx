@@ -12,9 +12,9 @@ import { stringifyQuery } from 'common/utils/request';
 const Search = () => {
   // Parse 'type' query parameter to determine whether to render authority- or inquest-search.
   const query = useQueryParams<{ type: SearchType }>(
-    joi.object({ type: joi.string().valid('authority', 'inquest') })
+    joi.object({ type: joi.string().valid(...Object.values(SearchType)) })
   );
-  const searchType: SearchType = (query && query.type) || 'authority';
+  const searchType: SearchType = (query && query.type) || SearchType.Authority;
 
   const history = useHistory();
 
@@ -27,14 +27,14 @@ const Search = () => {
   };
 
   switch (searchType) {
-    case 'authority':
+    case SearchType.Authority:
       return (
         <AuthoritySearch
           onQueryChange={handleQueryChange}
           onSearchTypeChange={handleSearchTypeChange}
         />
       );
-    case 'inquest':
+    case SearchType.Inquest:
       return (
         <InquestSearch
           onQueryChange={handleQueryChange}
