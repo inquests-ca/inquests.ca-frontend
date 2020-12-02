@@ -10,8 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    // TODO: Remove following flag once create-react-app bug is resolved:
-    // https://github.com/facebook/create-react-app/issues/9429
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "node",
