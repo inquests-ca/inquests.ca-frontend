@@ -34,7 +34,7 @@ const App = () => (
       <Router>
         <NavHeader />
         <Switch>
-          <Route exact={true} path="/search" component={Search} />
+          <Route path="/search" component={Search} />
           <Route path="/authority/:authorityId" component={ViewAuthority} />
           <Route path="/inquest/:inquestId" component={ViewInquest} />
           <Redirect to="/search" />
