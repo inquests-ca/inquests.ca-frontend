@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import _ from 'lodash';
 import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -10,7 +11,6 @@ import Section from './Section';
 import { Table, Row } from './Table';
 import { InquestInternalLinks, AuthorityInternalLinks } from './InternalLinks';
 import Dialog from 'common/components/Dialog';
-import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson } from 'common/utils/request';
 import { toReadableDateString } from 'common/utils/date';
 import LoadingPage from 'common/components/LoadingPage';
@@ -188,28 +188,21 @@ const InternalLinksSection = ({ authority }: { authority: Authority }) => {
 };
 
 const ViewAuthority = () => {
-  const [authority, setAuthority] = useState<Authority | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { authorityId } = useParams<{ authorityId: string }>();
 
-  const isMounted = useMountedState();
+  // TODO: on 404, redirect to homepage.
+  const { data: authority } = useQuery(['authority', authorityId], (_key, authorityId: string) =>
+    fetchJson<Authority>(`/authorities/${authorityId}`)
+  );
 
-  useEffect(() => {
-    const fetchAuthority = async () => {
-      const response = await fetchJson<Authority>(`/authorities/${authorityId}`);
-      // TODO: on 404, redirect to homepage.
-      if (!response.error && isMounted()) setAuthority(response.data!);
-    };
-    fetchAuthority();
-  }, [authorityId, isMounted]);
+  const classes = useStyles();
 
   const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
 
-  const classes = useStyles();
-
-  if (authority === null) return <LoadingPage />;
+  if (!authority) return <LoadingPage />;
 
   return (
     <Container className={classes.layout}>

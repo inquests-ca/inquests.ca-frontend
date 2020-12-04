@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import _ from 'lodash';
 import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -10,7 +11,6 @@ import Section from './Section';
 import { Table, Row } from './Table';
 import { AuthorityInternalLinks } from './InternalLinks';
 import Dialog from 'common/components/Dialog';
-import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson } from 'common/utils/request';
 import { toReadableDateString } from 'common/utils/date';
 import LoadingPage from 'common/components/LoadingPage';
@@ -153,28 +153,21 @@ const InternalLinksSection = ({ authorities }: { authorities: Authority[] }) => 
 };
 
 const ViewInquest = () => {
-  const [inquest, setInquest] = useState<Inquest | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { inquestId } = useParams<{ inquestId: string }>();
 
-  const isMounted = useMountedState();
+  // TODO: on 404, redirect to homepage.
+  const { data: inquest } = useQuery(['inquest', inquestId], (_key, inquestId: string) =>
+    fetchJson<Inquest>(`/inquests/${inquestId}`)
+  );
 
-  useEffect(() => {
-    const fetchInquest = async () => {
-      const response = await fetchJson<Inquest>(`/inquests/${inquestId}`);
-      // TODO: on 404, redirect to homepage.
-      if (!response.error && isMounted()) setInquest(response.data!);
-    };
-    fetchInquest();
-  }, [inquestId, isMounted]);
+  const classes = useStyles();
 
   const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
 
-  const classes = useStyles();
-
-  if (inquest === null) return <LoadingPage />;
+  if (!inquest) return <LoadingPage />;
 
   return (
     <Container className={classes.layout}>

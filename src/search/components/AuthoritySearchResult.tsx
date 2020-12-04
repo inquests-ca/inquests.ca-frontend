@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
   layout: {
     textAlign: 'left',
     maxHeight: 200,
-    marginTop: theme.spacing(2),
   },
   // Prevent default anchor styling.
   nav: {
@@ -45,7 +44,7 @@ interface AuthoritySearchResultProps {
   className?: string;
 }
 
-export const AuthoritySearchResult = ({ authority, className }: AuthoritySearchResultProps) => {
+const AuthoritySearchResult = ({ authority, className }: AuthoritySearchResultProps) => {
   const primaryDocument = _.find(
     authority.authorityDocuments,
     (doc) => doc.isPrimary
@@ -95,3 +94,5 @@ export const AuthoritySearchResult = ({ authority, className }: AuthoritySearchR
     </Card>
   );
 };
+
+export default AuthoritySearchResult;

@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -7,14 +8,15 @@ import Pagination from '@material-ui/lab/Pagination';
 const useStyles = makeStyles((theme) => ({
   layout: {
     padding: theme.spacing(4),
-    minWidth: '100%',
+    display: 'grid',
+    gridRowGap: theme.spacing(2),
   },
   noResults: {
     color: theme.palette.text.secondary,
   },
-  // TODO: center.
   pagination: {
-    margin: theme.spacing(4),
+    marginTop: theme.spacing(2),
+    justifySelf: 'center',
   },
 }));
 
@@ -50,20 +52,18 @@ const SearchResults = ({
     );
 
   return (
-    <div className={className}>
-      <Paper className={classes.layout}>
-        <Typography variant="h5" component="span">
-          {count} {count === 1 ? 'Result' : 'Results'}
-        </Typography>
-        {children}
-      </Paper>
+    <Paper className={clsx(className, classes.layout)}>
+      <Typography variant="h5" component="span">
+        {count} {count === 1 ? 'Result' : 'Results'}
+      </Typography>
+      {children}
       <Pagination
         className={classes.pagination}
         count={Math.ceil(count / pagination)}
         page={page}
         onChange={handlePageChange}
       />
-    </div>
+    </Paper>
   );
 };
 

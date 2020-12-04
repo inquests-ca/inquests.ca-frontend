@@ -35,8 +35,6 @@ const NavHeader = () => {
               Inquests.ca
             </Link>
           </Typography>
-          <NavButton to="/authorities" label="Authorities" />
-          <NavButton to="/inquests" label="Inquests" />
           <NavButton to={URL_TERMS_OF_USE} label="Terms of Use" external />
         </Toolbar>
       </AppBar>

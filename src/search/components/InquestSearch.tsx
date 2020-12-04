@@ -1,93 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useQuery } from 'react-query';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
-import { InquestSearchResult } from './InquestSearchResult';
+import InquestSearchResult from './InquestSearchResult';
+import { InquestQuery, inquestQuerySchema, defaultInquestQuery, fetchInquests } from '../utils/api';
 import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
-import useMountedState from 'common/hooks/useMountedState';
 import { fetchJson } from 'common/utils/request';
-import LoadingPage from 'common/components/LoadingPage';
-import { Inquest, InquestCategory } from 'common/models';
-import { DataWithCount } from 'common/types';
-
-const PAGINATION = 12;
+import { InquestCategory } from 'common/models';
+import { SearchType } from 'common/types';
+import { PAGINATION } from 'common/constants';
+import useQueryParams from 'common/hooks/useQueryParams';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    height: '90vh',
-  },
-  searchMenuLayout: {
     margin: theme.spacing(4),
-    marginRight: 0,
+    display: 'grid',
+    gridTemplateColumns: '300px 1fr',
+    gridColumnGap: theme.spacing(4),
+    alignItems: 'start',
   },
-  searchMenuComponent: {
-    marginBottom: theme.spacing(4),
-  },
-  searchResultsLayout: {
-    margin: theme.spacing(4),
-    flexGrow: 1,
+  loading: {
+    alignSelf: 'center',
+    justifySelf: 'center',
   },
 }));
 
-const InquestSearch = () => {
-  const [inquestCount, setInquestCount] = useState(0);
-  const [inquests, setInquests] = useState<Inquest[] | null>(null);
-  const [keywords, setKeywords] = useState<InquestCategory[] | null>(null);
+interface InquestSearchProps {
+  onQueryChange: (query: InquestQuery) => void;
+  onSearchTypeChange: (searchType: SearchType) => void;
+}
 
-  const [textSearch, setTextSearch] = useState('');
-  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
-  const [page, setPage] = useState(1);
+const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps) => {
+  const queryParams = useQueryParams<InquestQuery>(inquestQuerySchema);
+  const query = { ...defaultInquestQuery(), ...queryParams };
 
-  const isMounted = useMountedState();
+  const { data: keywords } = useQuery('inquestKeywords', () =>
+    fetchJson<InquestCategory[]>('/keywords/inquest')
+  );
 
-  useEffect(() => {
-    const fetchKeywords = async () => {
-      const response = await fetchJson<InquestCategory[]>('/keywords/inquest');
-      if (!response.error && isMounted()) setKeywords(response.data!);
-    };
-    fetchKeywords();
-  }, [isMounted]);
+  const { data: inquests } = useQuery(['inquests', query], (_key: string, query: InquestQuery) =>
+    fetchInquests(query)
+  );
 
-  useEffect(() => {
-    const fetchInquests = async () => {
-      const query = {
-        text: textSearch,
-        keywords: selectedKeywords,
-        offset: (page - 1) * PAGINATION,
-        limit: PAGINATION,
-      };
-      const response = await fetchJson<DataWithCount<Inquest[]>>('/inquests', query);
-      if (!response.error && isMounted()) {
-        setInquests(response.data!.data);
-        setInquestCount(response.data!.count);
-      }
-    };
-    fetchInquests();
-  }, [textSearch, selectedKeywords, page, isMounted]);
-
-  const handleTextSearch = (text: string): void => {
-    setPage(1);
-    setTextSearch(text);
-  };
-
-  const handleKeywordsChange = (newSelectedKeywords: string[]): void => {
-    setPage(1);
-    setSelectedKeywords(newSelectedKeywords);
-  };
-
-  const handlePageChange = (newPage: number): void => setPage(newPage);
+  const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
+  const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
+  const handleKeywordsSelect = (selectedKeywords: string[]): void =>
+    onQueryChange({ ...query, page: 1, keywords: selectedKeywords });
 
   const classes = useStyles();
 
-  // TODO: show loading indicator every time a new search is performed.
-  if (inquests === null || keywords === null) return <LoadingPage />;
-
-  const keywordItems = keywords.map((keywordCategory) => ({
+  const keywordItems = keywords?.map((keywordCategory) => ({
     label: keywordCategory.name,
     items: keywordCategory.inquestKeywords.map((keyword) => ({
       label: keyword.name,
@@ -95,41 +61,41 @@ const InquestSearch = () => {
     })),
   }));
 
+  // TODO: prevent flicker after search by displaying previous search results.
   return (
     <div className={classes.layout}>
-      <SearchMenu className={classes.searchMenuLayout}>
+      <SearchMenu searchType={SearchType.Inquest} onSearchTypeChange={onSearchTypeChange}>
         <SearchField
-          className={classes.searchMenuComponent}
+          defaultValue={query.text}
           onSearch={handleTextSearch}
           label="Search Inquests"
           name="search"
-          fullWidth
         />
-        {keywords && (
+        {
           <NestedMultiSelect
-            className={classes.searchMenuComponent}
-            items={keywordItems}
-            selectedValues={selectedKeywords}
-            onChange={handleKeywordsChange}
+            items={keywordItems ?? []}
+            loading={!keywordItems}
+            defaultValues={query.keywords}
+            onSelect={handleKeywordsSelect}
             renderLabel={(selected) =>
               selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
             }
-            fullWidth
           />
-        )}
+        }
       </SearchMenu>
-      {inquests && (
+      {inquests ? (
         <SearchResults
-          className={classes.searchResultsLayout}
-          count={inquestCount}
+          count={inquests.count}
           pagination={PAGINATION}
-          page={page}
+          page={query.page}
           onPageChange={handlePageChange}
         >
-          {inquests.map((inquest, i) => (
+          {inquests.data.map((inquest, i) => (
             <InquestSearchResult key={i} inquest={inquest} />
           ))}
         </SearchResults>
+      ) : (
+        <CircularProgress className={classes.loading} />
       )}
     </div>
   );

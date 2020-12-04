@@ -8,7 +8,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { MenuItem } from 'common/types';
 
 interface RadioButtonProps {
-  legend: string;
+  legend?: string;
   items: MenuItem[];
   selectedValue: string;
   onChange: (value: string) => void;
@@ -22,7 +22,7 @@ const RadioButtons = ({ legend, items, selectedValue, onChange, className }: Rad
   return (
     <div className={className}>
       <FormControl component="fieldset">
-        <FormLabel component="legend">{legend}</FormLabel>
+        {legend && <FormLabel component="legend">{legend}</FormLabel>}
         <RadioGroup value={selectedValue} onChange={handleChange}>
           {items.map((item, i) => (
             <FormControlLabel key={i} value={item.value} control={<Radio />} label={item.label} />

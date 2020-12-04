@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
   layout: {
     textAlign: 'left',
     maxHeight: 200,
-    marginTop: theme.spacing(2),
   },
   // Prevent default anchor styling.
   nav: {
@@ -45,7 +44,7 @@ interface InquestSearchResultProps {
   className?: string;
 }
 
-export const InquestSearchResult = ({ inquest, className }: InquestSearchResultProps) => {
+const InquestSearchResult = ({ inquest, className }: InquestSearchResultProps) => {
   // Used to create an overview if one is not provided.
   const createOverview = () => {
     // In most cases there is only one deceased. Handle this case separately to avoid unnecessary computation.
@@ -101,3 +100,5 @@ export const InquestSearchResult = ({ inquest, className }: InquestSearchResultP
     </Card>
   );
 };
+
+export default InquestSearchResult;

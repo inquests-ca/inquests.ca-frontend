@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
+import useDefaultState from 'common/hooks/useDefaultState';
+
 interface SearchFieldProps {
+  defaultValue?: string;
   label: string;
   name: string;
   onSearch: (text: string) => void;
@@ -9,21 +12,28 @@ interface SearchFieldProps {
   className?: string;
 }
 
-const SearchField = ({ label, name, onSearch, fullWidth, className }: SearchFieldProps) => {
-  const [text, setText] = useState('');
+const SearchField = ({
+  defaultValue,
+  label,
+  name,
+  onSearch,
+  fullWidth,
+  className,
+}: SearchFieldProps) => {
+  const [text, setText, handleSearch] = useDefaultState(defaultValue ?? '', onSearch);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void =>
     setText(event.currentTarget.value);
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (event.key === 'Enter') onSearch(text);
-  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void =>
+    event.key === 'Enter' ? handleSearch() : undefined;
 
-  const handleBlur = (): void => onSearch(text);
+  const handleBlur = (): void => handleSearch();
 
   return (
     <TextField
-      type={'search'}
+      value={text}
+      type="search"
       label={label}
       name={name}
       className={className}
