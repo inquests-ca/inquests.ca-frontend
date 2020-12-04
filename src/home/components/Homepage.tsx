@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import RadioButtons from 'common/components/RadioButtons';
 import SearchField from 'common/components/SearchField';
-import { AuthorityOrInquest, MenuItem } from 'common/types';
+import { SearchType, MenuItem } from 'common/types';
 import { stringifyQuery } from 'common/utils/request';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,13 +28,13 @@ const useStyles = makeStyles((theme) => ({
 const Homepage = () => {
   const history = useHistory();
 
-  const [searchType, setSearchType] = useState<AuthorityOrInquest>('authority');
+  const [searchType, setSearchType] = useState<SearchType>(SearchType.Authority);
 
   const handleSearchTypeChange = (newSearchType: string) =>
-    setSearchType(newSearchType as AuthorityOrInquest);
+    setSearchType(newSearchType as SearchType);
 
   const handleSearch = (text: string) => {
-    history.push(`/search${stringifyQuery({ type: searchType, text })}`);
+    history.push(`/search${stringifyQuery({ type: searchType, text, page: 1 })}`);
   };
 
   const classes = useStyles();
