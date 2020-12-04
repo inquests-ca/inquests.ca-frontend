@@ -43,17 +43,17 @@ const Homepage = () => {
     {
       value: 'authority',
       label: (
-        <span>
-          <b>Authorities</b> &mdash; inquest-related case law.
-        </span>
+        <>
+          <b>Authorities</b> &mdash; Inquest-related case law and other reference materials.
+        </>
       ),
     },
     {
       value: 'inquest',
       label: (
-        <span>
-          <b>Inquests</b> &mdash; inquests including their verdicts and verdict explanations.
-        </span>
+        <>
+          <b>Inquests</b> &mdash; Findings, recommendations, and other documents from inquests.
+        </>
       ),
     },
   ];
@@ -64,7 +64,8 @@ const Homepage = () => {
         Inquests.ca
       </Typography>
       <Typography className={classes.subtitle} variant="h6" component="h2">
-        A repository of Canadian inquest-related rulings, findings, and other authorities.
+        A searchable, public repository of Canadian inquests and the law and procedures governing
+        them.
       </Typography>
       <RadioButtons
         items={searchOptions}
@@ -73,7 +74,7 @@ const Homepage = () => {
       ></RadioButtons>
       <SearchField
         onSearch={handleSearch}
-        label="Search"
+        label="Enter search terms"
         name="search"
         fullWidth
         className={classes.searchField}
