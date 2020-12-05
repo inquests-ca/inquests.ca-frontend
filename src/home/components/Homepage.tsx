@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 
@@ -7,6 +8,7 @@ import RadioButtons from 'common/components/RadioButtons';
 import SearchField from 'common/components/SearchField';
 import { SearchType, MenuItem } from 'common/types';
 import { stringifyQuery } from 'common/utils/request';
+import { AuthorityQuery, fetchAuthorities, defaultAuthorityQuery } from 'search/utils/api';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -29,6 +31,11 @@ const Homepage = () => {
   const history = useHistory();
 
   const [searchType, setSearchType] = useState<SearchType>(SearchType.Authority);
+
+  // Send request to wake up Heroku instance.
+  useQuery(['authorities', defaultAuthorityQuery()], (_key: string, query: AuthorityQuery) =>
+    fetchAuthorities(query)
+  );
 
   const handleSearchTypeChange = (newSearchType: string) =>
     setSearchType(newSearchType as SearchType);
