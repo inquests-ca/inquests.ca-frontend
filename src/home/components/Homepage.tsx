@@ -17,19 +17,21 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     margin: theme.spacing(6),
   },
-  title: { fontSize: '5rem' },
+  title: {
+    fontSize: '5rem',
+  },
   subtitle: {
     marginBottom: theme.spacing(8),
   },
+  radioButtons: {
+    marginBottom: theme.spacing(2),
+  },
   searchField: {
-    marginTop: theme.spacing(2),
-    maxWidth: '550px',
+    maxWidth: '600px',
   },
 }));
 
 const Homepage = () => {
-  const history = useHistory();
-
   const [searchType, setSearchType] = useState<SearchType>(SearchType.Authority);
 
   // Send request to wake up Heroku instance.
@@ -37,18 +39,17 @@ const Homepage = () => {
     fetchAuthorities(query)
   );
 
-  const handleSearchTypeChange = (newSearchType: string) =>
-    setSearchType(newSearchType as SearchType);
+  const history = useHistory();
 
-  const handleSearch = (text: string) => {
+  const handleSearchTypeChange = (newSearchType: SearchType) => setSearchType(newSearchType);
+  const handleSearch = (text: string) =>
     history.push(`/search${stringifyQuery({ type: searchType, text, page: 1 })}`);
-  };
 
   const classes = useStyles();
 
-  const searchOptions: MenuItem[] = [
+  const searchTypeItems: MenuItem[] = [
     {
-      value: 'authority',
+      value: SearchType.Authority,
       label: (
         <>
           <b>Authorities</b> &mdash; Inquest-related case law and other reference materials.
@@ -56,7 +57,7 @@ const Homepage = () => {
       ),
     },
     {
-      value: 'inquest',
+      value: SearchType.Inquest,
       label: (
         <>
           <b>Inquests</b> &mdash; Findings, recommendations, and other documents from inquests.
@@ -75,9 +76,10 @@ const Homepage = () => {
         them.
       </Typography>
       <RadioButtons
-        items={searchOptions}
+        items={searchTypeItems}
         selectedValue={searchType}
-        onChange={handleSearchTypeChange}
+        onChange={(searchType: string) => handleSearchTypeChange(searchType as SearchType)}
+        className={classes.radioButtons}
       ></RadioButtons>
       <SearchField
         onSearch={handleSearch}
