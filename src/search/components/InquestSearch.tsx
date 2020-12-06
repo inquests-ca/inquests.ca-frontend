@@ -6,7 +6,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
 import InquestSearchResult from './InquestSearchResult';
-import { InquestQuery, inquestQuerySchema, defaultInquestQuery, fetchInquests } from '../utils/api';
+import {
+  Sort,
+  InquestQuery,
+  inquestQuerySchema,
+  defaultInquestQuery,
+  fetchInquests,
+} from '../utils/api';
 import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import { fetchJson } from 'common/utils/request';
@@ -46,6 +52,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
     fetchInquests(query)
   );
 
+  const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
   const handleKeywordsSelect = (selectedKeywords: string[]): void =>
@@ -87,7 +94,9 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
         <SearchResults
           count={inquests.count}
           pagination={PAGINATION}
+          sort={query.sort}
           page={query.page}
+          onSortChange={handleSortChange}
           onPageChange={handlePageChange}
         >
           {inquests.data.map((inquest, i) => (

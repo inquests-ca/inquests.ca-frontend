@@ -7,6 +7,7 @@ import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
 import AuthoritySearchResult from './AuthoritySearchResult';
 import {
+  Sort,
   AuthorityQuery,
   defaultAuthorityQuery,
   authorityQuerySchema,
@@ -52,6 +53,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
     (_key: string, query: AuthorityQuery) => fetchAuthorities(query)
   );
 
+  const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
   const handleKeywordsSelect = (selectedKeywords: string[]): void =>
@@ -93,7 +95,9 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
         <SearchResults
           count={authorities.count}
           pagination={PAGINATION}
+          sort={query.sort}
           page={query.page}
+          onSortChange={handleSortChange}
           onPageChange={handlePageChange}
         >
           {authorities.data.map((authority, i) => (
