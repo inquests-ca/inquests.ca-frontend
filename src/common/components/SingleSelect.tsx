@@ -1,22 +1,16 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 
 import { MenuItem } from 'common/types';
 
-const useStyles = makeStyles((theme) => ({
-  select: {
-    width: 200,
-  },
-}));
-
 interface SingleSelectProps {
   items: MenuItem[];
   emptyItem?: boolean;
   selectedValue: string;
-  onChange: (values: string[]) => void;
+  onChange: (value: string) => void;
+  renderValue?: (value: string) => React.ReactNode;
   className?: string;
 }
 
@@ -25,16 +19,22 @@ const SingleSelect = ({
   emptyItem,
   selectedValue,
   onChange,
+  renderValue,
   className,
 }: SingleSelectProps) => {
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) =>
-    onChange(event.target.value as string[]);
-
-  const classes = useStyles();
+    onChange(event.target.value as string);
 
   return (
     <FormControl className={className}>
-      <Select className={classes.select} value={selectedValue} onChange={handleChange}>
+      <Select
+        displayEmpty
+        value={selectedValue}
+        onChange={handleChange}
+        renderValue={(value: unknown) =>
+          renderValue ? renderValue(value as string) : (value as string)
+        }
+      >
         {emptyItem && <MuiMenuItem value="" />}
         {items.map((item, i) => (
           <MuiMenuItem key={i} value={item.value}>
