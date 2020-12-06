@@ -10,7 +10,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import useDefaultState from 'common/hooks/useDefaultState';
-import { MenuItemGroup } from 'common/types';
+import { OptionGroup, OptionValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
   fullWidth: {
@@ -26,32 +26,32 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-interface NestedMultiSelectProps {
-  items: MenuItemGroup[];
+interface NestedMultiSelectProps<T extends OptionValue> {
+  options: OptionGroup<T>[];
   loading?: boolean;
-  defaultValues?: string[];
-  onSelect: (value: string[]) => void;
-  renderLabel: (value: string[]) => React.ReactNode;
+  defaultValues?: T[];
+  onSelect: (value: T[]) => void;
+  renderLabel: (value: T[]) => React.ReactNode;
   fullWidth?: boolean;
   className?: string;
 }
 
 // TODO: achieve nesting with submenus rather than headers.
-const NestedMultiSelect = ({
-  items,
+export default function NestedMultiSelect<T extends OptionValue>({
+  options,
   loading,
   defaultValues,
   onSelect,
   renderLabel,
   fullWidth,
   className,
-}: NestedMultiSelectProps) => {
+}: NestedMultiSelectProps<T>) {
   const [values, setValues, handleSelect] = useDefaultState(defaultValues ?? [], onSelect);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     // Clicking a ListSubheader element also causes tihs event to be fired off with value undefined.
     // Discard these events.
-    const selectedValues = event.target.value as string[];
+    const selectedValues = event.target.value as T[];
     if (selectedValues.some((value) => value === undefined)) event.preventDefault();
     else setValues(selectedValues);
   };
@@ -66,7 +66,7 @@ const NestedMultiSelect = ({
         value={values}
         onChange={handleChange}
         onClose={handleSelect}
-        renderValue={(value: unknown) => renderLabel(value as string[])}
+        renderValue={(value: unknown) => renderLabel(value as T[])}
         MenuProps={{
           classes: { paper: classes.menu },
           anchorOrigin: {
@@ -85,14 +85,14 @@ const NestedMultiSelect = ({
             <CircularProgress />
           </div>
         ) : (
-          items.map((group, i) => [
+          options.map((group, i) => [
             <ListSubheader key={i} disableSticky>
               {group.label}
             </ListSubheader>,
-            group.items.map((item, i) => (
-              <MenuItem key={i} value={item.value}>
-                <Checkbox checked={values.indexOf(item.value) > -1} />
-                <ListItemText primary={item.label} />
+            group.options.map((option, i) => (
+              <MenuItem key={i} value={option.value}>
+                <Checkbox checked={values.indexOf(option.value) > -1} />
+                <ListItemText primary={option.label} />
               </MenuItem>
             )),
           ])
@@ -100,6 +100,4 @@ const NestedMultiSelect = ({
       </Select>
     </FormControl>
   );
-};
-
-export default NestedMultiSelect;
+}

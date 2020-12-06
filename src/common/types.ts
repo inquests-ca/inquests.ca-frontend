@@ -8,13 +8,14 @@ export interface DataWithCount<T> {
   data: T;
 }
 
-// TODO: add generic typing for value.
-export interface MenuItem {
-  value: string;
+export type OptionValue = string | number;
+
+export interface Option<T extends OptionValue> {
+  value: T;
   label: React.ReactNode;
 }
 
-export interface MenuItemGroup {
+export interface OptionGroup<T extends OptionValue> {
   label: React.ReactNode;
-  items: MenuItem[];
+  options: Option<T>[];
 }

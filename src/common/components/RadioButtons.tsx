@@ -5,32 +5,41 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-import { MenuItem } from 'common/types';
+import { Option } from 'common/types';
 
-interface RadioButtonProps {
+interface RadioButtonProps<T extends string> {
   legend?: string;
-  items: MenuItem[];
+  options: Option<T>[];
   selectedValue: string;
-  onChange: (value: string) => void;
+  onChange: (value: T) => void;
   className?: string;
 }
 
-const RadioButtons = ({ legend, items, selectedValue, onChange, className }: RadioButtonProps) => {
+export default function RadioButtons<T extends string>({
+  legend,
+  options,
+  selectedValue,
+  onChange,
+  className,
+}: RadioButtonProps<T>) {
   const handleChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) =>
-    onChange(value);
+    onChange(value as T);
 
   return (
     <div className={className}>
       <FormControl component="fieldset">
         {legend && <FormLabel component="legend">{legend}</FormLabel>}
         <RadioGroup value={selectedValue} onChange={handleChange}>
-          {items.map((item, i) => (
-            <FormControlLabel key={i} value={item.value} control={<Radio />} label={item.label} />
+          {options.map((option, i) => (
+            <FormControlLabel
+              key={i}
+              value={option.value}
+              control={<Radio />}
+              label={option.label}
+            />
           ))}
         </RadioGroup>
       </FormControl>
     </div>
   );
-};
-
-export default RadioButtons;
+}

@@ -71,7 +71,7 @@ const SearchResults = ({
           {count} {count === 1 ? 'Result' : 'Results'}
         </Typography>
         <SingleSelect
-          items={[
+          options={[
             { value: Sort.Relevant, label: 'Relevant' },
             { value: Sort.New, label: 'Newest' },
             { value: Sort.Alphabetical, label: 'A-Z' },

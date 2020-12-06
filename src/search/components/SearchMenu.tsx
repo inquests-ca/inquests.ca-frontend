@@ -29,12 +29,12 @@ const SearchMenu = ({ searchType, onSearchTypeChange, children, className }: Sea
   return (
     <Paper className={clsx(className, classes.layout)}>
       <RadioButtons
-        items={[
+        options={[
           { value: SearchType.Authority, label: 'Authorities' },
           { value: SearchType.Inquest, label: 'Inquests' },
         ]}
         selectedValue={searchType}
-        onChange={(value: string) => onSearchTypeChange(value as SearchType)}
+        onChange={onSearchTypeChange}
       ></RadioButtons>
       {children}
     </Paper>

@@ -8,7 +8,7 @@ import MuiMenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import { MenuItem } from 'common/types';
+import { Option, OptionValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
   fullWidth: {
@@ -21,27 +21,27 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-interface MultiSelectProps {
-  items: MenuItem[];
+interface MultiSelectProps<T extends OptionValue> {
+  options: Option<T>[];
   loading?: boolean;
-  selectedValues: string[];
-  onChange: (value: string[]) => void;
-  renderLabel: (value: string[]) => React.ReactNode;
+  selectedValues: T[];
+  onChange: (value: T[]) => void;
+  renderLabel: (value: T[]) => React.ReactNode;
   fullWidth?: boolean;
   className?: string;
 }
 
-const MultiSelect = ({
-  items,
+export default function MultiSelect<T extends OptionValue>({
+  options,
   loading,
   selectedValues,
   onChange,
   renderLabel,
   fullWidth,
   className,
-}: MultiSelectProps) => {
+}: MultiSelectProps<T>) {
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) =>
-    onChange(event.target.value as string[]);
+    onChange(event.target.value as T[]);
 
   const classes = useStyles();
 
@@ -52,23 +52,21 @@ const MultiSelect = ({
         displayEmpty
         value={selectedValues}
         onChange={handleChange}
-        renderValue={(value: unknown) => renderLabel(value as string[])}
+        renderValue={(value: unknown) => renderLabel(value as T[])}
       >
         {loading ? (
           <div className={classes.loading}>
             <CircularProgress />
           </div>
         ) : (
-          items.map((item, i) => (
-            <MuiMenuItem key={i} value={item.value}>
-              <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
-              <ListItemText primary={item.label} />
+          options.map((option, i) => (
+            <MuiMenuItem key={i} value={option.value}>
+              <Checkbox checked={selectedValues.indexOf(option.value) > -1} />
+              <ListItemText primary={option.label} />
             </MuiMenuItem>
           ))
         )}
       </Select>
     </FormControl>
   );
-};
-
-export default MultiSelect;
+}

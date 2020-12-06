@@ -1,29 +1,29 @@
 import React from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import MuiMenuItem from '@material-ui/core/MenuItem';
+import MenuItem from '@material-ui/core/MenuItem';
 
-import { MenuItem } from 'common/types';
+import { Option, OptionValue } from 'common/types';
 
-interface SingleSelectProps {
-  items: MenuItem[];
-  emptyItem?: boolean;
-  selectedValue: string;
-  onChange: (value: string) => void;
-  renderValue?: (value: string) => React.ReactNode;
+interface SingleSelectProps<T extends OptionValue> {
+  options: Option<T>[];
+  emptyOption?: boolean;
+  selectedValue: T;
+  onChange: (value: T) => void;
+  renderValue?: (value: T) => React.ReactNode;
   className?: string;
 }
 
-const SingleSelect = ({
-  items,
-  emptyItem,
+export default function SingleSelect<T extends OptionValue>({
+  options,
+  emptyOption,
   selectedValue,
   onChange,
   renderValue,
   className,
-}: SingleSelectProps) => {
+}: SingleSelectProps<T>) {
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) =>
-    onChange(event.target.value as string);
+    onChange(event.target.value as T);
 
   return (
     <FormControl className={className}>
@@ -32,18 +32,16 @@ const SingleSelect = ({
         value={selectedValue}
         onChange={handleChange}
         renderValue={(value: unknown) =>
-          renderValue ? renderValue(value as string) : (value as string)
+          renderValue ? renderValue(value as T) : (value as string)
         }
       >
-        {emptyItem && <MuiMenuItem value="" />}
-        {items.map((item, i) => (
-          <MuiMenuItem key={i} value={item.value}>
-            {item.label}
-          </MuiMenuItem>
+        {emptyOption && <MenuItem value="" />}
+        {options.map((option, i) => (
+          <MenuItem key={i} value={option.value}>
+            {option.label}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>
   );
-};
-
-export default SingleSelect;
+}
