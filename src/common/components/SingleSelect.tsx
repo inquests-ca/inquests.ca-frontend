@@ -32,7 +32,11 @@ export default function SingleSelect<T extends OptionValue>({
         value={selectedValue}
         onChange={handleChange}
         renderValue={(value: unknown) =>
-          renderValue ? renderValue(value as T) : (value as string)
+          value === undefined
+            ? undefined
+            : renderValue
+            ? renderValue(value as T)
+            : options.find((option) => option.value === value)?.label ?? ''
         }
       >
         {emptyOption && <MenuItem value="" />}
