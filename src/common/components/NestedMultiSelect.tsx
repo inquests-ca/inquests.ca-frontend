@@ -10,7 +10,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import useDefaultState from 'common/hooks/useDefaultState';
-import { OptionGroup, OptionValue } from 'common/types';
+import { MenuItemGroup, MenuItemValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
   fullWidth: {
@@ -26,8 +26,8 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-interface NestedMultiSelectProps<T extends OptionValue> {
-  options: OptionGroup<T>[];
+interface NestedMultiSelectProps<T extends MenuItemValue> {
+  items: MenuItemGroup<T>[];
   loading?: boolean;
   defaultValues?: T[];
   onSelect: (value: T[]) => void;
@@ -37,8 +37,8 @@ interface NestedMultiSelectProps<T extends OptionValue> {
 }
 
 // TODO: achieve nesting with submenus rather than headers.
-export default function NestedMultiSelect<T extends OptionValue>({
-  options,
+export default function NestedMultiSelect<T extends MenuItemValue>({
+  items,
   loading,
   defaultValues,
   onSelect,
@@ -85,14 +85,14 @@ export default function NestedMultiSelect<T extends OptionValue>({
             <CircularProgress />
           </div>
         ) : (
-          options.map((group, i) => [
+          items.map((group, i) => [
             <ListSubheader key={i} disableSticky>
               {group.label}
             </ListSubheader>,
-            group.options.map((option, i) => (
-              <MenuItem key={i} value={option.value}>
-                <Checkbox checked={values.indexOf(option.value) > -1} />
-                <ListItemText primary={option.label} />
+            group.items.map((item, i) => (
+              <MenuItem key={i} value={item.value}>
+                <Checkbox checked={values.indexOf(item.value) > -1} />
+                <ListItemText primary={item.label} />
               </MenuItem>
             )),
           ])

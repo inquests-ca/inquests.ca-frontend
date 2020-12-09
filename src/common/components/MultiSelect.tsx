@@ -8,7 +8,7 @@ import MuiMenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import { Option, OptionValue } from 'common/types';
+import { MenuItem, MenuItemValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
   fullWidth: {
@@ -21,8 +21,8 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-interface MultiSelectProps<T extends OptionValue> {
-  options: Option<T>[];
+interface MultiSelectProps<T extends MenuItemValue> {
+  items: MenuItem<T>[];
   loading?: boolean;
   selectedValues: T[];
   onChange: (value: T[]) => void;
@@ -31,8 +31,8 @@ interface MultiSelectProps<T extends OptionValue> {
   className?: string;
 }
 
-export default function MultiSelect<T extends OptionValue>({
-  options,
+export default function MultiSelect<T extends MenuItemValue>({
+  items,
   loading,
   selectedValues,
   onChange,
@@ -59,10 +59,10 @@ export default function MultiSelect<T extends OptionValue>({
             <CircularProgress />
           </div>
         ) : (
-          options.map((option, i) => (
-            <MuiMenuItem key={i} value={option.value}>
-              <Checkbox checked={selectedValues.indexOf(option.value) > -1} />
-              <ListItemText primary={option.label} />
+          items.map((item, i) => (
+            <MuiMenuItem key={i} value={item.value}>
+              <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
+              <ListItemText primary={item.label} />
             </MuiMenuItem>
           ))
         )}

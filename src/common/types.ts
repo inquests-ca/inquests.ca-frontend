@@ -8,14 +8,14 @@ export interface DataWithCount<T> {
   data: T;
 }
 
-export type OptionValue = string | number;
+export type MenuItemValue = string | number;
 
-export interface Option<T extends OptionValue> {
+export interface MenuItem<T extends MenuItemValue> {
   value: T;
   label: React.ReactNode;
 }
 
-export interface OptionGroup<T extends OptionValue> {
+export interface MenuItemGroup<T extends MenuItemValue> {
   label: React.ReactNode;
-  options: Option<T>[];
+  items: MenuItem<T>[];
 }

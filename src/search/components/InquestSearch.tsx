@@ -55,9 +55,9 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
 
   const classes = useStyles();
 
-  const keywordOptions = keywords?.map((keywordCategory) => ({
+  const keywordItems = keywords?.map((keywordCategory) => ({
     label: keywordCategory.name,
-    options: keywordCategory.inquestKeywords.map((keyword) => ({
+    items: keywordCategory.inquestKeywords.map((keyword) => ({
       label: keyword.name,
       value: keyword.inquestKeywordId,
     })),
@@ -74,8 +74,8 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           name="search"
         />
         <NestedMultiSelect
-          options={keywordOptions ?? []}
-          loading={!keywordOptions}
+          items={keywordItems ?? []}
+          loading={!keywordItems}
           defaultValues={query.keywords}
           onSelect={handleKeywordsSelect}
           renderLabel={(selected) =>

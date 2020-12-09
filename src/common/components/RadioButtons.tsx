@@ -5,11 +5,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-import { Option } from 'common/types';
+import { MenuItem } from 'common/types';
 
 interface RadioButtonProps<T extends string> {
   legend?: string;
-  options: Option<T>[];
+  items: MenuItem<T>[];
   selectedValue: string;
   onChange: (value: T) => void;
   className?: string;
@@ -17,7 +17,7 @@ interface RadioButtonProps<T extends string> {
 
 export default function RadioButtons<T extends string>({
   legend,
-  options,
+  items,
   selectedValue,
   onChange,
   className,
@@ -30,13 +30,8 @@ export default function RadioButtons<T extends string>({
       <FormControl component="fieldset">
         {legend && <FormLabel component="legend">{legend}</FormLabel>}
         <RadioGroup value={selectedValue} onChange={handleChange}>
-          {options.map((option, i) => (
-            <FormControlLabel
-              key={i}
-              value={option.value}
-              control={<Radio />}
-              label={option.label}
-            />
+          {items.map((item, i) => (
+            <FormControlLabel key={i} value={item.value} control={<Radio />} label={item.label} />
           ))}
         </RadioGroup>
       </FormControl>

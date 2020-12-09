@@ -1,22 +1,22 @@
 import React from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import MuiMenuItem from '@material-ui/core/MenuItem';
 
-import { Option, OptionValue } from 'common/types';
+import { MenuItem, MenuItemValue } from 'common/types';
 
-interface SingleSelectProps<T extends OptionValue> {
-  options: Option<T>[];
-  emptyOption?: boolean;
+interface SingleSelectProps<T extends MenuItemValue> {
+  items: MenuItem<T>[];
+  emptyItem?: boolean;
   selectedValue: T;
   onChange: (value: T) => void;
   renderValue?: (value: T) => React.ReactNode;
   className?: string;
 }
 
-export default function SingleSelect<T extends OptionValue>({
-  options,
-  emptyOption,
+export default function SingleSelect<T extends MenuItemValue>({
+  items,
+  emptyItem,
   selectedValue,
   onChange,
   renderValue,
@@ -36,14 +36,14 @@ export default function SingleSelect<T extends OptionValue>({
             ? undefined
             : renderValue
             ? renderValue(value as T)
-            : options.find((option) => option.value === value)?.label ?? ''
+            : items.find((item) => item.value === value)?.label ?? ''
         }
       >
-        {emptyOption && <MenuItem value="" />}
-        {options.map((option, i) => (
-          <MenuItem key={i} value={option.value}>
-            {option.label}
-          </MenuItem>
+        {emptyItem && <MuiMenuItem value="" />}
+        {items.map((item, i) => (
+          <MuiMenuItem key={i} value={item.value}>
+            {item.label}
+          </MuiMenuItem>
         ))}
       </Select>
     </FormControl>

@@ -56,9 +56,9 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
 
   const classes = useStyles();
 
-  const keywordOptions = keywords?.map((keywordCategory) => ({
+  const keywordItems = keywords?.map((keywordCategory) => ({
     label: keywordCategory.name,
-    options: keywordCategory.authorityKeywords.map((keyword) => ({
+    items: keywordCategory.authorityKeywords.map((keyword) => ({
       label: keyword.name,
       value: keyword.authorityKeywordId,
     })),
@@ -75,8 +75,8 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
           name="search"
         />
         <NestedMultiSelect
-          options={keywordOptions ?? []}
-          loading={!keywordOptions}
+          items={keywordItems ?? []}
+          loading={!keywordItems}
           defaultValues={query.keywords}
           onSelect={handleKeywordsSelect}
           renderLabel={(selected) =>

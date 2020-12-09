@@ -86,7 +86,7 @@ const SearchResults = ({
             Sort by&nbsp;&nbsp;
           </Typography>
           <SingleSelect
-            options={[
+            items={[
               { value: Sort.Relevant, label: 'Relevance' },
               { value: Sort.New, label: 'Newest' },
               { value: Sort.Alphabetical, label: 'A-Z' },

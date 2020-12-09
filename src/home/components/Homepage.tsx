@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import RadioButtons from 'common/components/RadioButtons';
 import SearchField from 'common/components/SearchField';
-import { SearchType, Option } from 'common/types';
+import { SearchType, MenuItem } from 'common/types';
 import { stringifyQuery } from 'common/utils/request';
 import { AuthorityQuery, fetchAuthorities, defaultAuthorityQuery } from 'search/utils/api';
 
@@ -47,7 +47,7 @@ const Homepage = () => {
 
   const classes = useStyles();
 
-  const searchTypeOptions: Option<SearchType>[] = [
+  const searchTypeItems: MenuItem<SearchType>[] = [
     {
       value: SearchType.Authority,
       label: (
@@ -76,7 +76,7 @@ const Homepage = () => {
         them.
       </Typography>
       <RadioButtons
-        options={searchTypeOptions}
+        items={searchTypeItems}
         selectedValue={searchType}
         onChange={handleSearchTypeChange}
         className={classes.radioButtons}
