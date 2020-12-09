@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'grid',
     gridRowGap: theme.spacing(2),
   },
-  topLayout: {
+  toolbarLayout: {
     display: 'flex',
     flexDirection: 'row-reverse',
     justifyContent: 'space-between',
@@ -80,7 +80,7 @@ const SearchResults = ({
 
   return (
     <Paper className={clsx(className, classes.layout)}>
-      <div className={classes.topLayout}>
+      <div className={classes.toolbarLayout}>
         <span>
           <Typography className={classes.sortText} variant="subtitle1" component="span">
             Sort by&nbsp;&nbsp;
@@ -92,7 +92,7 @@ const SearchResults = ({
               { value: Sort.Alphabetical, label: 'A-Z' },
             ]}
             selectedValue={sort}
-            onChange={(sort: string) => onSortChange(sort as Sort)}
+            onChange={onSortChange}
             className={classes.sortSelect}
           ></SingleSelect>
         </span>
