@@ -8,7 +8,7 @@ import MuiMenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import { MenuItem } from 'common/types';
+import { MenuItem, MenuItemValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
   fullWidth: {
@@ -21,17 +21,17 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-interface MultiSelectProps {
-  items: MenuItem[];
+interface MultiSelectProps<T extends MenuItemValue> {
+  items: MenuItem<T>[];
   loading?: boolean;
-  selectedValues: string[];
-  onChange: (value: string[]) => void;
-  renderLabel: (value: string[]) => React.ReactNode;
+  selectedValues: T[];
+  onChange: (value: T[]) => void;
+  renderLabel: (value: T[]) => React.ReactNode;
   fullWidth?: boolean;
   className?: string;
 }
 
-const MultiSelect = ({
+export default function MultiSelect<T extends MenuItemValue>({
   items,
   loading,
   selectedValues,
@@ -39,9 +39,9 @@ const MultiSelect = ({
   renderLabel,
   fullWidth,
   className,
-}: MultiSelectProps) => {
+}: MultiSelectProps<T>) {
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) =>
-    onChange(event.target.value as string[]);
+    onChange(event.target.value as T[]);
 
   const classes = useStyles();
 
@@ -52,7 +52,7 @@ const MultiSelect = ({
         displayEmpty
         value={selectedValues}
         onChange={handleChange}
-        renderValue={(value: unknown) => renderLabel(value as string[])}
+        renderValue={(value: unknown) => renderLabel(value as T[])}
       >
         {loading ? (
           <div className={classes.loading}>
@@ -69,6 +69,4 @@ const MultiSelect = ({
       </Select>
     </FormControl>
   );
-};
-
-export default MultiSelect;
+}

@@ -1,12 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from 'react-query';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
 import AuthoritySearchResult from './AuthoritySearchResult';
 import {
+  Sort,
   AuthorityQuery,
   defaultAuthorityQuery,
   authorityQuerySchema,
@@ -28,10 +28,6 @@ const useStyles = makeStyles((theme) => ({
     gridColumnGap: theme.spacing(4),
     alignItems: 'start',
   },
-  loading: {
-    alignSelf: 'center',
-    justifySelf: 'center',
-  },
 }));
 
 interface AuthoritySearchProps {
@@ -52,6 +48,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
     (_key: string, query: AuthorityQuery) => fetchAuthorities(query)
   );
 
+  const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
   const handleKeywordsSelect = (selectedKeywords: string[]): void =>
@@ -77,32 +74,29 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
           label="Search Authorities"
           name="search"
         />
-        {
-          <NestedMultiSelect
-            items={keywordItems ?? []}
-            loading={!keywordItems}
-            defaultValues={query.keywords}
-            onSelect={handleKeywordsSelect}
-            renderLabel={(selected) =>
-              selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
-            }
-          />
-        }
+        <NestedMultiSelect
+          items={keywordItems ?? []}
+          loading={!keywordItems}
+          defaultValues={query.keywords}
+          onSelect={handleKeywordsSelect}
+          renderLabel={(selected) =>
+            selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
+          }
+        />
       </SearchMenu>
-      {authorities ? (
-        <SearchResults
-          count={authorities.count}
-          pagination={PAGINATION}
-          page={query.page}
-          onPageChange={handlePageChange}
-        >
-          {authorities.data.map((authority, i) => (
-            <AuthoritySearchResult key={i} authority={authority} />
-          ))}
-        </SearchResults>
-      ) : (
-        <CircularProgress className={classes.loading} />
-      )}
+      <SearchResults
+        loading={!authorities}
+        count={authorities?.count ?? 0}
+        pagination={PAGINATION}
+        sort={query.sort}
+        page={query.page}
+        onSortChange={handleSortChange}
+        onPageChange={handlePageChange}
+      >
+        {authorities?.data.map((authority, i) => (
+          <AuthoritySearchResult key={i} authority={authority} />
+        ))}
+      </SearchResults>
     </div>
   );
 };

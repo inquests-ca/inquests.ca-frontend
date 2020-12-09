@@ -7,17 +7,23 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 import { MenuItem } from 'common/types';
 
-interface RadioButtonProps {
+interface RadioButtonProps<T extends string> {
   legend?: string;
-  items: MenuItem[];
+  items: MenuItem<T>[];
   selectedValue: string;
-  onChange: (value: string) => void;
+  onChange: (value: T) => void;
   className?: string;
 }
 
-const RadioButtons = ({ legend, items, selectedValue, onChange, className }: RadioButtonProps) => {
+export default function RadioButtons<T extends string>({
+  legend,
+  items,
+  selectedValue,
+  onChange,
+  className,
+}: RadioButtonProps<T>) {
   const handleChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) =>
-    onChange(value);
+    onChange(value as T);
 
   return (
     <div className={className}>
@@ -31,6 +37,4 @@ const RadioButtons = ({ legend, items, selectedValue, onChange, className }: Rad
       </FormControl>
     </div>
   );
-};
-
-export default RadioButtons;
+}

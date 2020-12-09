@@ -1,40 +1,44 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 
-import { MenuItem } from 'common/types';
+import { MenuItem, MenuItemValue } from 'common/types';
 
-const useStyles = makeStyles((theme) => ({
-  select: {
-    width: 200,
-  },
-}));
-
-interface SingleSelectProps {
-  items: MenuItem[];
+interface SingleSelectProps<T extends MenuItemValue> {
+  items: MenuItem<T>[];
   emptyItem?: boolean;
-  selectedValue: string;
-  onChange: (values: string[]) => void;
+  selectedValue: T;
+  onChange: (value: T) => void;
+  renderValue?: (value: T) => React.ReactNode;
   className?: string;
 }
 
-const SingleSelect = ({
+export default function SingleSelect<T extends MenuItemValue>({
   items,
   emptyItem,
   selectedValue,
   onChange,
+  renderValue,
   className,
-}: SingleSelectProps) => {
+}: SingleSelectProps<T>) {
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) =>
-    onChange(event.target.value as string[]);
-
-  const classes = useStyles();
+    onChange(event.target.value as T);
 
   return (
     <FormControl className={className}>
-      <Select className={classes.select} value={selectedValue} onChange={handleChange}>
+      <Select
+        displayEmpty
+        value={selectedValue}
+        onChange={handleChange}
+        renderValue={(value: unknown) =>
+          value === undefined
+            ? undefined
+            : renderValue
+            ? renderValue(value as T)
+            : items.find((item) => item.value === value)?.label ?? ''
+        }
+      >
         {emptyItem && <MuiMenuItem value="" />}
         {items.map((item, i) => (
           <MuiMenuItem key={i} value={item.value}>
@@ -44,6 +48,4 @@ const SingleSelect = ({
       </Select>
     </FormControl>
   );
-};
-
-export default SingleSelect;
+}

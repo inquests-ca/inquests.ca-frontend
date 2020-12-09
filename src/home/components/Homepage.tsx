@@ -47,7 +47,7 @@ const Homepage = () => {
 
   const classes = useStyles();
 
-  const searchTypeItems: MenuItem[] = [
+  const searchTypeItems: MenuItem<SearchType>[] = [
     {
       value: SearchType.Authority,
       label: (
@@ -78,7 +78,7 @@ const Homepage = () => {
       <RadioButtons
         items={searchTypeItems}
         selectedValue={searchType}
-        onChange={(searchType: string) => handleSearchTypeChange(searchType as SearchType)}
+        onChange={handleSearchTypeChange}
         className={classes.radioButtons}
       ></RadioButtons>
       <SearchField

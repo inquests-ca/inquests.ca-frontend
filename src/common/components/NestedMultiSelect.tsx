@@ -10,7 +10,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import useDefaultState from 'common/hooks/useDefaultState';
-import { MenuItemGroup } from 'common/types';
+import { MenuItemGroup, MenuItemValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
   fullWidth: {
@@ -26,18 +26,18 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-interface NestedMultiSelectProps {
-  items: MenuItemGroup[];
+interface NestedMultiSelectProps<T extends MenuItemValue> {
+  items: MenuItemGroup<T>[];
   loading?: boolean;
-  defaultValues?: string[];
-  onSelect: (value: string[]) => void;
-  renderLabel: (value: string[]) => React.ReactNode;
+  defaultValues?: T[];
+  onSelect: (value: T[]) => void;
+  renderLabel: (value: T[]) => React.ReactNode;
   fullWidth?: boolean;
   className?: string;
 }
 
 // TODO: achieve nesting with submenus rather than headers.
-const NestedMultiSelect = ({
+export default function NestedMultiSelect<T extends MenuItemValue>({
   items,
   loading,
   defaultValues,
@@ -45,13 +45,13 @@ const NestedMultiSelect = ({
   renderLabel,
   fullWidth,
   className,
-}: NestedMultiSelectProps) => {
+}: NestedMultiSelectProps<T>) {
   const [values, setValues, handleSelect] = useDefaultState(defaultValues ?? [], onSelect);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     // Clicking a ListSubheader element also causes tihs event to be fired off with value undefined.
     // Discard these events.
-    const selectedValues = event.target.value as string[];
+    const selectedValues = event.target.value as T[];
     if (selectedValues.some((value) => value === undefined)) event.preventDefault();
     else setValues(selectedValues);
   };
@@ -66,7 +66,7 @@ const NestedMultiSelect = ({
         value={values}
         onChange={handleChange}
         onClose={handleSelect}
-        renderValue={(value: unknown) => renderLabel(value as string[])}
+        renderValue={(value: unknown) => renderLabel(value as T[])}
         MenuProps={{
           classes: { paper: classes.menu },
           anchorOrigin: {
@@ -100,6 +100,4 @@ const NestedMultiSelect = ({
       </Select>
     </FormControl>
   );
-};
-
-export default NestedMultiSelect;
+}

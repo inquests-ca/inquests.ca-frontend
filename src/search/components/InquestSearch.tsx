@@ -1,12 +1,17 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from 'react-query';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
 import InquestSearchResult from './InquestSearchResult';
-import { InquestQuery, inquestQuerySchema, defaultInquestQuery, fetchInquests } from '../utils/api';
+import {
+  Sort,
+  InquestQuery,
+  inquestQuerySchema,
+  defaultInquestQuery,
+  fetchInquests,
+} from '../utils/api';
 import SearchField from 'common/components/SearchField';
 import NestedMultiSelect from 'common/components/NestedMultiSelect';
 import { fetchJson } from 'common/utils/request';
@@ -22,10 +27,6 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: '300px 1fr',
     gridColumnGap: theme.spacing(4),
     alignItems: 'start',
-  },
-  loading: {
-    alignSelf: 'center',
-    justifySelf: 'center',
   },
 }));
 
@@ -46,6 +47,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
     fetchInquests(query)
   );
 
+  const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
   const handleKeywordsSelect = (selectedKeywords: string[]): void =>
@@ -71,32 +73,29 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           label="Search Inquests"
           name="search"
         />
-        {
-          <NestedMultiSelect
-            items={keywordItems ?? []}
-            loading={!keywordItems}
-            defaultValues={query.keywords}
-            onSelect={handleKeywordsSelect}
-            renderLabel={(selected) =>
-              selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
-            }
-          />
-        }
+        <NestedMultiSelect
+          items={keywordItems ?? []}
+          loading={!keywordItems}
+          defaultValues={query.keywords}
+          onSelect={handleKeywordsSelect}
+          renderLabel={(selected) =>
+            selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
+          }
+        />
       </SearchMenu>
-      {inquests ? (
-        <SearchResults
-          count={inquests.count}
-          pagination={PAGINATION}
-          page={query.page}
-          onPageChange={handlePageChange}
-        >
-          {inquests.data.map((inquest, i) => (
-            <InquestSearchResult key={i} inquest={inquest} />
-          ))}
-        </SearchResults>
-      ) : (
-        <CircularProgress className={classes.loading} />
-      )}
+      <SearchResults
+        loading={!inquests}
+        count={inquests?.count ?? 0}
+        pagination={PAGINATION}
+        sort={query.sort}
+        page={query.page}
+        onSortChange={handleSortChange}
+        onPageChange={handlePageChange}
+      >
+        {inquests?.data.map((inquest, i) => (
+          <InquestSearchResult key={i} inquest={inquest} />
+        ))}
+      </SearchResults>
     </div>
   );
 };

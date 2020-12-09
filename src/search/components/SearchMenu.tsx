@@ -34,7 +34,7 @@ const SearchMenu = ({ searchType, onSearchTypeChange, children, className }: Sea
           { value: SearchType.Inquest, label: 'Inquests' },
         ]}
         selectedValue={searchType}
-        onChange={(value: string) => onSearchTypeChange(value as SearchType)}
+        onChange={onSearchTypeChange}
       ></RadioButtons>
       {children}
     </Paper>
