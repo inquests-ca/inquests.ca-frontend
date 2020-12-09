@@ -158,16 +158,11 @@ export interface InquestType {
 
 export interface Jurisdiction {
   jurisdictionId: string;
-  jurisdictionCategoryId: string;
+  federalJurisdictionId: string;
   name: string;
   code: string;
-  isFederal?: number;
-  jurisdictionCategory: JurisdictionCategory;
-}
-
-export interface JurisdictionCategory {
-  jurisdictionCategoryId: string;
-  name: string;
+  federalJurisdiction: Jurisdiction;
+  jurisdictions: Jurisdiction[];
 }
 
 export interface Source {
