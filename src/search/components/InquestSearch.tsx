@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from 'react-query';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import SearchMenu from './SearchMenu';
 import SearchResults from './SearchResults';
@@ -28,10 +27,6 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: '300px 1fr',
     gridColumnGap: theme.spacing(4),
     alignItems: 'start',
-  },
-  loading: {
-    alignSelf: 'center',
-    justifySelf: 'center',
   },
 }));
 
@@ -78,34 +73,29 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           label="Search Inquests"
           name="search"
         />
-        {
-          <NestedMultiSelect
-            options={keywordOptions ?? []}
-            loading={!keywordOptions}
-            defaultValues={query.keywords}
-            onSelect={handleKeywordsSelect}
-            renderLabel={(selected) =>
-              selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
-            }
-          />
-        }
+        <NestedMultiSelect
+          options={keywordOptions ?? []}
+          loading={!keywordOptions}
+          defaultValues={query.keywords}
+          onSelect={handleKeywordsSelect}
+          renderLabel={(selected) =>
+            selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
+          }
+        />
       </SearchMenu>
-      {inquests ? (
-        <SearchResults
-          count={inquests.count}
-          pagination={PAGINATION}
-          sort={query.sort}
-          page={query.page}
-          onSortChange={handleSortChange}
-          onPageChange={handlePageChange}
-        >
-          {inquests.data.map((inquest, i) => (
-            <InquestSearchResult key={i} inquest={inquest} />
-          ))}
-        </SearchResults>
-      ) : (
-        <CircularProgress className={classes.loading} />
-      )}
+      <SearchResults
+        loading={!inquests}
+        count={inquests?.count ?? 0}
+        pagination={PAGINATION}
+        sort={query.sort}
+        page={query.page}
+        onSortChange={handleSortChange}
+        onPageChange={handlePageChange}
+      >
+        {inquests?.data.map((inquest, i) => (
+          <InquestSearchResult key={i} inquest={inquest} />
+        ))}
+      </SearchResults>
     </div>
   );
 };
