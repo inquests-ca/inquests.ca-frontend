@@ -1,8 +1,10 @@
+// TODO: move to search "module".
 export const PAGINATION = 12;
 
+// TODO: move to NavHeader.
 export const URL_TERMS_OF_USE = 'https://inquests-ca-resources.s3.amazonaws.com/TermsOfUse.pdf';
 
-// TODO: use translations library.
+// TODO: move to view "module" or into common component.
 export const TEXT_DOCUMENT_MISSING_DIALOG_TITLE = 'No Document Link';
 export const TEXT_DOCUMENT_MISSING_DIALOG_CONTENT = `
 Sorry, Inquests.ca does not currently have a link to this document. It may be that no public
