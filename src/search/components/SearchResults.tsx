@@ -20,6 +20,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row-reverse',
     justifyContent: 'space-between',
+    marginBottom: theme.spacing(2),
+  },
+  sortText: {
+    // Lines up text baselines of "Sort by" and sort selector.
+    lineHeight: '1.9',
+  },
+  sortSelect: {
+    width: '7rem',
   },
   noResults: {
     color: theme.palette.text.secondary,
@@ -74,7 +82,7 @@ const SearchResults = ({
     <Paper className={clsx(className, classes.layout)}>
       <div className={classes.topLayout}>
         <span>
-          <Typography variant="subtitle1" component="span">
+          <Typography className={classes.sortText} variant="subtitle1" component="span">
             Sort by&nbsp;&nbsp;
           </Typography>
           <SingleSelect
@@ -85,6 +93,7 @@ const SearchResults = ({
             ]}
             selectedValue={sort}
             onChange={(sort: string) => onSortChange(sort as Sort)}
+            className={classes.sortSelect}
           ></SingleSelect>
         </span>
         {!loading && (
