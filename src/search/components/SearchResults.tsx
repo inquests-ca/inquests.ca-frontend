@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
     display: 'grid',
     gridRowGap: theme.spacing(2),
+    gridAutoRows: 'min-content',
   },
   toolbarLayout: {
     display: 'flex',
@@ -33,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   loading: {
+    // Centers loading icon.
+    marginTop: '20%',
     justifySelf: 'center',
   },
   pagination: {
