@@ -74,7 +74,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
 
   const jurisdictionItems = jurisdictions?.map(
     (jurisdiction): MenuItem<string> => ({
-      label: jurisdiction.name,
+      label: jurisdiction.name === 'Canada' ? 'Canada (federal)' : jurisdiction.name,
       value: jurisdiction.jurisdictionId,
     })
   );
