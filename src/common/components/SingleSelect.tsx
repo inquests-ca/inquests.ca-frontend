@@ -63,7 +63,6 @@ export default function SingleSelect<T extends MenuItemValue>({
     <FormControl className={className}>
       {label && <InputLabel>{label}</InputLabel>}
       <Select
-        displayEmpty
         value={selectedValue}
         onChange={handleChange}
         MenuProps={{ classes: { paper: classes.menu } }}

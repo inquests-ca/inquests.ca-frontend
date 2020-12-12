@@ -91,7 +91,6 @@ export default function MultiSelect<T extends MenuItemValue>({
       {label && <InputLabel>{label}</InputLabel>}
       <Select
         multiple
-        displayEmpty
         value={values}
         onChange={handleChange}
         onClose={handleSelect}
