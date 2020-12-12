@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -14,9 +13,6 @@ import useDefaultState from 'common/hooks/useDefaultState';
 import { MenuItem, MenuItemGroup, MenuItemValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
-  fullWidth: {
-    width: '100%',
-  },
   menu: {
     maxHeight: '40%',
   },
@@ -34,7 +30,6 @@ interface MultiSelectProps<T extends MenuItemValue> {
   onSelect: (value: T[]) => void;
   renderValues: (value: T[]) => React.ReactNode;
   label?: string;
-  fullWidth?: boolean;
   className?: string;
 }
 
@@ -45,7 +40,6 @@ export default function MultiSelect<T extends MenuItemValue>({
   onSelect,
   renderValues,
   label,
-  fullWidth,
   className,
 }: MultiSelectProps<T>) {
   const [values, setValues, handleSelect] = useDefaultState(defaultValues ?? [], onSelect);
@@ -87,7 +81,7 @@ export default function MultiSelect<T extends MenuItemValue>({
   };
 
   return (
-    <FormControl className={fullWidth ? clsx(className, classes.fullWidth) : className}>
+    <FormControl className={className}>
       {label && <InputLabel>{label}</InputLabel>}
       <Select
         multiple
