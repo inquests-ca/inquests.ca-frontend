@@ -81,9 +81,14 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
           loading={!keywordItems}
           defaultValues={query.keywords}
           onSelect={handleKeywordsSelect}
-          renderLabel={(selected) =>
-            selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
+          renderValues={(selected) =>
+            selected.length > 1
+              ? `${selected.length} Keywords Selected`
+              : selected.length === 1
+              ? `${selected.length} Keyword Selected`
+              : undefined
           }
+          label="Keywords"
         />
       </SearchMenu>
       <SearchResults

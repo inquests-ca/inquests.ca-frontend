@@ -8,6 +8,7 @@ import MuiMenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import useDefaultState from 'common/hooks/useDefaultState';
 import { MenuItem, MenuItemGroup, MenuItemValue } from 'common/types';
@@ -31,7 +32,8 @@ interface MultiSelectProps<T extends MenuItemValue> {
   loading?: boolean;
   defaultValues?: T[];
   onSelect: (value: T[]) => void;
-  renderLabel: (value: T[]) => React.ReactNode;
+  renderValues: (value: T[]) => React.ReactNode;
+  label?: string;
   fullWidth?: boolean;
   className?: string;
 }
@@ -41,7 +43,8 @@ export default function MultiSelect<T extends MenuItemValue>({
   loading,
   defaultValues,
   onSelect,
-  renderLabel,
+  renderValues,
+  label,
   fullWidth,
   className,
 }: MultiSelectProps<T>) {
@@ -85,13 +88,14 @@ export default function MultiSelect<T extends MenuItemValue>({
 
   return (
     <FormControl className={fullWidth ? clsx(className, classes.fullWidth) : className}>
+      {label && <InputLabel>{label}</InputLabel>}
       <Select
         multiple
         displayEmpty
         value={values}
         onChange={handleChange}
         onClose={handleSelect}
-        renderValue={(value: unknown) => renderLabel(value as T[])}
+        renderValue={(value: unknown) => renderValues(value as T[])}
         // Prevents menu from scrolling upon selection and constrains height.
         MenuProps={{
           classes: { paper: classes.menu },
