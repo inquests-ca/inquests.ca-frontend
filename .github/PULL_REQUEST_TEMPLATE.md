@@ -8,5 +8,6 @@ _TODO..._
 
 - [ ] PR resolves ticket
 - [ ] Changes have been tested locally
+- [ ] No JavaScript errors in console
 
 ---

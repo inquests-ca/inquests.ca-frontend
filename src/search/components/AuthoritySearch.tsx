@@ -13,10 +13,11 @@ import {
   fetchAuthorities,
 } from '../utils/api';
 import SearchField from 'common/components/SearchField';
-import NestedMultiSelect from 'common/components/NestedMultiSelect';
+import MultiSelect from 'common/components/MultiSelect';
+import SingleSelect from 'common/components/SingleSelect';
 import { fetchJson } from 'common/utils/request';
-import { AuthorityCategory } from 'common/models';
-import { SearchType } from 'common/types';
+import { AuthorityCategory, Jurisdiction } from 'common/models';
+import { MenuItem, MenuItemGroup, SearchType } from 'common/types';
 import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
 
@@ -48,21 +49,36 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
     (_key: string, query: AuthorityQuery) => fetchAuthorities(query)
   );
 
+  const { data: jurisdictions } = useQuery('jurisdictions', () =>
+    fetchJson<Jurisdiction[]>('/jurisdictions')
+  );
+
   const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
   const handleKeywordsSelect = (selectedKeywords: string[]): void =>
     onQueryChange({ ...query, page: 1, keywords: selectedKeywords });
+  const handleJurisdictionSelect = (jurisdiction: string): void =>
+    onQueryChange({ ...query, page: 1, jurisdiction });
 
   const classes = useStyles();
 
-  const keywordItems = keywords?.map((keywordCategory) => ({
-    label: keywordCategory.name,
-    items: keywordCategory.authorityKeywords.map((keyword) => ({
-      label: keyword.name,
-      value: keyword.authorityKeywordId,
-    })),
-  }));
+  const keywordItems = keywords?.map(
+    (keywordCategory): MenuItemGroup<string> => ({
+      header: keywordCategory.name,
+      items: keywordCategory.authorityKeywords.map((keyword) => ({
+        label: keyword.name,
+        value: keyword.authorityKeywordId,
+      })),
+    })
+  );
+
+  const jurisdictionItems = jurisdictions?.map(
+    (jurisdiction): MenuItem<string> => ({
+      label: jurisdiction.name === 'Canada' ? 'Canada (federal)' : jurisdiction.name,
+      value: jurisdiction.jurisdictionId,
+    })
+  );
 
   // TODO: prevent flicker after search by displaying previous search results.
   return (
@@ -74,14 +90,27 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
           label="Search Authorities"
           name="search"
         />
-        <NestedMultiSelect
+        <MultiSelect
           items={keywordItems ?? []}
           loading={!keywordItems}
           defaultValues={query.keywords}
           onSelect={handleKeywordsSelect}
-          renderLabel={(selected) =>
-            selected.length === 0 ? 'Select Keywords' : `${selected.length} Keywords Selected`
+          renderValues={(selected) =>
+            selected.length > 1
+              ? `${selected.length} Keywords Selected`
+              : selected.length === 1
+              ? `${selected.length} Keyword Selected`
+              : undefined
           }
+          label="Keywords"
+        />
+        <SingleSelect
+          emptyItem
+          items={jurisdictionItems ?? []}
+          loading={!jurisdictionItems}
+          selectedValue={query.jurisdiction}
+          onChange={handleJurisdictionSelect}
+          label="Jurisdiction"
         />
       </SearchMenu>
       <SearchResults
