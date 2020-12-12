@@ -85,6 +85,7 @@ const Homepage = () => {
         onSearch={handleSearch}
         label="Enter search terms"
         name="search"
+        fullWidth
         className={classes.searchField}
       ></SearchField>
     </div>

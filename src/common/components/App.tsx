@@ -8,7 +8,7 @@ import { ThemeProvider } from '@material-ui/styles';
 
 import Search from 'search';
 import Homepage from 'home';
-import NavHeader from 'common/components/NavHeader';
+import NavHeader from 'common/components/Header';
 import { ViewAuthority, ViewInquest } from 'view';
 
 const theme = createMuiTheme({

@@ -8,10 +8,18 @@ interface SearchFieldProps {
   label: string;
   name: string;
   onSearch: (text: string) => void;
+  fullWidth?: boolean;
   className?: string;
 }
 
-const SearchField = ({ defaultValue, label, name, onSearch, className }: SearchFieldProps) => {
+const SearchField = ({
+  defaultValue,
+  label,
+  name,
+  onSearch,
+  fullWidth,
+  className,
+}: SearchFieldProps) => {
   const [text, setText, handleSearch] = useDefaultState(defaultValue ?? '', onSearch);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void =>
@@ -28,6 +36,7 @@ const SearchField = ({ defaultValue, label, name, onSearch, className }: SearchF
       type="search"
       label={label}
       name={name}
+      fullWidth={fullWidth}
       className={className}
       onKeyDown={handleKeyDown}
       onChange={handleChange}
