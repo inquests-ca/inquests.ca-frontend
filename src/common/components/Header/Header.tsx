@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import NavButton from './NavButton';
 
 const URL_TERMS_OF_USE = 'https://inquests-ca-resources.s3.amazonaws.com/TermsOfUse.pdf';
+const URL_HELP = 'https://inquests-ca-resources.s3.amazonaws.com/Help.pdf';
 
 const useStyles = makeStyles((theme) => ({
   navMenu: {
@@ -37,6 +38,7 @@ const NavHeader = () => {
             </Link>
           </Typography>
           <NavButton to={URL_TERMS_OF_USE} label="Terms of Use" external />
+          <NavButton to={URL_HELP} label="Help" external />
         </Toolbar>
       </AppBar>
       <div className={classes.offset} />
