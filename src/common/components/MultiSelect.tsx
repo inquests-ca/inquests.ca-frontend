@@ -9,7 +9,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 import InputLabel from '@material-ui/core/InputLabel';
 
-import useDefaultState from 'common/hooks/useDefaultState';
 import { MenuItem, MenuItemGroup, MenuItemValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
@@ -26,8 +25,8 @@ const useStyles = makeStyles((_theme) => ({
 interface MultiSelectProps<T extends MenuItemValue> {
   items: MenuItem<T>[] | MenuItemGroup<T>[];
   loading?: boolean;
-  defaultValues?: T[];
-  onSelect: (value: T[]) => void;
+  selectedValues: T[];
+  onChange: (value: T[]) => void;
   renderValues: (value: T[]) => React.ReactNode;
   label?: string;
   className?: string;
@@ -36,20 +35,18 @@ interface MultiSelectProps<T extends MenuItemValue> {
 export default function MultiSelect<T extends MenuItemValue>({
   items,
   loading,
-  defaultValues,
-  onSelect,
+  selectedValues,
+  onChange,
   renderValues,
   label,
   className,
 }: MultiSelectProps<T>) {
-  const [values, setValues, handleSelect] = useDefaultState(defaultValues ?? [], onSelect);
-
-  const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     // Clicking a ListSubheader element also causes tihs event to be fired off with value undefined.
     // Discard these events.
-    const selectedValues = event.target.value as T[];
-    if (selectedValues.some((value) => value === undefined)) event.preventDefault();
-    else setValues(selectedValues);
+    const values = event.target.value as T[];
+    if (values.some((value) => value === undefined)) event.preventDefault();
+    else onChange(values);
   };
 
   const classes = useStyles();
@@ -60,7 +57,7 @@ export default function MultiSelect<T extends MenuItemValue>({
       // items is type MenuItem<T>[]
       return (items as MenuItem<T>[]).map((item, i) => (
         <MuiMenuItem key={i} value={item.value}>
-          <Checkbox checked={values.indexOf(item.value) > -1} />
+          <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
           <ListItemText primary={item.label} />
         </MuiMenuItem>
       ));
@@ -72,7 +69,7 @@ export default function MultiSelect<T extends MenuItemValue>({
         </ListSubheader>,
         ...group.items.map((item, j) => (
           <MuiMenuItem key={`${i}-${j}`} value={item.value}>
-            <Checkbox checked={values.indexOf(item.value) > -1} />
+            <Checkbox checked={selectedValues.indexOf(item.value) > -1} />
             <ListItemText primary={item.label} />
           </MuiMenuItem>
         )),
@@ -85,9 +82,8 @@ export default function MultiSelect<T extends MenuItemValue>({
       {label && <InputLabel>{label}</InputLabel>}
       <Select
         multiple
-        value={values}
+        value={selectedValues}
         onChange={handleChange}
-        onClose={handleSelect}
         renderValue={(value: unknown) => renderValues(value as T[])}
         // Prevents menu from scrolling upon selection and constrains height.
         MenuProps={{

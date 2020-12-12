@@ -93,8 +93,8 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
         <MultiSelect
           items={keywordItems ?? []}
           loading={!keywordItems}
-          defaultValues={query.keywords}
-          onSelect={handleKeywordsSelect}
+          selectedValues={query.keywords}
+          onChange={handleKeywordsSelect}
           renderValues={(selected) =>
             selected.length > 1
               ? `${selected.length} Keywords Selected`
