@@ -4,6 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import { MenuItem, MenuItemValue } from 'common/types';
 
@@ -22,6 +23,7 @@ interface SingleSelectProps<T extends MenuItemValue> {
   selectedValue: T;
   onChange: (value: T) => void;
   renderValue?: (value: T) => React.ReactNode;
+  label?: string;
   className?: string;
 }
 
@@ -32,6 +34,7 @@ export default function SingleSelect<T extends MenuItemValue>({
   selectedValue,
   onChange,
   renderValue,
+  label,
   className,
 }: SingleSelectProps<T>) {
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) =>
@@ -52,6 +55,7 @@ export default function SingleSelect<T extends MenuItemValue>({
 
   return (
     <FormControl className={className}>
+      {label && <InputLabel>{label}</InputLabel>}
       <Select
         displayEmpty
         value={selectedValue}
