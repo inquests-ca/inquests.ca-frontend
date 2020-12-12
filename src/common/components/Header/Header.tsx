@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
 import NavButton from './NavButton';
-import { URL_TERMS_OF_USE } from 'common/constants';
+
+const URL_TERMS_OF_USE = 'https://inquests-ca-resources.s3.amazonaws.com/TermsOfUse.pdf';
 
 const useStyles = makeStyles((theme) => ({
   navMenu: {
