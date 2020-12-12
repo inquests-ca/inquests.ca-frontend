@@ -14,8 +14,9 @@ import {
 } from '../utils/api';
 import SearchField from 'common/components/SearchField';
 import MultiSelect from 'common/components/MultiSelect';
+import SingleSelect from 'common/components/SingleSelect';
 import { fetchJson } from 'common/utils/request';
-import { AuthorityCategory } from 'common/models';
+import { AuthorityCategory, Jurisdiction } from 'common/models';
 import { MenuItem, MenuItemGroup, SearchType } from 'common/types';
 import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
@@ -48,11 +49,17 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
     (_key: string, query: AuthorityQuery) => fetchAuthorities(query)
   );
 
+  const { data: jurisdictions } = useQuery('jurisdictions', () =>
+    fetchJson<Jurisdiction[]>('/jurisdictions')
+  );
+
   const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
   const handleKeywordsSelect = (selectedKeywords: string[]): void =>
     onQueryChange({ ...query, page: 1, keywords: selectedKeywords });
+  const handleJurisdictionSelect = (jurisdiction: string): void =>
+    onQueryChange({ ...query, page: 1, jurisdiction });
 
   const classes = useStyles();
 
@@ -63,6 +70,13 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
         label: keyword.name,
         value: keyword.authorityKeywordId,
       })),
+    })
+  );
+
+  const jurisdictionItems = jurisdictions?.map(
+    (jurisdiction): MenuItem<string> => ({
+      label: jurisdiction.name,
+      value: jurisdiction.jurisdictionId,
     })
   );
 
@@ -89,6 +103,14 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
               : undefined
           }
           label="Keywords"
+        />
+        <SingleSelect
+          emptyItem
+          items={jurisdictionItems ?? []}
+          loading={!jurisdictionItems}
+          selectedValue={query.jurisdiction}
+          onChange={handleJurisdictionSelect}
+          label="Jurisdiction"
         />
       </SearchMenu>
       <SearchResults
