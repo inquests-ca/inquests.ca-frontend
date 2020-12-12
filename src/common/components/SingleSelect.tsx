@@ -52,7 +52,7 @@ export default function SingleSelect<T extends MenuItemValue>({
     ));
     if (emptyItem)
       itemElements.unshift(
-        <MuiMenuItem value="">
+        <MuiMenuItem key={-1} value="">
           <em>None</em>
         </MuiMenuItem>
       );

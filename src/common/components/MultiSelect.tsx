@@ -76,8 +76,8 @@ export default function MultiSelect<T extends MenuItemValue>({
         <ListSubheader key={i} disableSticky>
           {group.header}
         </ListSubheader>,
-        ...group.items.map((item, i) => (
-          <MuiMenuItem key={i} value={item.value}>
+        ...group.items.map((item, j) => (
+          <MuiMenuItem key={`${i}-${j}`} value={item.value}>
             <Checkbox checked={values.indexOf(item.value) > -1} />
             <ListItemText primary={item.label} />
           </MuiMenuItem>
