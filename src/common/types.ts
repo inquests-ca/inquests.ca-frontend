@@ -16,6 +16,6 @@ export interface MenuItem<T extends MenuItemValue> {
 }
 
 export interface MenuItemGroup<T extends MenuItemValue> {
-  label: React.ReactNode;
+  header: React.ReactNode;
   items: MenuItem<T>[];
 }

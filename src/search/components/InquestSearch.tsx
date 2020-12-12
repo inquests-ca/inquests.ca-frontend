@@ -13,10 +13,10 @@ import {
   fetchInquests,
 } from '../utils/api';
 import SearchField from 'common/components/SearchField';
-import NestedMultiSelect from 'common/components/NestedMultiSelect';
+import MultiSelect from 'common/components/MultiSelect';
 import { fetchJson } from 'common/utils/request';
 import { InquestCategory } from 'common/models';
-import { SearchType } from 'common/types';
+import { MenuItem, MenuItemGroup, SearchType } from 'common/types';
 import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
 
@@ -55,13 +55,15 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
 
   const classes = useStyles();
 
-  const keywordItems = keywords?.map((keywordCategory) => ({
-    label: keywordCategory.name,
-    items: keywordCategory.inquestKeywords.map((keyword) => ({
-      label: keyword.name,
-      value: keyword.inquestKeywordId,
-    })),
-  }));
+  const keywordItems = keywords?.map(
+    (keywordCategory): MenuItemGroup<string> => ({
+      header: keywordCategory.name,
+      items: keywordCategory.inquestKeywords.map((keyword) => ({
+        label: keyword.name,
+        value: keyword.inquestKeywordId,
+      })),
+    })
+  );
 
   // TODO: prevent flicker after search by displaying previous search results.
   return (
@@ -73,7 +75,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           label="Search Inquests"
           name="search"
         />
-        <NestedMultiSelect
+        <MultiSelect
           items={keywordItems ?? []}
           loading={!keywordItems}
           defaultValues={query.keywords}

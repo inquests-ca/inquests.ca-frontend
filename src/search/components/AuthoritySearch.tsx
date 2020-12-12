@@ -13,10 +13,10 @@ import {
   fetchAuthorities,
 } from '../utils/api';
 import SearchField from 'common/components/SearchField';
-import NestedMultiSelect from 'common/components/NestedMultiSelect';
+import MultiSelect from 'common/components/MultiSelect';
 import { fetchJson } from 'common/utils/request';
 import { AuthorityCategory } from 'common/models';
-import { SearchType } from 'common/types';
+import { MenuItem, MenuItemGroup, SearchType } from 'common/types';
 import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
 
@@ -56,13 +56,15 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
 
   const classes = useStyles();
 
-  const keywordItems = keywords?.map((keywordCategory) => ({
-    label: keywordCategory.name,
-    items: keywordCategory.authorityKeywords.map((keyword) => ({
-      label: keyword.name,
-      value: keyword.authorityKeywordId,
-    })),
-  }));
+  const keywordItems = keywords?.map(
+    (keywordCategory): MenuItemGroup<string> => ({
+      header: keywordCategory.name,
+      items: keywordCategory.authorityKeywords.map((keyword) => ({
+        label: keyword.name,
+        value: keyword.authorityKeywordId,
+      })),
+    })
+  );
 
   // TODO: prevent flicker after search by displaying previous search results.
   return (
@@ -74,7 +76,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
           label="Search Authorities"
           name="search"
         />
-        <NestedMultiSelect
+        <MultiSelect
           items={keywordItems ?? []}
           loading={!keywordItems}
           defaultValues={query.keywords}
