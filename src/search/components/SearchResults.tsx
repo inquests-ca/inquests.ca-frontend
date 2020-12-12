@@ -23,11 +23,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     marginBottom: theme.spacing(2),
   },
-  sortText: {
-    // Lines up text baselines of "Sort by" and sort selector.
-    lineHeight: '1.9',
-  },
-  sortSelect: {
+  sort: {
     width: '7rem',
   },
   noResults: {
@@ -85,9 +81,6 @@ const SearchResults = ({
     <Paper className={clsx(className, classes.layout)}>
       <div className={classes.toolbarLayout}>
         <span>
-          <Typography className={classes.sortText} variant="subtitle1" component="span">
-            Sort by&nbsp;&nbsp;
-          </Typography>
           <SingleSelect
             items={[
               { value: Sort.Relevant, label: 'Relevance' },
@@ -96,7 +89,8 @@ const SearchResults = ({
             ]}
             selectedValue={sort}
             onChange={onSortChange}
-            className={classes.sortSelect}
+            label="Sort by"
+            className={classes.sort}
           ></SingleSelect>
         </span>
         {!loading && (
