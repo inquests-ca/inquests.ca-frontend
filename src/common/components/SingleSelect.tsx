@@ -9,6 +9,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem, MenuItemValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
+  menu: {
+    maxHeight: '40%',
+  },
   loading: {
     display: 'grid',
     justifyItems: 'center',
@@ -49,7 +52,12 @@ export default function SingleSelect<T extends MenuItemValue>({
         {item.label}
       </MuiMenuItem>
     ));
-    if (emptyItem) itemElements.unshift(<MuiMenuItem value="" />);
+    if (emptyItem)
+      itemElements.unshift(
+        <MuiMenuItem value="">
+          <em>None</em>
+        </MuiMenuItem>
+      );
     return itemElements;
   };
 
@@ -67,6 +75,7 @@ export default function SingleSelect<T extends MenuItemValue>({
             ? renderValue(value as T)
             : items.find((item) => item.value === value)?.label ?? ''
         }
+        MenuProps={{ classes: { paper: classes.menu } }}
       >
         {loading ? (
           <div className={classes.loading}>
