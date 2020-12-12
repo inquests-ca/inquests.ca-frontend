@@ -25,7 +25,6 @@ interface SingleSelectProps<T extends MenuItemValue> {
   emptyItem?: boolean;
   selectedValue: T;
   onChange: (value: T) => void;
-  renderValue?: (value: T) => React.ReactNode;
   label?: string;
   className?: string;
 }
@@ -36,7 +35,6 @@ export default function SingleSelect<T extends MenuItemValue>({
   emptyItem,
   selectedValue,
   onChange,
-  renderValue,
   label,
   className,
 }: SingleSelectProps<T>) {
@@ -68,13 +66,6 @@ export default function SingleSelect<T extends MenuItemValue>({
         displayEmpty
         value={selectedValue}
         onChange={handleChange}
-        renderValue={(value: unknown) =>
-          value === undefined
-            ? undefined
-            : renderValue
-            ? renderValue(value as T)
-            : items.find((item) => item.value === value)?.label ?? ''
-        }
         MenuProps={{ classes: { paper: classes.menu } }}
       >
         {loading ? (
