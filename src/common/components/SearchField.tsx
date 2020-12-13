@@ -35,6 +35,7 @@ const SearchField = ({
   return (
     <TextField
       value={text}
+      variant="outlined"
       type="search"
       placeholder={label}
       name={name}
