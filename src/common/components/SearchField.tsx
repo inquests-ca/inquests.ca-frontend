@@ -1,5 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Search from '@material-ui/icons/Search';
 
 import useDefaultState from 'common/hooks/useDefaultState';
 
@@ -34,13 +36,20 @@ const SearchField = ({
     <TextField
       value={text}
       type="search"
-      label={label}
+      placeholder={label}
       name={name}
       fullWidth={fullWidth}
       className={className}
       onKeyDown={handleKeyDown}
       onChange={handleChange}
       onBlur={handleBlur}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <Search />
+          </InputAdornment>
+        ),
+      }}
     />
   );
 };
