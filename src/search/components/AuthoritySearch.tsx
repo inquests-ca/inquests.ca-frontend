@@ -87,7 +87,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
         <SearchField
           defaultValue={query.text}
           onSearch={handleTextSearch}
-          label="Search Authorities"
+          label="Enter search terms"
           name="search"
         />
         <MultiSelect
