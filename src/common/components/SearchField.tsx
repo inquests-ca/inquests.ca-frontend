@@ -4,7 +4,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Search from '@material-ui/icons/Search';
 
 import useDefaultState from 'common/hooks/useDefaultState';
-import useCallbackOnChange from 'common/hooks/useCallbackOnChange';
 
 interface SearchFieldProps {
   defaultValue?: string;
@@ -26,15 +25,16 @@ const SearchField = ({
   className,
 }: SearchFieldProps) => {
   const [text, setText] = useDefaultState(defaultValue ?? '');
-  const handleSearch = useCallbackOnChange(defaultValue ?? '', onSearch);
+
+  const handleSearch = (): void => (text !== defaultValue ? onSearch(text) : undefined);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void =>
     setText(event.currentTarget.value);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void =>
-    event.key === 'Enter' ? handleSearch(text) : undefined;
+    event.key === 'Enter' ? handleSearch() : undefined;
 
-  const handleBlur = (): void => (searchOnBlur ? handleSearch(text) : undefined);
+  const handleBlur = (): void => (searchOnBlur ? handleSearch() : undefined);
 
   return (
     <TextField
