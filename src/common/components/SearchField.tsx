@@ -10,6 +10,7 @@ interface SearchFieldProps {
   label: string;
   name: string;
   onSearch: (text: string) => void;
+  searchOnBlur?: boolean;
   fullWidth?: boolean;
   className?: string;
 }
@@ -19,6 +20,7 @@ const SearchField = ({
   label,
   name,
   onSearch,
+  searchOnBlur,
   fullWidth,
   className,
 }: SearchFieldProps) => {
@@ -30,7 +32,7 @@ const SearchField = ({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void =>
     event.key === 'Enter' ? handleSearch() : undefined;
 
-  const handleBlur = (): void => handleSearch();
+  const handleBlur = (): void => (searchOnBlur ? handleSearch() : undefined);
 
   return (
     <TextField
