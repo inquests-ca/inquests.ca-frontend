@@ -86,6 +86,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
         <SearchField
           defaultValue={query.text}
           onSearch={handleTextSearch}
+          searchOnBlur
           label="Enter search terms"
           name="search"
         />
