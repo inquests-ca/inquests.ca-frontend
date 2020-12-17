@@ -16,7 +16,7 @@ import SearchField from 'common/components/SearchField';
 import MultiSelect from 'common/components/MultiSelect';
 import SingleSelect from 'common/components/SingleSelect';
 import { fetchJson } from 'common/utils/request';
-import { InquestCategory, Jurisdiction } from 'common/models';
+import { InquestCategory, Jurisdiction, DeathCause } from 'common/models';
 import { MenuItem, MenuItemGroup, SearchType } from 'common/types';
 import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
@@ -40,12 +40,16 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
   const queryParams = useQueryParams<InquestQuery>(inquestQuerySchema);
   const query = { ...defaultInquestQuery(), ...queryParams };
 
-  const { data: keywords } = useQuery('inquestKeywords', () =>
-    fetchJson<InquestCategory[]>('/keywords/inquest')
-  );
-
   const { data: inquests } = useQuery(['inquests', query], (_key: string, query: InquestQuery) =>
     fetchInquests(query)
+  );
+
+  const { data: deathCauses } = useQuery('deathCauses', () =>
+    fetchJson<DeathCause[]>('/deathCauses')
+  );
+
+  const { data: keywords } = useQuery('inquestKeywords', () =>
+    fetchJson<InquestCategory[]>('/keywords/inquest')
   );
 
   const { data: jurisdictions } = useQuery('jurisdictions', () =>
@@ -55,12 +59,21 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
   const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
+  const handleDeathCauseSelect = (deathCause: string): void =>
+    onQueryChange({ ...query, page: 1, deathCause });
   const handleKeywordsSelect = (selectedKeywords: string[]): void =>
     onQueryChange({ ...query, page: 1, keywords: selectedKeywords });
   const handleJurisdictionSelect = (jurisdiction: string): void =>
     onQueryChange({ ...query, page: 1, jurisdiction });
 
   const classes = useStyles();
+
+  const deathCauseItems = deathCauses?.map(
+    (deathCause): MenuItem<string> => ({
+      label: deathCause.name,
+      value: deathCause.deathCauseId,
+    })
+  );
 
   const keywordItems = keywords?.map(
     (keywordCategory): MenuItemGroup<string> => ({
@@ -111,6 +124,14 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           selectedValue={query.jurisdiction}
           onChange={handleJurisdictionSelect}
           label="Jurisdiction"
+        />
+        <SingleSelect
+          emptyItem
+          items={deathCauseItems ?? []}
+          loading={!deathCauseItems}
+          selectedValue={query.deathCause}
+          onChange={handleDeathCauseSelect}
+          label="Cause of Death"
         />
       </SearchMenu>
       <SearchResults
