@@ -40,13 +40,13 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
   const queryParams = useQueryParams<AuthorityQuery>(authorityQuerySchema);
   const query = { ...defaultAuthorityQuery(), ...queryParams };
 
-  const { data: keywords } = useQuery('authorityKeywords', () =>
-    fetchJson<AuthorityCategory[]>('/keywords/authority')
-  );
-
   const { data: authorities } = useQuery(
     ['authorities', query],
     (_key: string, query: AuthorityQuery) => fetchAuthorities(query)
+  );
+
+  const { data: keywords } = useQuery('authorityKeywords', () =>
+    fetchJson<AuthorityCategory[]>('/keywords/authority')
   );
 
   const { data: jurisdictions } = useQuery('jurisdictions', () =>
@@ -56,9 +56,9 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
   const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
-  const handleKeywordsSelect = (selectedKeywords: string[]): void =>
+  const handleKeywordsChange = (selectedKeywords: string[]): void =>
     onQueryChange({ ...query, page: 1, keywords: selectedKeywords });
-  const handleJurisdictionSelect = (jurisdiction: string): void =>
+  const handleJurisdictionChange = (jurisdiction: string): void =>
     onQueryChange({ ...query, page: 1, jurisdiction });
 
   const classes = useStyles();
@@ -95,7 +95,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
           items={keywordItems ?? []}
           loading={!keywordItems}
           selectedValues={query.keywords}
-          onChange={handleKeywordsSelect}
+          onChange={handleKeywordsChange}
           renderValues={(selected) =>
             selected.length > 1
               ? `${selected.length} Keywords Selected`
@@ -110,7 +110,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
           items={jurisdictionItems ?? []}
           loading={!jurisdictionItems}
           selectedValue={query.jurisdiction}
-          onChange={handleJurisdictionSelect}
+          onChange={handleJurisdictionChange}
           label="Jurisdiction"
         />
       </SearchMenu>

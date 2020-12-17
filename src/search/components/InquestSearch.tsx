@@ -59,11 +59,11 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
   const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
-  const handleDeathCauseSelect = (deathCause: string): void =>
+  const handleDeathCauseChange = (deathCause: string): void =>
     onQueryChange({ ...query, page: 1, deathCause });
-  const handleKeywordsSelect = (selectedKeywords: string[]): void =>
+  const handleKeywordsChange = (selectedKeywords: string[]): void =>
     onQueryChange({ ...query, page: 1, keywords: selectedKeywords });
-  const handleJurisdictionSelect = (jurisdiction: string): void =>
+  const handleJurisdictionChange = (jurisdiction: string): void =>
     onQueryChange({ ...query, page: 1, jurisdiction });
 
   const classes = useStyles();
@@ -107,7 +107,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           items={keywordItems ?? []}
           loading={!keywordItems}
           selectedValues={query.keywords}
-          onChange={handleKeywordsSelect}
+          onChange={handleKeywordsChange}
           renderValues={(selected) =>
             selected.length > 1
               ? `${selected.length} Keywords Selected`
@@ -122,7 +122,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           items={jurisdictionItems ?? []}
           loading={!jurisdictionItems}
           selectedValue={query.jurisdiction}
-          onChange={handleJurisdictionSelect}
+          onChange={handleJurisdictionChange}
           label="Jurisdiction"
         />
         <SingleSelect
@@ -130,7 +130,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           items={deathCauseItems ?? []}
           loading={!deathCauseItems}
           selectedValue={query.deathCause}
-          onChange={handleDeathCauseSelect}
+          onChange={handleDeathCauseChange}
           label="Cause of Death"
         />
       </SearchMenu>
