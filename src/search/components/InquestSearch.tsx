@@ -103,6 +103,14 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           label="Enter search terms"
           name="search"
         />
+        <SingleSelect
+          emptyItem
+          items={deathCauseItems ?? []}
+          loading={!deathCauseItems}
+          selectedValue={query.deathCause}
+          onChange={handleDeathCauseChange}
+          label="Cause of Death"
+        />
         <MultiSelect
           items={keywordItems ?? []}
           loading={!keywordItems}
@@ -124,14 +132,6 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           selectedValue={query.jurisdiction}
           onChange={handleJurisdictionChange}
           label="Jurisdiction"
-        />
-        <SingleSelect
-          emptyItem
-          items={deathCauseItems ?? []}
-          loading={!deathCauseItems}
-          selectedValue={query.deathCause}
-          onChange={handleDeathCauseChange}
-          label="Cause of Death"
         />
       </SearchMenu>
       <SearchResults
