@@ -67,11 +67,18 @@ export interface DeathManner {
   name: string;
 }
 
+export interface DeathCause {
+  deathCauseId: string;
+  name: string;
+  description: string | null;
+}
+
 export interface Deceased {
   deceasedId?: number;
   inquestId: number;
   inquestTypeId: string;
   deathMannerId: string;
+  deathCauseId: string;
   deathCause: string;
   deathDate: string;
   lastName: string | null;

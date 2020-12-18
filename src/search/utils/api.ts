@@ -19,11 +19,11 @@ interface BaseQuery {
   sort: Sort;
 }
 
-const baseQuerySchema = joi.object({
+const baseQuerySchema = joi.object<BaseQuery>({
+  page: joi.number().integer().positive(),
   text: joi.string(),
   keywords: joi.array(),
   jurisdiction: joi.string(),
-  page: joi.number().integer().positive().default(1),
   sort: joi.string().valid(...Object.values(Sort)),
 });
 
@@ -48,7 +48,9 @@ export const fetchAuthorities = (query: AuthorityQuery) => {
 export const defaultAuthorityQuery = (): AuthorityQuery => defaultBaseQuery();
 export const authorityQuerySchema = baseQuerySchema;
 
-export type InquestQuery = BaseQuery;
+export interface InquestQuery extends BaseQuery {
+  deathCause: string;
+}
 export const fetchInquests = (query: InquestQuery) => {
   const apiQuery = {
     ...query,
@@ -58,5 +60,10 @@ export const fetchInquests = (query: InquestQuery) => {
   };
   return fetchJson<DataWithCount<Inquest[]>>('/inquests', apiQuery);
 };
-export const defaultInquestQuery = (): InquestQuery => defaultBaseQuery();
-export const inquestQuerySchema = baseQuerySchema;
+export const defaultInquestQuery = (): InquestQuery => ({
+  ...defaultBaseQuery(),
+  deathCause: '',
+});
+export const inquestQuerySchema = (baseQuerySchema as joi.ObjectSchema<InquestQuery>).keys({
+  deathCause: joi.string(),
+});
