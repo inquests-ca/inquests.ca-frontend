@@ -17,7 +17,7 @@ import MultiSelect from 'common/components/MultiSelect';
 import SingleSelect from 'common/components/SingleSelect';
 import { fetchJson } from 'common/utils/request';
 import { AuthorityCategory, Jurisdiction } from 'common/models';
-import { MenuItem, MenuItemGroup, SearchType } from 'common/types';
+import { MenuItem, SearchType } from 'common/types';
 import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
 
@@ -56,22 +56,16 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
   const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
-  const handleKeywordsChange = (selectedKeywords: string[]): void =>
-    onQueryChange({ ...query, page: 1, keywords: selectedKeywords });
+  const handleKeywordsChange = (category: AuthorityCategory, selectedKeywords: string[]): void =>
+    onQueryChange({
+      ...query,
+      page: 1,
+      keywords: { ...query.keywords, [category.authorityCategoryId]: selectedKeywords },
+    });
   const handleJurisdictionChange = (jurisdiction: string): void =>
     onQueryChange({ ...query, page: 1, jurisdiction });
 
   const classes = useStyles();
-
-  const keywordItems = keywords?.map(
-    (keywordCategory): MenuItemGroup<string> => ({
-      header: keywordCategory.name,
-      items: keywordCategory.authorityKeywords.map((keyword) => ({
-        label: keyword.name,
-        value: keyword.authorityKeywordId,
-      })),
-    })
-  );
 
   const jurisdictionItems = jurisdictions?.map(
     (jurisdiction): MenuItem<string> => ({
@@ -91,20 +85,25 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
           label="Enter search terms"
           name="search"
         />
-        <MultiSelect
-          items={keywordItems ?? []}
-          loading={!keywordItems}
-          selectedValues={query.keywords}
-          onChange={handleKeywordsChange}
-          renderValues={(selected) =>
-            selected.length > 1
-              ? `${selected.length} Keywords Selected`
-              : selected.length === 1
-              ? `${selected.length} Keyword Selected`
-              : undefined
-          }
-          label="Keywords"
-        />
+        {keywords?.map((category, i) => (
+          <MultiSelect
+            key={i}
+            items={category.authorityKeywords.map((keyword) => ({
+              label: keyword.name,
+              value: keyword.authorityKeywordId,
+            }))}
+            selectedValues={query.keywords[category.authorityCategoryId] || []}
+            onChange={(selectedKeywords) => handleKeywordsChange(category, selectedKeywords)}
+            renderValues={(selected) =>
+              selected.length > 1
+                ? `${selected.length} Keywords Selected`
+                : selected.length === 1
+                ? `${selected.length} Keyword Selected`
+                : undefined
+            }
+            label={category.name}
+          />
+        ))}
         <SingleSelect
           emptyItem
           items={jurisdictionItems ?? []}
