@@ -50,12 +50,12 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
     fetchInquests(query)
   );
 
-  const { data: deathCauses } = useQuery('deathCauses', () =>
-    fetchJson<DeathCause[]>('/deathCauses')
-  );
-
   const { data: keywords } = useQuery('inquestKeywords', () =>
     fetchJson<InquestCategory[]>('/keywords/inquest')
+  );
+
+  const { data: deathCauses } = useQuery('deathCauses', () =>
+    fetchJson<DeathCause[]>('/deathCauses')
   );
 
   const { data: jurisdictions } = useQuery('jurisdictions', () =>
@@ -103,14 +103,6 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           label="Enter search terms"
           name="search"
         />
-        <SingleSelect
-          emptyItem
-          items={deathCauseItems ?? []}
-          loading={!deathCauseItems}
-          selectedValue={query.deathCause}
-          onChange={handleDeathCauseChange}
-          label="Cause of Death"
-        />
         <Box className={classes.keywordsBox} label="Keywords" loading={!keywords}>
           {keywords?.map((category, i) => (
             <MultiSelect
@@ -136,6 +128,14 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
             />
           ))}
         </Box>
+        <SingleSelect
+          emptyItem
+          items={deathCauseItems ?? []}
+          loading={!deathCauseItems}
+          selectedValue={query.deathCause}
+          onChange={handleDeathCauseChange}
+          label="Cause of Death"
+        />
         <SingleSelect
           emptyItem
           items={jurisdictionItems ?? []}
