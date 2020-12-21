@@ -15,9 +15,10 @@ import {
 import SearchField from 'common/components/SearchField';
 import MultiSelect from 'common/components/MultiSelect';
 import SingleSelect from 'common/components/SingleSelect';
+import Box from 'common/components/Box';
 import { fetchJson } from 'common/utils/request';
 import { InquestCategory, Jurisdiction, DeathCause } from 'common/models';
-import { MenuItem, MenuItemGroup, SearchType } from 'common/types';
+import { MenuItem, SearchType } from 'common/types';
 import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
 
@@ -28,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: '300px 1fr',
     gridColumnGap: theme.spacing(4),
     alignItems: 'start',
+  },
+  keywordsBox: {
+    padding: theme.spacing(2),
+    display: 'grid',
+    gridRowGap: theme.spacing(3),
   },
 }));
 
@@ -44,12 +50,12 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
     fetchInquests(query)
   );
 
-  const { data: deathCauses } = useQuery('deathCauses', () =>
-    fetchJson<DeathCause[]>('/deathCauses')
-  );
-
   const { data: keywords } = useQuery('inquestKeywords', () =>
     fetchJson<InquestCategory[]>('/keywords/inquest')
+  );
+
+  const { data: deathCauses } = useQuery('deathCauses', () =>
+    fetchJson<DeathCause[]>('/deathCauses')
   );
 
   const { data: jurisdictions } = useQuery('jurisdictions', () =>
@@ -61,8 +67,12 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
   const handleDeathCauseChange = (deathCause: string): void =>
     onQueryChange({ ...query, page: 1, deathCause });
-  const handleKeywordsChange = (selectedKeywords: string[]): void =>
-    onQueryChange({ ...query, page: 1, keywords: selectedKeywords });
+  const handleKeywordsChange = (category: string, selectedKeywords: string[]): void =>
+    onQueryChange({
+      ...query,
+      page: 1,
+      keywords: { ...query.keywords, [category]: selectedKeywords },
+    });
   const handleJurisdictionChange = (jurisdiction: string): void =>
     onQueryChange({ ...query, page: 1, jurisdiction });
 
@@ -72,16 +82,6 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
     (deathCause): MenuItem<string> => ({
       label: deathCause.name,
       value: deathCause.deathCauseId,
-    })
-  );
-
-  const keywordItems = keywords?.map(
-    (keywordCategory): MenuItemGroup<string> => ({
-      header: keywordCategory.name,
-      items: keywordCategory.inquestKeywords.map((keyword) => ({
-        label: keyword.name,
-        value: keyword.inquestKeywordId,
-      })),
     })
   );
 
@@ -103,6 +103,31 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           label="Enter search terms"
           name="search"
         />
+        <Box className={classes.keywordsBox} label="Keywords" loading={!keywords}>
+          {keywords?.map((category, i) => (
+            <MultiSelect
+              key={i}
+              items={category.inquestKeywords.map(
+                (keyword): MenuItem<string> => ({
+                  label: keyword.name,
+                  value: keyword.inquestKeywordId,
+                })
+              )}
+              selectedValues={query.keywords[category.inquestCategoryId] || []}
+              onChange={(selectedKeywords) =>
+                handleKeywordsChange(category.inquestCategoryId, selectedKeywords)
+              }
+              renderValues={(selected) =>
+                selected.length > 1
+                  ? `${selected.length} Keywords Selected`
+                  : selected.length === 1
+                  ? `${selected.length} Keyword Selected`
+                  : undefined
+              }
+              label={category.name}
+            />
+          ))}
+        </Box>
         <SingleSelect
           emptyItem
           items={deathCauseItems ?? []}
@@ -110,20 +135,6 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           selectedValue={query.deathCause}
           onChange={handleDeathCauseChange}
           label="Cause of Death"
-        />
-        <MultiSelect
-          items={keywordItems ?? []}
-          loading={!keywordItems}
-          selectedValues={query.keywords}
-          onChange={handleKeywordsChange}
-          renderValues={(selected) =>
-            selected.length > 1
-              ? `${selected.length} Keywords Selected`
-              : selected.length === 1
-              ? `${selected.length} Keyword Selected`
-              : undefined
-          }
-          label="Keywords"
         />
         <SingleSelect
           emptyItem

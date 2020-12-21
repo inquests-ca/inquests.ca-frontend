@@ -12,26 +12,26 @@ export enum Sort {
 }
 
 interface BaseQuery {
-  text: string;
-  keywords: string[];
-  jurisdiction: string;
   page: number;
+  text: string;
+  keywords: { [key: string]: string[] }; // Keywords listed by category.
+  jurisdiction: string;
   sort: Sort;
 }
 
 const baseQuerySchema = joi.object<BaseQuery>({
   page: joi.number().integer().positive(),
   text: joi.string(),
-  keywords: joi.array(),
+  keywords: joi.object<string, string[]>(),
   jurisdiction: joi.string(),
   sort: joi.string().valid(...Object.values(Sort)),
 });
 
 const defaultBaseQuery = (): BaseQuery => ({
-  text: '',
-  keywords: [],
-  jurisdiction: '',
   page: 1,
+  text: '',
+  keywords: {},
+  jurisdiction: '',
   sort: Sort.Relevant,
 });
 
@@ -40,6 +40,7 @@ export const fetchAuthorities = (query: AuthorityQuery) => {
   const apiQuery = {
     ...query,
     page: undefined, // Remove page query parameter (effectively replaced by offset).
+    keywords: Object.values(query.keywords).flat(), // Flatten keywords object.
     limit: PAGINATION,
     offset: (query.page - 1) * PAGINATION,
   };
@@ -55,6 +56,7 @@ export const fetchInquests = (query: InquestQuery) => {
   const apiQuery = {
     ...query,
     page: undefined, // Remove page query parameter (effectively replaced by offset).
+    keywords: Object.values(query.keywords).flat(), // Flatten keywords object.
     limit: PAGINATION,
     offset: (query.page - 1) * PAGINATION,
   };

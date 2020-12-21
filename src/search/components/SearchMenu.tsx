@@ -9,10 +9,10 @@ import { SearchType } from 'common/types';
 const useStyles = makeStyles((theme) => ({
   layout: {
     padding: theme.spacing(4),
-    height: `calc(100vh - ${theme.spacing(8)}px - 64px)`,
+    minHeight: `calc(100vh - ${theme.spacing(8)}px - 64px)`,
     display: 'grid',
     gridAutoRows: 'min-content',
-    gridRowGap: theme.spacing(4),
+    gridRowGap: theme.spacing(3),
   },
 }));
 
