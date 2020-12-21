@@ -12,9 +12,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem, MenuItemGroup, MenuItemValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
-  menu: {
-    maxHeight: '40%',
-  },
   loading: {
     display: 'grid',
     justifyItems: 'center',
@@ -87,7 +84,6 @@ export default function MultiSelect<T extends MenuItemValue>({
         renderValue={(value: unknown) => renderValues(value as T[])}
         // Prevents menu from scrolling upon selection and constrains height.
         MenuProps={{
-          classes: { paper: classes.menu },
           anchorOrigin: {
             vertical: 'bottom',
             horizontal: 'left',

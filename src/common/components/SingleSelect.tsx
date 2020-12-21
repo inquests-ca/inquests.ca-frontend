@@ -9,9 +9,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem, MenuItemValue } from 'common/types';
 
 const useStyles = makeStyles((_theme) => ({
-  menu: {
-    maxHeight: '40%',
-  },
   loading: {
     display: 'grid',
     justifyItems: 'center',
@@ -62,11 +59,7 @@ export default function SingleSelect<T extends MenuItemValue>({
   return (
     <FormControl className={className}>
       {label && <InputLabel>{label}</InputLabel>}
-      <Select
-        value={selectedValue}
-        onChange={handleChange}
-        MenuProps={{ classes: { paper: classes.menu } }}
-      >
+      <Select value={selectedValue} onChange={handleChange}>
         {loading ? (
           <div className={classes.loading}>
             <CircularProgress />
