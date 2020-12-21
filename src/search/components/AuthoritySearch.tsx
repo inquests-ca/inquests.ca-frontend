@@ -62,11 +62,11 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
   const handleSortChange = (sort: Sort): void => onQueryChange({ ...query, sort });
   const handlePageChange = (page: number): void => onQueryChange({ ...query, page });
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
-  const handleKeywordsChange = (category: AuthorityCategory, selectedKeywords: string[]): void =>
+  const handleKeywordsChange = (category: string, selectedKeywords: string[]): void =>
     onQueryChange({
       ...query,
       page: 1,
-      keywords: { ...query.keywords, [category.authorityCategoryId]: selectedKeywords },
+      keywords: { ...query.keywords, [category]: selectedKeywords },
     });
   const handleJurisdictionChange = (jurisdiction: string): void =>
     onQueryChange({ ...query, page: 1, jurisdiction });
@@ -95,12 +95,16 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
           {keywords?.map((category, i) => (
             <MultiSelect
               key={i}
-              items={category.authorityKeywords.map((keyword) => ({
-                label: keyword.name,
-                value: keyword.authorityKeywordId,
-              }))}
+              items={category.authorityKeywords.map(
+                (keyword): MenuItem<string> => ({
+                  label: keyword.name,
+                  value: keyword.authorityKeywordId,
+                })
+              )}
               selectedValues={query.keywords[category.authorityCategoryId] || []}
-              onChange={(selectedKeywords) => handleKeywordsChange(category, selectedKeywords)}
+              onChange={(selectedKeywords) =>
+                handleKeywordsChange(category.authorityCategoryId, selectedKeywords)
+              }
               renderValues={(selected) =>
                 selected.length > 1
                   ? `${selected.length} Keywords Selected`

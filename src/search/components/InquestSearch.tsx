@@ -67,11 +67,11 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
   const handleTextSearch = (text: string): void => onQueryChange({ ...query, page: 1, text });
   const handleDeathCauseChange = (deathCause: string): void =>
     onQueryChange({ ...query, page: 1, deathCause });
-  const handleKeywordsChange = (category: InquestCategory, selectedKeywords: string[]): void =>
+  const handleKeywordsChange = (category: string, selectedKeywords: string[]): void =>
     onQueryChange({
       ...query,
       page: 1,
-      keywords: { ...query.keywords, [category.inquestCategoryId]: selectedKeywords },
+      keywords: { ...query.keywords, [category]: selectedKeywords },
     });
   const handleJurisdictionChange = (jurisdiction: string): void =>
     onQueryChange({ ...query, page: 1, jurisdiction });
@@ -115,12 +115,16 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           {keywords?.map((category, i) => (
             <MultiSelect
               key={i}
-              items={category.inquestKeywords.map((keyword) => ({
-                label: keyword.name,
-                value: keyword.inquestKeywordId,
-              }))}
+              items={category.inquestKeywords.map(
+                (keyword): MenuItem<string> => ({
+                  label: keyword.name,
+                  value: keyword.inquestKeywordId,
+                })
+              )}
               selectedValues={query.keywords[category.inquestCategoryId] || []}
-              onChange={(selectedKeywords) => handleKeywordsChange(category, selectedKeywords)}
+              onChange={(selectedKeywords) =>
+                handleKeywordsChange(category.inquestCategoryId, selectedKeywords)
+              }
               renderValues={(selected) =>
                 selected.length > 1
                   ? `${selected.length} Keywords Selected`
