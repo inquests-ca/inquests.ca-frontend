@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
   },
   loading: {
+    padding: theme.spacing(2),
     display: 'grid',
     justifyItems: 'center',
     alignItems: 'center',
