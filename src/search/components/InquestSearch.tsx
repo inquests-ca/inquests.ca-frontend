@@ -15,6 +15,7 @@ import {
 import SearchField from 'common/components/SearchField';
 import MultiSelect from 'common/components/MultiSelect';
 import SingleSelect from 'common/components/SingleSelect';
+import Box from 'common/components/Box';
 import { fetchJson } from 'common/utils/request';
 import { InquestCategory, Jurisdiction, DeathCause } from 'common/models';
 import { MenuItem, SearchType } from 'common/types';
@@ -28,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: '300px 1fr',
     gridColumnGap: theme.spacing(4),
     alignItems: 'start',
+  },
+  keywordsBox: {
+    padding: theme.spacing(2),
+    display: 'grid',
+    gridRowGap: theme.spacing(3),
   },
 }));
 
@@ -105,25 +111,27 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
           onChange={handleDeathCauseChange}
           label="Cause of Death"
         />
-        {keywords?.map((category, i) => (
-          <MultiSelect
-            key={i}
-            items={category.inquestKeywords.map((keyword) => ({
-              label: keyword.name,
-              value: keyword.inquestKeywordId,
-            }))}
-            selectedValues={query.keywords[category.inquestCategoryId] || []}
-            onChange={(selectedKeywords) => handleKeywordsChange(category, selectedKeywords)}
-            renderValues={(selected) =>
-              selected.length > 1
-                ? `${selected.length} Keywords Selected`
-                : selected.length === 1
-                ? `${selected.length} Keyword Selected`
-                : undefined
-            }
-            label={category.name}
-          />
-        ))}
+        <Box className={classes.keywordsBox} label="Keywords" loading={!keywords}>
+          {keywords?.map((category, i) => (
+            <MultiSelect
+              key={i}
+              items={category.inquestKeywords.map((keyword) => ({
+                label: keyword.name,
+                value: keyword.inquestKeywordId,
+              }))}
+              selectedValues={query.keywords[category.inquestCategoryId] || []}
+              onChange={(selectedKeywords) => handleKeywordsChange(category, selectedKeywords)}
+              renderValues={(selected) =>
+                selected.length > 1
+                  ? `${selected.length} Keywords Selected`
+                  : selected.length === 1
+                  ? `${selected.length} Keyword Selected`
+                  : undefined
+              }
+              label={category.name}
+            />
+          ))}
+        </Box>
         <SingleSelect
           emptyItem
           items={jurisdictionItems ?? []}
