@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 
 import { toIsoDateString } from 'common/utils/date';
 import { Inquest } from 'common/models';
+import { reportSearchResultClick } from 'common/utils/analytics';
+import { SearchType } from 'common/types';
 
 // TODO: share styles with AuthoritySearchResult.
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +65,16 @@ const InquestSearchResult = ({ inquest, className }: InquestSearchResultProps) =
 
   return (
     <Card className={clsx(className, classes.layout)}>
-      <Link to={`/inquest/${inquest.inquestId}`} className={classes.nav}>
+      <Link
+        to={`/inquest/${inquest.inquestId}`}
+        className={classes.nav}
+        onClick={() => {
+          reportSearchResultClick({
+            type: SearchType.Inquest,
+            id: inquest.inquestId!,
+          });
+        }}
+      >
         <CardActionArea>
           <CardContent>
             <Container className={classes.titleContainer}>

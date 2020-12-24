@@ -9,3 +9,38 @@ export const initializeAnalytics = () => {
   }
 };
 
+const analyticsReporter = <T extends Record<string, any>>(name: string) => {
+  return (args: T) => {
+    if (process.env.REACT_APP_DEBUG_ANALYTICS === 'true') {
+      console.debug(`Event reported: ${name}\nParameters: ${JSON.stringify(args, null, 2)}`);
+    }
+    if (process.env.REACT_APP_ENABLE_ANALYTICS === 'true') {
+      mixpanel.track(name, args);
+    }
+  };
+};
+
+/**
+ * Reports authority or inquest search performed by user.
+ */
+export const reportSearchEvent = analyticsReporter<
+  (AuthorityQuery | InquestQuery) & { type: SearchType }
+>('Search');
+
+/**
+ * Reports click on search result.
+ */
+export const reportSearchResultClick = analyticsReporter<{ type: SearchType; id: number }>(
+  'Search Result Click'
+);
+
+/**
+ * Reports click on internal link (e.g., authority citation).
+ *
+ * @param category Type of internal link (e.g., "Citation", "Cited By")
+ */
+export const reportInternalLinkClick = analyticsReporter<{
+  type: SearchType;
+  category: string;
+  id: number;
+}>('Internal Link Click');
