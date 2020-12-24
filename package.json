@@ -1,7 +1,13 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "inquests-ca-frontend",
+  "version": "0.0.1",
+  "description": "Frontend for inquests.ca",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inquests-ca/inquests.ca-frontend.git"
+  },
   "dependencies": {
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.2.1",
