@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from 'common/components/App';
+import { initializeAnalytics } from 'common/utils/analytics';
 import * as serviceWorker from 'serviceWorker';
 
+initializeAnalytics();
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
