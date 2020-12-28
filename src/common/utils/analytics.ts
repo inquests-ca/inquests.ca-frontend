@@ -44,3 +44,12 @@ export const reportInternalLinkClick = analyticsReporter<{
   category: string;
   id: number;
 }>('Internal Link Click');
+
+export interface NavigationEvent {
+  location: 'Home' | 'Terms of Use' | 'Help';
+}
+
+/**
+ * Reports website navigation via header links.
+ */
+export const reportNavigation = analyticsReporter<NavigationEvent>('Website Navigation');
