@@ -147,7 +147,7 @@ const InternalLinksSection = ({ authorities }: { authorities: Authority[] }) => 
 
   return (
     <Section header="Related Authorities">
-      <AuthorityInternalLinks authorities={authorities} />
+      <AuthorityInternalLinks authorities={authorities} category="Related Authorities" />
     </Section>
   );
 };

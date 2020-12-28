@@ -11,6 +11,9 @@ import Typography from '@material-ui/core/Typography';
 
 import { toIsoDateString } from 'common/utils/date';
 import { Authority, AuthorityDocument } from 'common/models';
+import { reportSearchResultClick } from 'common/utils/analytics';
+import { SearchType } from 'common/types';
+import { AuthorityQuery } from 'search/utils/api';
 
 // TODO: share styles with InquestSearchResult.
 const useStyles = makeStyles((theme) => ({
@@ -41,10 +44,11 @@ const useStyles = makeStyles((theme) => ({
 
 interface AuthoritySearchResultProps {
   authority: Authority;
+  query: AuthorityQuery;
   className?: string;
 }
 
-const AuthoritySearchResult = ({ authority, className }: AuthoritySearchResultProps) => {
+const AuthoritySearchResult = ({ authority, query, className }: AuthoritySearchResultProps) => {
   const primaryDocument = _.find(
     authority.authorityDocuments,
     (doc) => doc.isPrimary
@@ -55,7 +59,17 @@ const AuthoritySearchResult = ({ authority, className }: AuthoritySearchResultPr
   // TODO: remove extra whitespace between fields when one field is undefined.
   return (
     <Card className={clsx(className, classes.layout)}>
-      <Link to={`/authority/${authority.authorityId}`} className={classes.nav}>
+      <Link
+        to={`/authority/${authority.authorityId}`}
+        className={classes.nav}
+        onClick={() => {
+          reportSearchResultClick({
+            ...query,
+            type: SearchType.Authority,
+            id: authority.authorityId!,
+          });
+        }}
+      >
         <CardActionArea>
           <CardContent>
             <Container className={classes.titleContainer}>

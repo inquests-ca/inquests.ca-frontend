@@ -155,7 +155,7 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
         onPageChange={handlePageChange}
       >
         {inquests?.data.map((inquest, i) => (
-          <InquestSearchResult key={i} inquest={inquest} />
+          <InquestSearchResult key={i} inquest={inquest} query={query} />
         ))}
       </SearchResults>
     </div>

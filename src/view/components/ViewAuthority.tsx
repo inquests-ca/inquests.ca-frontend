@@ -154,32 +154,32 @@ const InternalLinksSection = ({ authority }: { authority: Authority }) => {
       <Table>
         {!!authorityCitations.length && (
           <Row name="Citations">
-            <AuthorityInternalLinks authorities={authorityCitations} />
+            <AuthorityInternalLinks authorities={authorityCitations} category="Citations" />
           </Row>
         )}
         {!!authorityCitedBy.length && (
           <Row name="Cited&nbsp;By">
-            <AuthorityInternalLinks authorities={authorityCitedBy} />
+            <AuthorityInternalLinks authorities={authorityCitedBy} category="Cited By" />
           </Row>
         )}
         {!!authoritySuperceded.length && (
           <Row name="Supercedes">
-            <AuthorityInternalLinks authorities={authoritySuperceded} />
+            <AuthorityInternalLinks authorities={authoritySuperceded} category="Supercedes" />
           </Row>
         )}
         {!!authoritySupercededBy.length && (
           <Row name="Superceded&nbsp;By">
-            <AuthorityInternalLinks authorities={authoritySupercededBy} />
+            <AuthorityInternalLinks authorities={authoritySupercededBy} category="Superceded By" />
           </Row>
         )}
         {!!inquests.length && (
           <Row name="Related&nbsp;Inquests">
-            <InquestInternalLinks inquests={inquests} />
+            <InquestInternalLinks inquests={inquests} category="Related Inquests" />
           </Row>
         )}
         {!!authorityRelated.length && (
           <Row name="See&nbsp;Also">
-            <AuthorityInternalLinks authorities={authorityRelated} />
+            <AuthorityInternalLinks authorities={authorityRelated} category="See Also" />
           </Row>
         )}
       </Table>

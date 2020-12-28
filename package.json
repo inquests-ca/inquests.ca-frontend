@@ -1,7 +1,13 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "inquests-ca-frontend",
+  "version": "0.0.1",
+  "description": "Frontend for inquests.ca",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inquests-ca/inquests.ca-frontend.git"
+  },
   "dependencies": {
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.2.1",
@@ -13,6 +19,7 @@
     "joi": "^17.3.0",
     "lodash": "^4.17.15",
     "qs": "^6.9.4",
+    "mixpanel-browser": "^2.39.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-query": "^2.26.3",
@@ -24,6 +31,7 @@
     "@types/joi": "^14.3.4",
     "@types/lodash": "^4.14.161",
     "@types/qs": "^6.9.5",
+    "@types/mixpanel-browser": "^2.35.4",
     "@types/react-router-dom": "^5.1.5",
     "prettier": "^2.1.2",
     "react-query-devtools": "^2.6.3"
