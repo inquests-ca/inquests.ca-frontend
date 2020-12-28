@@ -25,7 +25,7 @@ type Query = { type: SearchType } & (AuthorityQuery | InquestQuery);
 /**
  * Reports authority or inquest search performed by user.
  */
-export const reportSearchEvent = analyticsReporter<Query>('Search');
+export const reportSearch = analyticsReporter<Query & { location: 'Home' | 'Search' }>('Search');
 
 /**
  * Reports click on search result.
@@ -52,4 +52,4 @@ export interface NavigationEvent {
 /**
  * Reports website navigation via header links.
  */
-export const reportNavigation = analyticsReporter<NavigationEvent>('Website Navigation');
+export const reportNavigation = analyticsReporter<NavigationEvent>('Navigation');

@@ -8,7 +8,7 @@ import { AuthorityQuery, InquestQuery } from 'search/utils/api';
 import { SearchType } from 'common/types';
 import useQueryParams from 'common/hooks/useQueryParams';
 import { stringifyQuery } from 'common/utils/request';
-import { reportSearchEvent } from 'common/utils/analytics';
+import { reportSearch } from 'common/utils/analytics';
 
 const Search = () => {
   // Parse 'type' query parameter to determine whether to render authority- or inquest-search.
@@ -20,7 +20,7 @@ const Search = () => {
   const history = useHistory();
 
   const handleQueryChange = (query: AuthorityQuery | InquestQuery) => {
-    reportSearchEvent({ type: searchType, ...query });
+    reportSearch({ type: searchType, location: 'Search', ...query });
     history.push(`/search${stringifyQuery({ type: searchType, ...query }, { encode: false })}`);
   };
 

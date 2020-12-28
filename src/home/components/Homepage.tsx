@@ -8,7 +8,13 @@ import RadioButtons from 'common/components/RadioButtons';
 import SearchField from 'common/components/SearchField';
 import { SearchType, MenuItem } from 'common/types';
 import { stringifyQuery } from 'common/utils/request';
-import { AuthorityQuery, fetchAuthorities, defaultAuthorityQuery } from 'search/utils/api';
+import {
+  AuthorityQuery,
+  fetchAuthorities,
+  defaultAuthorityQuery,
+  defaultInquestQuery,
+} from 'search/utils/api';
+import { reportSearch } from 'common/utils/analytics';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -42,8 +48,15 @@ const Homepage = () => {
   const history = useHistory();
 
   const handleSearchTypeChange = (newSearchType: SearchType) => setSearchType(newSearchType);
-  const handleSearch = (text: string) =>
+  const handleSearch = (text: string) => {
+    reportSearch({
+      ...(searchType === SearchType.Authority ? defaultAuthorityQuery() : defaultInquestQuery()),
+      type: searchType,
+      location: 'Home',
+      text,
+    });
     history.push(`/search${stringifyQuery({ type: searchType, text, page: 1 })}`);
+  };
 
   const classes = useStyles();
 
