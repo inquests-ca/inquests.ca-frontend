@@ -135,7 +135,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
         onPageChange={handlePageChange}
       >
         {authorities?.data.map((authority, i) => (
-          <AuthoritySearchResult key={i} authority={authority} />
+          <AuthoritySearchResult key={i} authority={authority} query={query} />
         ))}
       </SearchResults>
     </div>

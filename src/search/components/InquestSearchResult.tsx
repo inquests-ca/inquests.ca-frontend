@@ -13,6 +13,7 @@ import { toIsoDateString } from 'common/utils/date';
 import { Inquest } from 'common/models';
 import { reportSearchResultClick } from 'common/utils/analytics';
 import { SearchType } from 'common/types';
+import { InquestQuery } from 'search/utils/api';
 
 // TODO: share styles with AuthoritySearchResult.
 const useStyles = makeStyles((theme) => ({
@@ -43,10 +44,11 @@ const useStyles = makeStyles((theme) => ({
 
 interface InquestSearchResultProps {
   inquest: Inquest;
+  query: InquestQuery;
   className?: string;
 }
 
-const InquestSearchResult = ({ inquest, className }: InquestSearchResultProps) => {
+const InquestSearchResult = ({ inquest, query, className }: InquestSearchResultProps) => {
   // Used to create an overview if one is not provided.
   const createOverview = () => {
     // In most cases there is only one deceased. Handle this case separately to avoid unnecessary computation.
@@ -70,6 +72,7 @@ const InquestSearchResult = ({ inquest, className }: InquestSearchResultProps) =
         className={classes.nav}
         onClick={() => {
           reportSearchResultClick({
+            ...query,
             type: SearchType.Inquest,
             id: inquest.inquestId!,
           });

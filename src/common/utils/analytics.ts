@@ -20,17 +20,17 @@ const analyticsReporter = <T extends Record<string, any>>(name: string) => {
   };
 };
 
+type Query = { type: SearchType } & (AuthorityQuery | InquestQuery);
+
 /**
  * Reports authority or inquest search performed by user.
  */
-export const reportSearchEvent = analyticsReporter<
-  (AuthorityQuery | InquestQuery) & { type: SearchType }
->('Search');
+export const reportSearchEvent = analyticsReporter<Query>('Search');
 
 /**
  * Reports click on search result.
  */
-export const reportSearchResultClick = analyticsReporter<{ type: SearchType; id: number }>(
+export const reportSearchResultClick = analyticsReporter<Query & { id: number }>(
   'Search Result Click'
 );
 
