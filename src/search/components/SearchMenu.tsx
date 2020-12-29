@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
 import RadioButtons from 'common/components/RadioButtons';
 import { SearchType } from 'common/types';
@@ -19,11 +20,18 @@ const useStyles = makeStyles((theme) => ({
 interface SearchMenuProps {
   searchType: SearchType;
   onSearchTypeChange: (searchType: SearchType) => void;
+  onSearchClear: () => void;
   children: React.ReactNode;
   className?: string;
 }
 
-const SearchMenu = ({ searchType, onSearchTypeChange, children, className }: SearchMenuProps) => {
+const SearchMenu = ({
+  searchType,
+  onSearchTypeChange,
+  onSearchClear,
+  children,
+  className,
+}: SearchMenuProps) => {
   const classes = useStyles();
 
   return (
@@ -37,6 +45,9 @@ const SearchMenu = ({ searchType, onSearchTypeChange, children, className }: Sea
         onChange={onSearchTypeChange}
       ></RadioButtons>
       {children}
+      <Button variant="contained" onClick={onSearchClear}>
+        Clear Search
+      </Button>
     </Paper>
   );
 };

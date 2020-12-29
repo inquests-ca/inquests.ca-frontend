@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from 'react-query';
 
@@ -75,6 +76,8 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
     });
   const handleJurisdictionChange = (jurisdiction: string): void =>
     onQueryChange({ ...query, page: 1, jurisdiction });
+  const handleSearchClear = () =>
+    !_.isEqual(query, defaultInquestQuery()) ? onQueryChange(defaultInquestQuery()) : undefined;
 
   const classes = useStyles();
 
@@ -95,7 +98,11 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
   // TODO: prevent flicker after search by displaying previous search results.
   return (
     <div className={classes.layout}>
-      <SearchMenu searchType={SearchType.Inquest} onSearchTypeChange={onSearchTypeChange}>
+      <SearchMenu
+        searchType={SearchType.Inquest}
+        onSearchTypeChange={onSearchTypeChange}
+        onSearchClear={handleSearchClear}
+      >
         <SearchField
           defaultValue={query.text}
           onSearch={handleTextSearch}
