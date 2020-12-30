@@ -78,7 +78,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
 
   const jurisdictionItems = jurisdictions?.map(
     (jurisdiction): MenuItem<string> => ({
-      label: jurisdiction.name === 'Canada' ? 'Canada (federal)' : jurisdiction.name,
+      label: jurisdiction.code === 'CAN' ? 'Canada (Federal)' : jurisdiction.name,
       value: jurisdiction.jurisdictionId,
     })
   );
