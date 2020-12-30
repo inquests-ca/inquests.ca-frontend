@@ -63,7 +63,7 @@ const DetailsSection = ({ inquest }: { inquest: Inquest; classes: any }) => (
     <Table>
       <Row name="Overview">{inquest.overview}</Row>
       <Row name="Synopsis">{inquest.synopsis}</Row>
-      <Row name="Notes">{inquest.notes}</Row>
+      <Row name="Commentary">{inquest.notes}</Row>
       <Row name="Presiding&nbsp;Officer">{inquest.presidingOfficer}</Row>
       <Row name="Sitting Days">{inquest.sittingDays}</Row>
       <Row name="Exhibits">{inquest.exhibits}</Row>

@@ -75,7 +75,7 @@ const DetailsSection = ({ authority }: { authority: Authority }) => (
     <Table>
       <Row name="Overview">{authority.overview}</Row>
       <Row name="Synopsis">{authority.synopsis}</Row>
-      <Row name="Notes">{authority.notes}</Row>
+      <Row name="Commentary">{authority.notes}</Row>
       <Row name="Quotes">{authority.quotes}</Row>
     </Table>
   </Section>
