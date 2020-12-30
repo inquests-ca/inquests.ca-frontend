@@ -163,13 +163,13 @@ const InternalLinksSection = ({ authority }: { authority: Authority }) => {
           </Row>
         )}
         {!!authoritySuperceded.length && (
-          <Row name="Supercedes">
-            <AuthorityInternalLinks authorities={authoritySuperceded} category="Supercedes" />
+          <Row name="Supersedes">
+            <AuthorityInternalLinks authorities={authoritySuperceded} category="Supersedes" />
           </Row>
         )}
         {!!authoritySupercededBy.length && (
-          <Row name="Superceded&nbsp;By">
-            <AuthorityInternalLinks authorities={authoritySupercededBy} category="Superceded By" />
+          <Row name="Superseded&nbsp;By">
+            <AuthorityInternalLinks authorities={authoritySupercededBy} category="Superseded By" />
           </Row>
         )}
         {!!inquests.length && (
