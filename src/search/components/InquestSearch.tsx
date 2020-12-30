@@ -88,12 +88,14 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
     })
   );
 
-  const jurisdictionItems = jurisdictions?.map(
-    (jurisdiction): MenuItem<string> => ({
-      label: jurisdiction.name === 'Canada' ? 'Canada (federal)' : jurisdiction.name,
-      value: jurisdiction.jurisdictionId,
-    })
-  );
+  const jurisdictionItems = jurisdictions
+    ?.filter((jurisdiction) => jurisdiction.code !== 'CAN')
+    ?.map(
+      (jurisdiction): MenuItem<string> => ({
+        label: jurisdiction.name,
+        value: jurisdiction.jurisdictionId,
+      })
+    );
 
   // TODO: prevent flicker after search by displaying previous search results.
   return (
