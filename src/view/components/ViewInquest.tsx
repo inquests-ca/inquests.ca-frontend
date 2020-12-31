@@ -27,9 +27,6 @@ const useStyles = makeStyles((theme) => ({
   headerSection: {
     marginLeft: theme.spacing(2),
   },
-  document: {
-    display: 'block',
-  },
   primary: {
     color: theme.palette.secondary.main,
   },
@@ -123,13 +120,17 @@ const DocumentsSection = ({
 }) => (
   <Section header="Documents">
     {documents.map((doc, i) => (
-      <span className={classes.document} key={i}>
-        {doc.name}&nbsp;&mdash;&nbsp;
+      <span key={i}>
+        {doc.name} &mdash;{' '}
         {doc.inquestDocumentLinks.length ? (
-          _.sortBy(doc.inquestDocumentLinks, 'isFree').map((documentLink, i) => (
-            <span key={i}>
-              <MuiLink href={documentLink.link}>{documentLink.documentSource.name}</MuiLink>
-              {i !== doc.inquestDocumentLinks.length - 1 ? ', ' : ''}
+          _.sortBy(doc.inquestDocumentLinks, 'isFree').map((docLink, j) => (
+            <span key={j}>
+              <MuiLink href={docLink.link}>
+                {docLink.documentSourceId === 'INQUESTS_CA'
+                  ? 'View PDF'
+                  : `View on ${docLink.documentSource.name}`}
+              </MuiLink>
+              {j !== doc.inquestDocumentLinks.length - 1 ? ', ' : null}
             </span>
           ))
         ) : (
