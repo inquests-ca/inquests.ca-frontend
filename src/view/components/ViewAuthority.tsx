@@ -12,7 +12,7 @@ import { Table, Row } from './Table';
 import { InquestInternalLinks, AuthorityInternalLinks } from './InternalLinks';
 import Dialog from 'common/components/Dialog';
 import { fetchJson } from 'common/utils/request';
-import { toReadableDateString } from 'common/utils/date';
+import { toReadableDateString, getYear } from 'common/utils/date';
 import LoadingPage from 'common/components/LoadingPage';
 import { Authority, AuthorityDocument } from 'common/models';
 import {
@@ -27,14 +27,8 @@ const useStyles = makeStyles((theme) => ({
   headerSection: {
     marginLeft: theme.spacing(2),
   },
-  document: {
-    display: 'block',
-  },
   primary: {
     color: theme.palette.secondary.main,
-  },
-  hidden: {
-    visibility: 'hidden',
   },
   // Adds anchor styling to anchor elements without href attribute.
   modalLink: {
@@ -81,9 +75,7 @@ const DetailsSection = ({ authority }: { authority: Authority }) => (
   </Section>
 );
 
-// TODO: display other document data as needed (citation, creation date).
 // TODO: display document type.
-// TODO: clean up UI.
 // TODO: is it safe to have a user-inputted href?
 const DocumentsSection = ({
   documents,
@@ -93,35 +85,50 @@ const DocumentsSection = ({
   documents: AuthorityDocument[];
   onDialogOpen: () => void;
   classes: any;
-}) => (
-  <Section header="Documents">
-    {_.reverse(_.sortBy(documents, ['isPrimary', 'source.rank'])).map((doc, i) => (
-      <span className={classes.document} key={i}>
-        {documents.length > 1 ? (
-          doc.isPrimary ? (
-            <span className={classes.primary}>&#9733;&nbsp;&nbsp;</span>
-          ) : (
-            <span className={classes.hidden}>&#9733;&nbsp;&nbsp;</span>
-          )
-        ) : null}
-        <b>{doc.source.code}</b>,&nbsp;
-        {doc.citation}&nbsp;&mdash;&nbsp;
+}) => {
+  const renderDocuments = (docs: AuthorityDocument[]) =>
+    docs.map((doc, i) => (
+      <span key={i}>
+        {doc.source.code}
+        {doc.created && `, ${getYear(doc.created)}`} &mdash; <em>{doc.citation}</em> &mdash;{' '}
         {doc.authorityDocumentLinks.length ? (
-          _.sortBy(doc.authorityDocumentLinks, 'isFree').map((documentLink, i) => (
-            <span key={i}>
-              <MuiLink href={documentLink.link}>{documentLink.documentSource.name}</MuiLink>
-              {i !== doc.authorityDocumentLinks.length - 1 ? ', ' : ''}
-            </span>
+          doc.authorityDocumentLinks.map((docLink, j) => (
+            <MuiLink key={j} href={docLink.link}>
+              {docLink.documentSourceId === 'INQUESTS_CA'
+                ? 'View PDF'
+                : `View on ${docLink.documentSource.name}`}
+              {j !== doc.authorityDocumentLinks.length - 1 ? ', ' : null}
+            </MuiLink>
           ))
         ) : (
           <MuiLink className={classes.modalLink} onClick={onDialogOpen}>
             No Document Link
           </MuiLink>
         )}
+        <br />
       </span>
-    ))}
-  </Section>
-);
+    ));
+
+  const primaryDoc = documents.filter((doc) => doc.isPrimary);
+  const otherDocs = _.chain(documents)
+    .filter((doc) => !doc.isPrimary)
+    .sortBy('source.rank')
+    .reverse()
+    .value();
+
+  return (
+    <Section header="Documents">
+      {!otherDocs.length ? (
+        renderDocuments(primaryDoc)
+      ) : (
+        <Table>
+          <Row name="Primary">{renderDocuments(primaryDoc)}</Row>
+          <Row name="Other">{renderDocuments(otherDocs)}</Row>
+        </Table>
+      )}
+    </Section>
+  );
+};
 
 const InternalLinksSection = ({ authority }: { authority: Authority }) => {
   const {
