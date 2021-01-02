@@ -20,7 +20,6 @@ import Box from 'common/components/Box';
 import { fetchJson } from 'common/utils/request';
 import { InquestCategory, Jurisdiction, DeathCause } from 'common/models';
 import { MenuItem, SearchType } from 'common/types';
-import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
 
 const useStyles = makeStyles((theme) => ({
@@ -157,7 +156,6 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
       <SearchResults
         loading={!inquests}
         count={inquests?.count ?? 0}
-        pagination={PAGINATION}
         sort={query.sort}
         page={query.page}
         onSortChange={handleSortChange}

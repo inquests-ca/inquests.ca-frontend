@@ -7,7 +7,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import SingleSelect from 'common/components/SingleSelect';
-import { Sort } from 'search/utils/api';
+import { Sort, PAGINATION } from 'search/utils/api';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -46,7 +46,6 @@ interface SearchResultsProps {
   count: number;
   sort: Sort;
   page: number;
-  pagination: number;
   onSortChange: (sort: Sort) => void;
   onPageChange: (page: number) => void;
   className?: string;
@@ -57,7 +56,6 @@ const SearchResults = ({
   loading,
   count,
   page,
-  pagination,
   sort,
   onPageChange,
   onSortChange,
@@ -108,7 +106,7 @@ const SearchResults = ({
           {children}
           <Pagination
             className={classes.pagination}
-            count={Math.ceil(count / pagination)}
+            count={Math.ceil(count / PAGINATION)}
             page={page}
             onChange={handlePageChange}
           />
