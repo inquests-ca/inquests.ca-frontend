@@ -107,37 +107,45 @@ const DeceasedSection = ({ deceasedList, classes }: { deceasedList: Deceased[]; 
 // TODO: is it safe to have a user-inputted href?
 const DocumentsSection = ({
   documents,
-  onDialogOpen,
   classes,
 }: {
   documents: InquestDocument[];
-  onDialogOpen: () => void;
   classes: any;
-}) => (
-  <Section header="Documents">
-    {documents.map((doc, i) => (
-      <span key={i}>
-        {doc.name} &mdash;{' '}
-        {doc.inquestDocumentLinks.length ? (
-          _.sortBy(doc.inquestDocumentLinks, 'isFree').map((docLink, j) => (
-            <span key={j}>
-              <MuiLink href={docLink.link}>
-                {docLink.documentSourceId === 'INQUESTS_CA'
-                  ? 'View PDF'
-                  : `View on ${docLink.documentSource.name}`}
+}) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+
+  return (
+    <>
+      <Section header="Documents">
+        {documents.map((doc, i) => (
+          <span key={i}>
+            {doc.name} &mdash;{' '}
+            {doc.inquestDocumentLinks.length ? (
+              _.sortBy(doc.inquestDocumentLinks, 'isFree').map((docLink, j) => (
+                <span key={j}>
+                  <MuiLink href={docLink.link}>
+                    {docLink.documentSourceId === 'INQUESTS_CA'
+                      ? 'View PDF'
+                      : `View on ${docLink.documentSource.name}`}
+                  </MuiLink>
+                  {j !== doc.inquestDocumentLinks.length - 1 ? ', ' : null}
+                </span>
+              ))
+            ) : (
+              <MuiLink className={classes.modalLink} onClick={handleDialogOpen}>
+                No Document Link
               </MuiLink>
-              {j !== doc.inquestDocumentLinks.length - 1 ? ', ' : null}
-            </span>
-          ))
-        ) : (
-          <MuiLink className={classes.modalLink} onClick={onDialogOpen}>
-            No Document Link
-          </MuiLink>
-        )}
-      </span>
-    ))}
-  </Section>
-);
+            )}
+          </span>
+        ))}
+      </Section>
+      <MissingDocumentDialog onClose={handleDialogClose} open={dialogOpen} />
+    </>
+  );
+};
 
 const InternalLinksSection = ({ authorities }: { authorities: Authority[] }) => {
   if (!authorities.length) return null;
@@ -150,8 +158,6 @@ const InternalLinksSection = ({ authorities }: { authorities: Authority[] }) => 
 };
 
 const ViewInquest = () => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
   const { inquestId } = useParams<{ inquestId: string }>();
 
   // TODO: on 404, redirect to homepage.
@@ -161,9 +167,6 @@ const ViewInquest = () => {
 
   const classes = useStyles();
 
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
-
   if (!inquest) return <LoadingPage />;
 
   return (
@@ -171,13 +174,8 @@ const ViewInquest = () => {
       <HeaderSection inquest={inquest} classes={classes} />
       <DetailsSection inquest={inquest} classes={classes} />
       <DeceasedSection deceasedList={inquest.deceased} classes={classes} />
-      <DocumentsSection
-        documents={inquest.inquestDocuments}
-        onDialogOpen={handleDialogOpen}
-        classes={classes}
-      />
+      <DocumentsSection documents={inquest.inquestDocuments} classes={classes} />
       <InternalLinksSection authorities={inquest.authorities} />
-      <MissingDocumentDialog onClose={handleDialogClose} open={dialogOpen} />
     </Container>
   );
 };

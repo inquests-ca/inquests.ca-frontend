@@ -75,13 +75,16 @@ const DetailsSection = ({ authority }: { authority: Authority }) => (
 // TODO: is it safe to have a user-inputted href?
 const DocumentsSection = ({
   documents,
-  onDialogOpen,
   classes,
 }: {
   documents: AuthorityDocument[];
-  onDialogOpen: () => void;
   classes: any;
 }) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+
   const renderDocuments = (docs: AuthorityDocument[]) =>
     docs.map((doc, i) => (
       <span key={i}>
@@ -97,7 +100,7 @@ const DocumentsSection = ({
             </MuiLink>
           ))
         ) : (
-          <MuiLink className={classes.modalLink} onClick={onDialogOpen}>
+          <MuiLink className={classes.modalLink} onClick={handleDialogOpen}>
             No Document Link
           </MuiLink>
         )}
@@ -113,16 +116,19 @@ const DocumentsSection = ({
     .value();
 
   return (
-    <Section header="Documents">
-      {!otherDocs.length ? (
-        renderDocuments(primaryDoc)
-      ) : (
-        <Table>
-          <Row name="Primary">{renderDocuments(primaryDoc)}</Row>
-          <Row name="Other">{renderDocuments(otherDocs)}</Row>
-        </Table>
-      )}
-    </Section>
+    <>
+      <Section header="Documents">
+        {!otherDocs.length ? (
+          renderDocuments(primaryDoc)
+        ) : (
+          <Table>
+            <Row name="Primary">{renderDocuments(primaryDoc)}</Row>
+            <Row name="Other">{renderDocuments(otherDocs)}</Row>
+          </Table>
+        )}
+      </Section>
+      <MissingDocumentDialog onClose={handleDialogClose} open={dialogOpen} />
+    </>
   );
 };
 
@@ -191,8 +197,6 @@ const InternalLinksSection = ({ authority }: { authority: Authority }) => {
 };
 
 const ViewAuthority = () => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
   const { authorityId } = useParams<{ authorityId: string }>();
 
   // TODO: on 404, redirect to homepage.
@@ -202,22 +206,14 @@ const ViewAuthority = () => {
 
   const classes = useStyles();
 
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
-
   if (!authority) return <LoadingPage />;
 
   return (
     <Container className={classes.layout}>
       <HeaderSection authority={authority} classes={classes} />
       <DetailsSection authority={authority} />
-      <DocumentsSection
-        documents={authority.authorityDocuments}
-        onDialogOpen={handleDialogOpen}
-        classes={classes}
-      />
+      <DocumentsSection documents={authority.authorityDocuments} classes={classes} />
       <InternalLinksSection authority={authority} />
-      <MissingDocumentDialog onClose={handleDialogClose} open={dialogOpen} />
     </Container>
   );
 };
