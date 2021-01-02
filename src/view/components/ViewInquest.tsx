@@ -12,7 +12,7 @@ import { Table, Row } from './Table';
 import { AuthorityInternalLinks } from './InternalLinks';
 import MissingDocumentDialog from './MissingDocumentDialog';
 import { fetchJson } from 'common/utils/request';
-import { toReadableDateString } from 'common/utils/date';
+import { getDateString } from 'common/utils/date';
 import LoadingPage from 'common/components/LoadingPage';
 import { Authority, Deceased, Inquest, InquestDocument } from 'common/models';
 
@@ -45,8 +45,8 @@ const HeaderSection = ({ inquest, classes }: { inquest: Inquest; classes: any })
     <Typography variant="h6" component="h2" gutterBottom>
       {inquest.jurisdiction.name}
       <br />
-      {toReadableDateString(inquest.start)}
-      {inquest.end ? ` - ${toReadableDateString(inquest.end)}` : ''}
+      {getDateString(inquest.start)}
+      {inquest.end ? ` - ${getDateString(inquest.end)}` : ''}
     </Typography>
   </div>
 );
@@ -89,7 +89,7 @@ const DeceasedSection = ({ deceasedList, classes }: { deceasedList: Deceased[]; 
             {deceased.deathCause}
           </Row>
           <Row compact name="Date&nbsp;of&nbsp;Death">
-            {toReadableDateString(deceased.deathDate)}
+            {getDateString(deceased.deathDate)}
           </Row>
           <Row compact name="Reason&nbsp;for&nbsp;Inquest">
             {deceased.inquestType.name}

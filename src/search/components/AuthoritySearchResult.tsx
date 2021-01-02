@@ -9,7 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
-import { toIsoDateString } from 'common/utils/date';
+import { getIsoDateString } from 'common/utils/date';
 import { Authority, AuthorityDocument } from 'common/models';
 import { reportSearchResultClick } from 'common/utils/analytics';
 import { SearchType } from 'common/types';
@@ -92,7 +92,7 @@ const AuthoritySearchResult = ({ authority, query, className }: AuthoritySearchR
               {'\n'}
               {primaryDocument.source.name}
               {'\n'}
-              {primaryDocument.created && toIsoDateString(primaryDocument.created)}
+              {primaryDocument.created && getIsoDateString(primaryDocument.created)}
             </Typography>
             <Typography
               className={classes.multiline}

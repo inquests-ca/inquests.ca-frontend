@@ -12,7 +12,7 @@ import { Table, Row } from './Table';
 import { InquestInternalLinks, AuthorityInternalLinks } from './InternalLinks';
 import MissingDocumentDialog from './MissingDocumentDialog';
 import { fetchJson } from 'common/utils/request';
-import { toReadableDateString, getYear } from 'common/utils/date';
+import { getDateString, getYear } from 'common/utils/date';
 import LoadingPage from 'common/components/LoadingPage';
 import { Authority, AuthorityDocument } from 'common/models';
 
@@ -54,7 +54,7 @@ const HeaderSection = ({ authority, classes }: { authority: Authority; classes: 
         <br />
         {primaryDocument.source.name}
         <br />
-        {primaryDocument.created && toReadableDateString(primaryDocument.created)}
+        {primaryDocument.created && getDateString(primaryDocument.created)}
       </Typography>
     </div>
   );

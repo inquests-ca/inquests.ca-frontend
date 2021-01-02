@@ -9,7 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
-import { toIsoDateString } from 'common/utils/date';
+import { getIsoDateString } from 'common/utils/date';
 import { Inquest } from 'common/models';
 import { reportSearchResultClick } from 'common/utils/analytics';
 import { SearchType } from 'common/types';
@@ -98,7 +98,7 @@ const InquestSearchResult = ({ inquest, query, className }: InquestSearchResultP
             >
               {inquest.jurisdiction.name}
               {'\n'}
-              {toIsoDateString(inquest.start)}
+              {getIsoDateString(inquest.start)}
             </Typography>
             <Typography
               className={classes.multiline}
