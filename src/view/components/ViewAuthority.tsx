@@ -10,15 +10,11 @@ import MuiLink from '@material-ui/core/Link';
 import Section from './Section';
 import { Table, Row } from './Table';
 import { InquestInternalLinks, AuthorityInternalLinks } from './InternalLinks';
-import Dialog from 'common/components/Dialog';
+import MissingDocumentDialog from './MissingDocumentDialog';
 import { fetchJson } from 'common/utils/request';
 import { toReadableDateString, getYear } from 'common/utils/date';
 import LoadingPage from 'common/components/LoadingPage';
 import { Authority, AuthorityDocument } from 'common/models';
-import {
-  TEXT_DOCUMENT_MISSING_DIALOG_CONTENT,
-  TEXT_DOCUMENT_MISSING_DIALOG_TITLE,
-} from 'common/constants';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -221,12 +217,7 @@ const ViewAuthority = () => {
         classes={classes}
       />
       <InternalLinksSection authority={authority} />
-      <Dialog
-        title={TEXT_DOCUMENT_MISSING_DIALOG_TITLE}
-        content={TEXT_DOCUMENT_MISSING_DIALOG_CONTENT}
-        onClose={handleDialogClose}
-        open={dialogOpen}
-      />
+      <MissingDocumentDialog onClose={handleDialogClose} open={dialogOpen} />
     </Container>
   );
 };
