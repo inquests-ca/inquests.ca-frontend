@@ -86,7 +86,7 @@ const InquestSearchResult = ({ inquest, query, className }: InquestSearchResultP
               </Typography>
               {inquest.isPrimary ? (
                 <Typography className={classes.primary} variant="subtitle1" component="h3">
-                  Pivotal
+                  Key Case
                 </Typography>
               ) : null}
             </Container>

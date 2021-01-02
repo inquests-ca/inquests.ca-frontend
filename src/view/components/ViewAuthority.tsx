@@ -46,7 +46,7 @@ const HeaderSection = ({ authority, classes }: { authority: Authority; classes: 
       </Typography>
       {authority.isPrimary ? (
         <Typography className={classes.primary} variant="h6" component="h2">
-          Principal
+          Key Case
         </Typography>
       ) : null}
       <Typography variant="h6" component="h2" gutterBottom>

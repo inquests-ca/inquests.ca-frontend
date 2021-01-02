@@ -39,7 +39,7 @@ const HeaderSection = ({ inquest, classes }: { inquest: Inquest; classes: any })
     </Typography>
     {inquest.isPrimary ? (
       <Typography className={classes.primary} variant="h6" component="h2">
-        Pivotal
+        Key Case
       </Typography>
     ) : null}
     <Typography variant="h6" component="h2" gutterBottom>

@@ -78,7 +78,7 @@ const AuthoritySearchResult = ({ authority, query, className }: AuthoritySearchR
               </Typography>
               {authority.isPrimary ? (
                 <Typography className={classes.primary} variant="subtitle1" component="h3">
-                  Principal
+                  Key Case
                 </Typography>
               ) : null}
             </Container>
