@@ -20,7 +20,6 @@ import Box from 'common/components/Box';
 import { fetchJson } from 'common/utils/request';
 import { AuthorityCategory, Jurisdiction } from 'common/models';
 import { MenuItem, SearchType } from 'common/types';
-import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
 
 const useStyles = makeStyles((theme) => ({
@@ -78,7 +77,7 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
 
   const jurisdictionItems = jurisdictions?.map(
     (jurisdiction): MenuItem<string> => ({
-      label: jurisdiction.name === 'Canada' ? 'Canada (federal)' : jurisdiction.name,
+      label: jurisdiction.code === 'CAN' ? 'Canada (Federal)' : jurisdiction.name,
       value: jurisdiction.jurisdictionId,
     })
   );
@@ -135,7 +134,6 @@ const AuthoritySearch = ({ onQueryChange, onSearchTypeChange }: AuthoritySearchP
       <SearchResults
         loading={!authorities}
         count={authorities?.count ?? 0}
-        pagination={PAGINATION}
         sort={query.sort}
         page={query.page}
         onSortChange={handleSortChange}

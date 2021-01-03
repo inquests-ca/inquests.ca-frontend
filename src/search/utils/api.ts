@@ -1,9 +1,10 @@
 import joi from 'joi';
 
 import { fetchJson } from 'common/utils/request';
-import { PAGINATION } from 'common/constants';
 import { DataWithCount } from 'common/types';
 import { Authority, Inquest } from 'common/models';
+
+export const PAGINATION = 12;
 
 export enum Sort {
   Relevant = 'relevant',

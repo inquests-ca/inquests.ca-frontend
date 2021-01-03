@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import _ from 'lodash';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,15 +9,11 @@ import MuiLink from '@material-ui/core/Link';
 import Section from './Section';
 import { Table, Row } from './Table';
 import { AuthorityInternalLinks } from './InternalLinks';
-import Dialog from 'common/components/Dialog';
+import MissingDocumentDialog from './MissingDocumentDialog';
 import { fetchJson } from 'common/utils/request';
-import { toReadableDateString } from 'common/utils/date';
+import { getDateString } from 'common/utils/date';
 import LoadingPage from 'common/components/LoadingPage';
 import { Authority, Deceased, Inquest, InquestDocument } from 'common/models';
-import {
-  TEXT_DOCUMENT_MISSING_DIALOG_CONTENT,
-  TEXT_DOCUMENT_MISSING_DIALOG_TITLE,
-} from 'common/constants';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -26,9 +21,6 @@ const useStyles = makeStyles((theme) => ({
   },
   headerSection: {
     marginLeft: theme.spacing(2),
-  },
-  document: {
-    display: 'block',
   },
   primary: {
     color: theme.palette.secondary.main,
@@ -46,14 +38,14 @@ const HeaderSection = ({ inquest, classes }: { inquest: Inquest; classes: any })
     </Typography>
     {inquest.isPrimary ? (
       <Typography className={classes.primary} variant="h6" component="h2">
-        Pivotal
+        Key Case
       </Typography>
     ) : null}
     <Typography variant="h6" component="h2" gutterBottom>
       {inquest.jurisdiction.name}
       <br />
-      {toReadableDateString(inquest.start)}
-      {inquest.end ? ` - ${toReadableDateString(inquest.end)}` : ''}
+      {getDateString(inquest.start)}
+      {inquest.end ? ` - ${getDateString(inquest.end)}` : ''}
     </Typography>
   </div>
 );
@@ -63,7 +55,7 @@ const DetailsSection = ({ inquest }: { inquest: Inquest; classes: any }) => (
     <Table>
       <Row name="Overview">{inquest.overview}</Row>
       <Row name="Synopsis">{inquest.synopsis}</Row>
-      <Row name="Notes">{inquest.notes}</Row>
+      <Row name="Commentary">{inquest.notes}</Row>
       <Row name="Presiding&nbsp;Officer">{inquest.presidingOfficer}</Row>
       <Row name="Sitting Days">{inquest.sittingDays}</Row>
       <Row name="Exhibits">{inquest.exhibits}</Row>
@@ -96,7 +88,7 @@ const DeceasedSection = ({ deceasedList, classes }: { deceasedList: Deceased[]; 
             {deceased.deathCause}
           </Row>
           <Row compact name="Date&nbsp;of&nbsp;Death">
-            {toReadableDateString(deceased.deathDate)}
+            {getDateString(deceased.deathDate)}
           </Row>
           <Row compact name="Reason&nbsp;for&nbsp;Inquest">
             {deceased.inquestType.name}
@@ -114,33 +106,46 @@ const DeceasedSection = ({ deceasedList, classes }: { deceasedList: Deceased[]; 
 // TODO: is it safe to have a user-inputted href?
 const DocumentsSection = ({
   documents,
-  onDialogOpen,
   classes,
 }: {
   documents: InquestDocument[];
-  onDialogOpen: () => void;
   classes: any;
-}) => (
-  <Section header="Documents">
-    {documents.map((doc, i) => (
-      <span className={classes.document} key={i}>
-        {doc.name}&nbsp;&mdash;&nbsp;
-        {doc.inquestDocumentLinks.length ? (
-          _.sortBy(doc.inquestDocumentLinks, 'isFree').map((documentLink, i) => (
-            <span key={i}>
-              <MuiLink href={documentLink.link}>{documentLink.documentSource.name}</MuiLink>
-              {i !== doc.inquestDocumentLinks.length - 1 ? ', ' : ''}
-            </span>
-          ))
-        ) : (
-          <MuiLink className={classes.modalLink} onClick={onDialogOpen}>
-            No Document Link
-          </MuiLink>
-        )}
-      </span>
-    ))}
-  </Section>
-);
+}) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+
+  return (
+    <>
+      <Section header="Documents">
+        {documents.map((doc, i) => (
+          <span key={i}>
+            {doc.name} &mdash;{' '}
+            {doc.inquestDocumentLinks.length ? (
+              doc.inquestDocumentLinks.map((docLink, j) => (
+                <span key={j}>
+                  <MuiLink href={docLink.link}>
+                    {docLink.documentSourceId === 'INQUESTS_CA'
+                      ? 'View PDF'
+                      : `View on ${docLink.documentSource.name}`}
+                  </MuiLink>
+                  {j !== doc.inquestDocumentLinks.length - 1 ? ', ' : null}
+                </span>
+              ))
+            ) : (
+              <MuiLink className={classes.modalLink} onClick={handleDialogOpen}>
+                No Document Link
+              </MuiLink>
+            )}
+            <br />
+          </span>
+        ))}
+      </Section>
+      <MissingDocumentDialog onClose={handleDialogClose} open={dialogOpen} />
+    </>
+  );
+};
 
 const InternalLinksSection = ({ authorities }: { authorities: Authority[] }) => {
   if (!authorities.length) return null;
@@ -153,8 +158,6 @@ const InternalLinksSection = ({ authorities }: { authorities: Authority[] }) => 
 };
 
 const ViewInquest = () => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
   const { inquestId } = useParams<{ inquestId: string }>();
 
   // TODO: on 404, redirect to homepage.
@@ -164,9 +167,6 @@ const ViewInquest = () => {
 
   const classes = useStyles();
 
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
-
   if (!inquest) return <LoadingPage />;
 
   return (
@@ -174,18 +174,8 @@ const ViewInquest = () => {
       <HeaderSection inquest={inquest} classes={classes} />
       <DetailsSection inquest={inquest} classes={classes} />
       <DeceasedSection deceasedList={inquest.deceased} classes={classes} />
-      <DocumentsSection
-        documents={inquest.inquestDocuments}
-        onDialogOpen={handleDialogOpen}
-        classes={classes}
-      />
+      <DocumentsSection documents={inquest.inquestDocuments} classes={classes} />
       <InternalLinksSection authorities={inquest.authorities} />
-      <Dialog
-        title={TEXT_DOCUMENT_MISSING_DIALOG_TITLE}
-        content={TEXT_DOCUMENT_MISSING_DIALOG_CONTENT}
-        onClose={handleDialogClose}
-        open={dialogOpen}
-      />
     </Container>
   );
 };

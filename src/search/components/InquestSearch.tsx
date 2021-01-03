@@ -20,7 +20,6 @@ import Box from 'common/components/Box';
 import { fetchJson } from 'common/utils/request';
 import { InquestCategory, Jurisdiction, DeathCause } from 'common/models';
 import { MenuItem, SearchType } from 'common/types';
-import { PAGINATION } from 'common/constants';
 import useQueryParams from 'common/hooks/useQueryParams';
 
 const useStyles = makeStyles((theme) => ({
@@ -88,12 +87,14 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
     })
   );
 
-  const jurisdictionItems = jurisdictions?.map(
-    (jurisdiction): MenuItem<string> => ({
-      label: jurisdiction.name === 'Canada' ? 'Canada (federal)' : jurisdiction.name,
-      value: jurisdiction.jurisdictionId,
-    })
-  );
+  const jurisdictionItems = jurisdictions
+    ?.filter((jurisdiction) => jurisdiction.code !== 'CAN')
+    ?.map(
+      (jurisdiction): MenuItem<string> => ({
+        label: jurisdiction.name,
+        value: jurisdiction.jurisdictionId,
+      })
+    );
 
   // TODO: prevent flicker after search by displaying previous search results.
   return (
@@ -155,7 +156,6 @@ const InquestSearch = ({ onQueryChange, onSearchTypeChange }: InquestSearchProps
       <SearchResults
         loading={!inquests}
         count={inquests?.count ?? 0}
-        pagination={PAGINATION}
         sort={query.sort}
         page={query.page}
         onSortChange={handleSortChange}

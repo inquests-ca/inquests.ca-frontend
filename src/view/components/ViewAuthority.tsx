@@ -10,15 +10,11 @@ import MuiLink from '@material-ui/core/Link';
 import Section from './Section';
 import { Table, Row } from './Table';
 import { InquestInternalLinks, AuthorityInternalLinks } from './InternalLinks';
-import Dialog from 'common/components/Dialog';
+import MissingDocumentDialog from './MissingDocumentDialog';
 import { fetchJson } from 'common/utils/request';
-import { toReadableDateString } from 'common/utils/date';
+import { getDateString, getYear } from 'common/utils/date';
 import LoadingPage from 'common/components/LoadingPage';
 import { Authority, AuthorityDocument } from 'common/models';
-import {
-  TEXT_DOCUMENT_MISSING_DIALOG_CONTENT,
-  TEXT_DOCUMENT_MISSING_DIALOG_TITLE,
-} from 'common/constants';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -27,14 +23,8 @@ const useStyles = makeStyles((theme) => ({
   headerSection: {
     marginLeft: theme.spacing(2),
   },
-  document: {
-    display: 'block',
-  },
   primary: {
     color: theme.palette.secondary.main,
-  },
-  hidden: {
-    visibility: 'hidden',
   },
   // Adds anchor styling to anchor elements without href attribute.
   modalLink: {
@@ -56,7 +46,7 @@ const HeaderSection = ({ authority, classes }: { authority: Authority; classes: 
       </Typography>
       {authority.isPrimary ? (
         <Typography className={classes.primary} variant="h6" component="h2">
-          Principal
+          Key Case
         </Typography>
       ) : null}
       <Typography variant="h6" component="h2" gutterBottom>
@@ -64,7 +54,7 @@ const HeaderSection = ({ authority, classes }: { authority: Authority; classes: 
         <br />
         {primaryDocument.source.name}
         <br />
-        {primaryDocument.created && toReadableDateString(primaryDocument.created)}
+        {primaryDocument.created && getDateString(primaryDocument.created)}
       </Typography>
     </div>
   );
@@ -75,53 +65,74 @@ const DetailsSection = ({ authority }: { authority: Authority }) => (
     <Table>
       <Row name="Overview">{authority.overview}</Row>
       <Row name="Synopsis">{authority.synopsis}</Row>
-      <Row name="Notes">{authority.notes}</Row>
+      <Row name="Commentary">{authority.notes}</Row>
       <Row name="Quotes">{authority.quotes}</Row>
     </Table>
   </Section>
 );
 
-// TODO: display other document data as needed (citation, creation date).
 // TODO: display document type.
-// TODO: clean up UI.
 // TODO: is it safe to have a user-inputted href?
 const DocumentsSection = ({
   documents,
-  onDialogOpen,
   classes,
 }: {
   documents: AuthorityDocument[];
-  onDialogOpen: () => void;
   classes: any;
-}) => (
-  <Section header="Documents">
-    {_.reverse(_.sortBy(documents, ['isPrimary', 'source.rank'])).map((doc, i) => (
-      <span className={classes.document} key={i}>
-        {documents.length > 1 ? (
-          doc.isPrimary ? (
-            <span className={classes.primary}>&#9733;&nbsp;&nbsp;</span>
-          ) : (
-            <span className={classes.hidden}>&#9733;&nbsp;&nbsp;</span>
-          )
-        ) : null}
-        <b>{doc.source.code}</b>,&nbsp;
-        {doc.citation}&nbsp;&mdash;&nbsp;
+}) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+
+  const renderDocuments = (docs: AuthorityDocument[]) =>
+    docs.map((doc, i) => (
+      <span key={i}>
+        {doc.source.code}
+        {doc.created && `, ${getYear(doc.created)}`} &mdash; <em>{doc.citation}</em> &mdash;{' '}
         {doc.authorityDocumentLinks.length ? (
-          _.sortBy(doc.authorityDocumentLinks, 'isFree').map((documentLink, i) => (
-            <span key={i}>
-              <MuiLink href={documentLink.link}>{documentLink.documentSource.name}</MuiLink>
-              {i !== doc.authorityDocumentLinks.length - 1 ? ', ' : ''}
+          doc.authorityDocumentLinks.map((docLink, j) => (
+            <span key={j}>
+              <MuiLink href={docLink.link}>
+                {docLink.documentSourceId === 'INQUESTS_CA'
+                  ? 'View PDF'
+                  : `View on ${docLink.documentSource.name}`}
+              </MuiLink>
+              {j !== doc.authorityDocumentLinks.length - 1 ? ', ' : null}
             </span>
           ))
         ) : (
-          <MuiLink className={classes.modalLink} onClick={onDialogOpen}>
+          <MuiLink className={classes.modalLink} onClick={handleDialogOpen}>
             No Document Link
           </MuiLink>
         )}
+        <br />
       </span>
-    ))}
-  </Section>
-);
+    ));
+
+  const primaryDoc = documents.filter((doc) => doc.isPrimary);
+  const otherDocs = _.chain(documents)
+    .filter((doc) => !doc.isPrimary)
+    .sortBy('source.rank')
+    .reverse()
+    .value();
+
+  return (
+    <>
+      <Section header="Documents">
+        {!otherDocs.length ? (
+          renderDocuments(primaryDoc)
+        ) : (
+          <Table>
+            <Row name="Primary">{renderDocuments(primaryDoc)}</Row>
+            <Row name="Other">{renderDocuments(otherDocs)}</Row>
+          </Table>
+        )}
+      </Section>
+      <MissingDocumentDialog onClose={handleDialogClose} open={dialogOpen} />
+    </>
+  );
+};
 
 const InternalLinksSection = ({ authority }: { authority: Authority }) => {
   const {
@@ -163,13 +174,13 @@ const InternalLinksSection = ({ authority }: { authority: Authority }) => {
           </Row>
         )}
         {!!authoritySuperceded.length && (
-          <Row name="Supercedes">
-            <AuthorityInternalLinks authorities={authoritySuperceded} category="Supercedes" />
+          <Row name="Supersedes">
+            <AuthorityInternalLinks authorities={authoritySuperceded} category="Supersedes" />
           </Row>
         )}
         {!!authoritySupercededBy.length && (
-          <Row name="Superceded&nbsp;By">
-            <AuthorityInternalLinks authorities={authoritySupercededBy} category="Superceded By" />
+          <Row name="Superseded&nbsp;By">
+            <AuthorityInternalLinks authorities={authoritySupercededBy} category="Superseded By" />
           </Row>
         )}
         {!!inquests.length && (
@@ -188,8 +199,6 @@ const InternalLinksSection = ({ authority }: { authority: Authority }) => {
 };
 
 const ViewAuthority = () => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
   const { authorityId } = useParams<{ authorityId: string }>();
 
   // TODO: on 404, redirect to homepage.
@@ -199,27 +208,14 @@ const ViewAuthority = () => {
 
   const classes = useStyles();
 
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
-
   if (!authority) return <LoadingPage />;
 
   return (
     <Container className={classes.layout}>
       <HeaderSection authority={authority} classes={classes} />
       <DetailsSection authority={authority} />
-      <DocumentsSection
-        documents={authority.authorityDocuments}
-        onDialogOpen={handleDialogOpen}
-        classes={classes}
-      />
+      <DocumentsSection documents={authority.authorityDocuments} classes={classes} />
       <InternalLinksSection authority={authority} />
-      <Dialog
-        title={TEXT_DOCUMENT_MISSING_DIALOG_TITLE}
-        content={TEXT_DOCUMENT_MISSING_DIALOG_CONTENT}
-        onClose={handleDialogClose}
-        open={dialogOpen}
-      />
     </Container>
   );
 };
