@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import _ from 'lodash';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { makeStyles } from '@material-ui/core/styles';
@@ -124,7 +123,7 @@ const DocumentsSection = ({
           <span key={i}>
             {doc.name} &mdash;{' '}
             {doc.inquestDocumentLinks.length ? (
-              _.sortBy(doc.inquestDocumentLinks, 'isFree').map((docLink, j) => (
+              doc.inquestDocumentLinks.map((docLink, j) => (
                 <span key={j}>
                   <MuiLink href={docLink.link}>
                     {docLink.documentSourceId === 'INQUESTS_CA'
@@ -139,6 +138,7 @@ const DocumentsSection = ({
                 No Document Link
               </MuiLink>
             )}
+            <br />
           </span>
         ))}
       </Section>

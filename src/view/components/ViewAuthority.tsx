@@ -92,12 +92,14 @@ const DocumentsSection = ({
         {doc.created && `, ${getYear(doc.created)}`} &mdash; <em>{doc.citation}</em> &mdash;{' '}
         {doc.authorityDocumentLinks.length ? (
           doc.authorityDocumentLinks.map((docLink, j) => (
-            <MuiLink key={j} href={docLink.link}>
-              {docLink.documentSourceId === 'INQUESTS_CA'
-                ? 'View PDF'
-                : `View on ${docLink.documentSource.name}`}
+            <span key={j}>
+              <MuiLink href={docLink.link}>
+                {docLink.documentSourceId === 'INQUESTS_CA'
+                  ? 'View PDF'
+                  : `View on ${docLink.documentSource.name}`}
+              </MuiLink>
               {j !== doc.authorityDocumentLinks.length - 1 ? ', ' : null}
-            </MuiLink>
+            </span>
           ))
         ) : (
           <MuiLink className={classes.modalLink} onClick={handleDialogOpen}>
