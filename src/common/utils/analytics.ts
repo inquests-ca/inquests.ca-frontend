@@ -46,7 +46,7 @@ export const reportInternalLinkClick = analyticsReporter<{
 }>('Internal Link Click');
 
 export interface NavigationEvent {
-  location: 'Home' | 'Terms of Use' | 'Help';
+  location: 'Home' | 'About' | 'Terms of Use' | 'Help';
 }
 
 /**

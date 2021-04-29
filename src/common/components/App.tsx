@@ -6,8 +6,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
-import Search from 'search';
 import Homepage from 'home';
+import { About, Legal } from 'static';
+import Search from 'search';
 import NavHeader from 'common/components/Header';
 import { ViewAuthority, ViewInquest } from 'view';
 
@@ -36,6 +37,8 @@ const App = () => (
         <NavHeader />
         <Switch>
           <Route exact={true} path="/" component={Homepage} />
+          <Route exact={true} path="/about" component={About} />
+          <Route exact={true} path="/legal" component={Legal} />
           <Route path="/search" component={Search} />
           <Route path="/authority/:authorityId" component={ViewAuthority} />
           <Route path="/inquest/:inquestId" component={ViewInquest} />

@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import NavButton from './NavButton';
 import { reportNavigation } from 'common/utils/analytics';
 
-const URL_TERMS_OF_USE = 'https://inquests-ca-resources.s3.amazonaws.com/TermsOfUse.pdf';
 const URL_HELP = 'https://inquests-ca-resources.s3.amazonaws.com/Help.pdf';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +41,8 @@ const NavHeader = () => {
               Inquests.ca
             </Link>
           </Typography>
-          <NavButton to={URL_TERMS_OF_USE} label="Terms of Use" location="Terms of Use" external />
+          <NavButton to="/about" label="About" location="About" />
+          <NavButton to="/legal" label="Terms of Use" location="Terms of Use" />
           <NavButton to={URL_HELP} label="Help" location="Help" external />
         </Toolbar>
       </AppBar>
